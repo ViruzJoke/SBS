@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHL Backup Solution</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Changed back to dark grey */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        main {
+            flex-grow: 1;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1280px; /* Equivalent to container max-w-7xl */
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .rounded-box {
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            padding: 2.5rem; /* p-10 */
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem; /* py-2 px-4 */
+            border: 1px solid black; /* Changed from #d1d5db to black */
+            border-radius: 0.375rem; /* rounded-md */
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #dc2626; /* Changed from blue to red-600 */
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2); /* Changed from blue shadow to red-600 shadow */
+        }
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem; /* px-6 py-3 */
+            font-weight: 600; /* font-semibold */
+            border-radius: 0.375rem; /* rounded-md */
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            color: #ffffff;
+        }
+        /* No longer using btn-red-yellow as a gradient. Instead, specific solid yellow/red. */
+        .btn-red {
+            background-color: #dc2626; /* red-600 */
+            color: white;
+        }
+        .btn-red:hover {
+            background-color: #b91c1c; /* red-700 */
+            transform: translateY(-1px);
+        }
+        .btn-red:active {
+            transform: translateY(0);
+        }
+        .btn-yellow { /* Solid yellow button */
+            background-color: #fbbf24; /* yellow-500 */
+            color: black; /* text-black */
+        }
+        .btn-yellow:hover {
+            background-color: #f59e0b; /* yellow-600 */
+            transform: translateY(-1px);
+        }
+        .btn-yellow:active {
+            transform: translateY(0);
+        }
+
+        .btn-gray {
+            background-color: #d1d5db; /* Keep as gray-300 (neutral light gray) */
+            color: #1f2937; /* Keep as gray-800 (neutral dark gray/black) */
+        }
+        .btn-gray:hover {
+            background-color: #9ca3af; /* Keep as gray-400 (neutral medium gray) */
+            transform: translateY(-1px);
+        }
+        .btn-gray:active {
+            transform: translateY(0);
+        }
+        /* The previous btn-green is now replaced by btn-yellow where it was used for confirm button */
+        /* Retaining for any unintended lingering uses, but ensure it aligns with yellow/red/white/black theme */
+        .btn-green {
+            background-color: #fbbf24; /* Changed to yellow-500 */
+            color: black; /* Changed to black */
+        }
+        .btn-green:hover {
+            background-color: #f59e0b; /* Changed to yellow-600 */
+            transform: translateY(0);
+        }
+        .btn-green:active {
+            transform: translateY(0);
+        }
+
+        /* Mobile menu specific styles */
+        .mobile-menu-open {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0 0 0.75rem 0.75rem;
+            padding: 1rem;
+            animation: fadeInDown 0.3s ease-out;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-page {
+            display: none;
+        }
+
+        /* Styles for page transitions */
+        .page-content.fade-out {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .page-content.fade-in {
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Styles for the two main action buttons on corporate page */
+        .main-action-button {
+            display: flex;
+            flex-direction: column; /* Stack icon and text */
+            align-items: center;
+            justify-content: center;
+            flex: 1; /* Allow buttons to grow and shrink */
+            padding: 2rem; /* Increased padding for larger feel */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+            border: none; /* No explicit border, rely on background color */
+            min-height: 10rem; /* Ensure minimum height */
+        }
+
+        .main-action-button:hover {
+            transform: translateY(-4px); /* lift effect */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* larger shadow */
+        }
+
+        .main-action-button svg {
+            width: 3.5rem; /* w-14 */
+            height: 3.5rem; /* h-14 */
+            margin-bottom: 0.75rem; /* mb-3 */
+        }
+        .main-action-button span {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            text-align: center;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10 rounded-b-xl">
+        <div class="flex items-center">
+            <span class="text-4xl font-bold text-red-600">DHL</span>
+            <span class="ml-2 text-xl font-semibold text-gray-800 hidden sm:block">Backup Solution</span>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-600 p-2 rounded-md" aria-label="Open menu">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+
+        <!-- Desktop Navigation -->
+        <nav id="desktop-nav" class="hidden md:flex space-x-6">
+            <a href="#" class="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200" onclick="navigateTo('corporate'); return false;">หน้าแรก</a>
+            <a href="#" class="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200" onclick="navigateTo('corporate', 'contact-info-section'); return false;">ติดต่อเรา</a>
+            <a href="#" class="px-4 py-2 bg-yellow-500 text-black rounded-full hover:bg-yellow-600 transition-colors duration-200 font-semibold" onclick="navigateTo('corporate', 'tracking-section'); return false;">ติดตามพัสดุ</a>
+        </nav>
+
+        <!-- Mobile Navigation (Responsive) -->
+        <div id="mobile-menu" class="hidden">
+            <nav class="flex flex-col space-y-4">
+                <a href="#" class="text-gray-700 hover:text-red-600 font-medium py-2 border-b border-gray-200" onclick="navigateTo('corporate'); closeMobileMenu(); return false;">หน้าแรก</a>
+                <a href="#" class="text-gray-700 hover:text-red-600 font-medium py-2 border-b border-gray-200" onclick="navigateTo('corporate', 'contact-info-section'); closeMobileMenu(); return false;">ติดต่อเรา</a>
+                <a href="#" class="px-4 py-2 bg-yellow-500 text-black rounded-full hover:bg-yellow-600 transition-colors duration-200 font-semibold text-center mt-2" onclick="navigateTo('corporate', 'tracking-section'); closeMobileMenu(); return false;">ติดตามพัสดุ</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area - Pages will be shown here -->
+    <main class="container mx-auto px-4 py-8">
+
+        <!-- Corporate Main Page Content -->
+        <section id="corporate-page" class="page-content">
+            <!-- Tracking Section -->
+            <section
+                id="tracking-section"
+                class="relative bg-cover bg-center h-96 flex flex-col items-center justify-center text-white text-center rounded-xl my-8 mx-4 sm:mx-6 md:mx-8 lg:mx-10 shadow-lg"
+                style="background-image: url(https://placehold.co/1200x400/FFCC00/CC0000?text=TRACK+YOUR+SHIPMENT);"
+            >
+                <div class="absolute inset-0 bg-black opacity-40 rounded-xl"></div>
+                <div class="relative z-10 p-6 max-w-2xl w-full">
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
+                        ติดตามพัสดุของคุณ
+                    </h2>
+                    <p class="text-lg md:text-xl mb-6">
+                        ป้อนหมายเลขติดตามพัสดุเพื่อตรวจสอบสถานะ
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                        <input
+                            type="text"
+                            id="tracking-number"
+                            placeholder="กรอกหมายเลขติดตามพัสดุ"
+                            class="w-full sm:w-2/3 px-5 py-3 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all duration-200 shadow-md"
+                        />
+                        <button
+                            id="track-button"
+                            class="w-full sm:w-1/3 px-8 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition-colors duration-300 transform hover:scale-105"
+                        >
+                            Track
+                        </button>
+                    </div>
+                    <div id="tracking-result" class="mt-4 p-3 bg-white text-black rounded-lg shadow-md text-sm md:text-base hidden"></div>
+                </div>
+            </section>
+
+            <!-- Action Buttons Section -->
+            <section class="py-16 px-4 sm:px-6 md:px-8 lg:px-10 rounded-xl my-8 shadow-lg bg-white">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    เริ่มต้นใช้งาน
+                </h2>
+                <div class="flex flex-col md:flex-row justify-center gap-8 max-w-3xl mx-auto">
+                    <button
+                        id="calculate-quote-button"
+                        class="main-action-button bg-yellow-500 text-black hover:bg-yellow-600"
+                        onclick="navigateTo('quote-page'); return false;"
+                    >
+                        <!-- Calculator Icon - Black -->
+                        <svg class="w-16 h-16 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: black;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m-3 4h.01M12 15h.01M12 11h.01M16 11h.01M16 15h.01M8 15h.01M8 11h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>คำนวณค่าขนส่งโดยประมาณ</span>
+                    </button>
+                    <button
+                        id="create-shipment-button"
+                        class="main-action-button bg-yellow-500 text-black hover:bg-yellow-600" /* Changed from bg-red-600 text-white to bg-yellow-500 text-black */
+                        onclick="navigateTo('ship-now'); return false;"
+                    >
+                        <!-- Package Icon - Black -->
+                        <svg class="w-16 h-16 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: black;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8.25V17.25H19V8.25L12 3L5 8.25Z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 8.25L12 13.5L5 8.25"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 13.5V21"></path></svg>
+                        <span>สร้างใบนำส่ง</span>
+                    </button>
+                </div>
+            </section>
+
+             <!-- Contact Info Section (re-added as a basic placeholder) -->
+            <section id="contact-info-section" class="py-16 px-4 sm:px-6 md:px-8 lg:px-10 rounded-xl my-8 shadow-lg bg-white">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    ติดต่อเรา
+                </h2>
+                <div class="max-w-3xl mx-auto text-gray-700 leading-relaxed text-lg space-y-4 text-center">
+                    <p>หากมีข้อสงสัยหรือต้องการความช่วยเหลือเพิ่มเติม กรุณาติดต่อเราตามข้อมูลด้านล่าง:</p>
+                    <p class="font-semibold">
+                        ที่อยู่: DHL Express Thailand, กรุงเทพฯ, ประเทศไทย<br />
+                        โทรศัพท์: +66 2 345 6789<br />
+                        อีเมล: info@dhl.co.th
+                    </p>
+                    <p>เรายินดีให้บริการเสมอ</p>
+                </div>
+            </section>
+        </section>
+
+        <!-- Quote Page Content -->
+        <section id="quote-page" class="page-content hidden-page">
+            <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 lg:p-10 w-full max-w-4xl mb-8 mx-auto">
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-yellow-500 text-center mb-8">
+                    <span class="text-red-600">DHL</span> คำนวณค่าขนส่งโดยประมาณ
+                </h1>
+
+                <form id="quote-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4 p-4 border border-black rounded-lg bg-yellow-50">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">ข้อมูลต้นทาง</h2>
+                            <div>
+                                <label for="quote-origin-country" class="block text-sm font-medium text-gray-700 mb-1">ประเทศต้นทาง:</label>
+                                <select id="quote-origin-country" class="input-field" required>
+                                    <option value="">เลือกประเทศ</option>
+                                    <!-- Options will be populated by JS -->
+                                </select>
+                            </div>
+                            <div>
+                                <label for="quote-origin-city" class="block text-sm font-medium text-gray-700 mb-1">เมืองต้นทาง:</label>
+                                <input type="text" id="quote-origin-city" placeholder="กรอกชื่อเมือง" class="input-field" required>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 p-4 border border-black rounded-lg bg-yellow-50">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">ข้อมูลปลายทาง</h2>
+                            <div>
+                                <label for="quote-destination-country" class="block text-sm font-medium text-gray-700 mb-1">ประเทศปลายทาง:</label>
+                                <select id="quote-destination-country" class="input-field" required>
+                                    <option value="">เลือกประเทศ</option>
+                                    <!-- Options will be populated by JS -->
+                                </select>
+                            </div>
+                            <div>
+                                <label for="quote-destination-city" class="block text-sm font-medium text-gray-700 mb-1">เมืองปลายทาง:</label>
+                                <input type="text" id="quote-destination-city" placeholder="กรอกชื่อเมือง" class="input-field" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 p-4 border border-black rounded-lg bg-yellow-50">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-2">รายละเอียดพัสดุ</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div>
+                                <label for="quote-length" class="block text-sm font-medium text-gray-700 mb-1">ความยาว (ซม.):</label>
+                                <input type="number" id="quote-length" placeholder="ยาว" min="0.1" step="0.1" class="input-field" required>
+                            </div>
+                            <div>
+                                <label for="quote-width" class="block text-sm font-medium text-gray-700 mb-1">ความกว้าง (ซม.):</label>
+                                <input type="number" id="quote-width" placeholder="กว้าง" min="0.1" step="0.1" class="input-field" required>
+                            </div>
+                            <div>
+                                <label for="quote-height" class="block text-sm font-medium text-gray-700 mb-1">ความสูง (ซม.):</label>
+                                <input type="number" id="quote-height" placeholder="สูง" min="0.1" step="0.1" class="input-field" required>
+                            </div>
+                            <div>
+                                <label for="quote-weight" class="block text-sm font-medium text-gray-700 mb-1">น้ำหนัก (กก.):</label>
+                                <input type="number" id="quote-weight" placeholder="น้ำหนัก" min="0.1" step="0.1" class="input-field" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button type="submit" class="flex-1 btn-primary btn-yellow"> <!-- Changed to btn-yellow -->
+                            <svg class="inline-block w-5 h-5 mr-2 -mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: black;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path></svg>
+                            รับใบเสนอราคา
+                        </button>
+                        <button type="button" id="quote-clear-button" class="flex-1 btn-primary btn-gray">
+                            <svg class="inline-block w-5 h-5 mr-2 -mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            ล้างข้อมูล
+                        </button>
+                    </div>
+                </form>
+
+                <div id="quote-result" class="mt-8 p-4 bg-yellow-100 border border-yellow-500 text-black rounded-md text-center hidden"></div>
+
+                <button
+                    type="button"
+                    id="quote-back-to-main"
+                    class="mt-6 w-full btn-primary btn-gray"
+                >
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    กลับสู่หน้าหลัก
+                </button>
+            </div>
+        </section>
+
+        <!-- Ship Now Page Content -->
+        <section id="ship-now-page" class="page-content hidden-page">
+            <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 lg:p-10 w-full max-w-4xl mb-8 mx-auto">
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-yellow-500 text-center mb-8">
+                    <span class="text-red-600">DHL</span> Ship Now
+                </h1>
+
+                <!-- Progress Indicator -->
+                <div class="flex justify-between mb-8">
+                    <div class="flex-1 text-center">
+                        <div id="step-1-indicator" class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-white font-bold bg-red-600">1</div>
+                        <p class="text-xs mt-2 text-red-600 font-semibold">ข้อมูลต้นทาง</p>
+                    </div>
+                    <div class="flex-1 text-center">
+                        <div id="step-2-indicator" class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-white font-bold bg-gray-400">2</div>
+                        <p class="text-xs mt-2 text-gray-600">ข้อมูลปลายทาง</p>
+                    </div>
+                    <div class="flex-1 text-center">
+                        <div id="step-3-indicator" class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-white font-bold bg-gray-400">3</div>
+                        <p class="text-xs mt-2 text-gray-600">รายละเอียดพัสดุ</p>
+                    </div>
+                    <div class="flex-1 text-center">
+                        <div id="step-4-indicator" class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-white font-bold bg-gray-400">4</div>
+                        <p class="text-xs mt-2 text-gray-600">สรุปและยืนยัน</p>
+                    </div>
+                </div>
+
+                <form id="ship-now-form" class="space-y-6">
+                    <!-- Step 1: Origin Information -->
+                    <div id="ship-now-step-1" class="ship-now-step space-y-4 p-4 border border-black rounded-lg bg-yellow-50">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">ข้อมูลต้นทาง</h2>
+                        <div>
+                            <label for="ship-origin-country" class="block text-sm font-medium text-gray-700 mb-1">ประเทศต้นทาง:</label>
+                            <select id="ship-origin-country" class="input-field" required>
+                                <option value="">เลือกประเทศ</option>
+                                <!-- Options will be populated by JS -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="ship-origin-city" class="block text-sm font-medium text-gray-700 mb-1">เมืองต้นทาง:</label>
+                            <input type="text" id="ship-origin-city" placeholder="กรอกชื่อเมือง" class="input-field" required>
+                        </div>
+                        <div>
+                            <label for="ship-origin-postalcode" class="block text-sm font-medium text-gray-700 mb-1">รหัสไปรษณีย์ต้นทาง (ถ้ามี):</label>
+                            <input type="text" id="ship-origin-postalcode" placeholder="กรอกรหัสไปรษณีย์" class="input-field">
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Destination Information -->
+                    <div id="ship-now-step-2" class="ship-now-step space-y-4 p-4 border border-black rounded-lg bg-yellow-50 hidden-page">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">ข้อมูลปลายทาง</h2>
+                        <div>
+                            <label for="ship-destination-country" class="block text-sm font-medium text-gray-700 mb-1">ประเทศปลายทาง:</label>
+                            <select id="ship-destination-country" class="input-field" required>
+                                <option value="">เลือกประเทศ</option>
+                                <!-- Options will be populated by JS -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="ship-destination-city" class="block text-sm font-medium text-gray-700 mb-1">เมืองปลายทาง:</label>
+                            <input type="text" id="ship-destination-city" placeholder="กรอกชื่อเมือง" class="input-field" required>
+                        </div>
+                        <div>
+                            <label for="ship-destination-postalcode" class="block text-sm font-medium text-gray-700 mb-1">รหัสไปรษณีย์ปลายทาง (ถ้ามี):</label>
+                            <input type="text" id="ship-destination-postalcode" placeholder="กรอกรหัสไปรษณีย์" class="input-field">
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Package Details -->
+                    <div id="ship-now-step-3" class="ship-now-step space-y-4 p-4 border border-black rounded-lg bg-yellow-50 hidden-page">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">รายละเอียดพัสดุ</h2>
+                        <div id="package-pieces-container">
+                            <!-- Piece inputs will be added here by JS -->
+                        </div>
+                        <button type="button" id="add-piece-button" class="w-full py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            เพิ่มชิ้นพัสดุ
+                        </button>
+                    </div>
+
+                    <!-- Step 4: Review and Confirm -->
+                    <div id="ship-now-step-4" class="ship-now-step space-y-6 p-4 border border-black rounded-lg bg-yellow-50 hidden-page">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">สรุปและยืนยัน</h2>
+                        <div class="space-y-3 text-gray-700">
+                            <p><span class="font-medium">ต้นทาง:</span> <span id="review-origin"></span></p>
+                            <p><span class="font-medium">ปลายทาง:</span> <span id="review-destination"></span></p>
+                            <p class="font-medium">รายละเอียดพัสดุ:</p>
+                            <ul id="review-package-list" class="list-disc list-inside ml-4">
+                                <!-- Package details will be populated by JS -->
+                            </ul>
+                            <p class="text-lg font-bold text-black">ค่าใช้จ่ายโดยประมาณ: (รอการคำนวณ)</p>
+                        </div>
+                        <button type="button" id="confirm-shipment-button" class="w-full btn-primary btn-yellow"> <!-- Changed to btn-yellow -->
+                            <svg class="inline-block w-5 h-5 mr-2 -mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: black;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            ยืนยันการจัดส่ง
+                        </button>
+                        <div id="shipment-result" class="mt-8 p-4 bg-red-100 border border-red-500 text-black rounded-md text-center hidden"></div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between gap-4 mt-6">
+                        <button type="button" id="ship-now-back-to-main" class="px-6 py-3 btn-primary btn-gray">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                            กลับสู่หน้าหลัก
+                        </button>
+                        <button type="button" id="ship-now-prev-step" class="flex-1 btn-primary btn-gray hidden">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                            ย้อนกลับ
+                        </button>
+                        <button type="button" id="ship-now-next-step" class="flex-1 btn-primary btn-yellow"> <!-- Changed to btn-yellow -->
+                            ถัดไป
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: black;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-white py-10 px-6 md:px-10 rounded-t-xl mt-8">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-yellow-500">เกี่ยวกับ DHL</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    DHL Express เป็นส่วนหนึ่งของ Deutsche Post DHL Group ผู้นำด้านโลจิสติกส์ของโลก เรามุ่งมั่นในการให้บริการจัดส่งพัสดุและเอกสารที่ยอดเยี่ยม
+                </p>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-yellow-500">ลิงก์ด่วน</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="navigateTo('corporate', 'tracking-section'); return false;" class="text-gray-400 hover:text-white transition-colors duration-200 text-sm">ติดตามพัสดุ</a></li>
+                    <li><a href="#" onclick="navigateTo('quote-page'); return false;" class="text-gray-400 hover:text-white transition-colors duration-200 text-sm">คำนวณค่าขนส่งโดยประมาณ</a></li>
+                    <li><a href="#" onclick="navigateTo('ship-now'); return false;" class="text-gray-400 hover:text-white transition-colors duration-200 text-sm">สร้างใบนำส่ง</a></li>
+                    <li><a href="#" onclick="navigateTo('corporate', 'contact-info-section'); return false;" class="text-gray-400 hover:text-white transition-colors duration-200 text-sm">ติดต่อเรา</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-yellow-500">ติดต่อเรา</h3>
+                <p class="text-gray-400 text-sm">
+                    ที่อยู่: DHL Express Thailand, กรุงเทพฯ, ประเทศไทย<br />
+                    โทรศัพท์: +66 2 345 6789<br />
+                    อีเมล: info@dhl.co.th
+                </p>
+                <div class="flex space-x-4 mt-4">
+                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.779 1.636 4.938 4.938.058 1.265.068 1.644.068 4.849 0 3.204-.01 3.584-.069 4.85-.148 3.252-1.636-4.779-1.636-4.938-4.938-.058-1.265-.068-1.644-.068-4.85 0-3.204.01-3.584.069-4.85.148-3.252 1.636-4.779 4.938-4.938 1.266-.058 1.644-.068 4.85-.068zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.947.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.073 4.948.073 3.259 0 3.668-.014 4.947-.072 4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zM12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm4.929-10.472a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M7.4 5.9C7.4 6.3 7.0 6.6 6.6 6.6H5.4C5.0 6.6 4.6 6.3 4.6 5.9V4.6C4.6 4.2 5.0 3.9 5.4 3.9H6.6C7.0 3.9 7.4 4.2 7.4 4.6V5.9ZM6.0 17.4C5.6 17.4 5.2 17.1 5.2 16.7V8.6C5.2 8.2 5.6 7.9 6.0 7.9H7.0C7.4 7.9 7.7 8.2 7.7 8.6V16.7C7.7 17.1 7.4 17.4 7.0 17.4H6.0ZM15.6 17.4C15.2 17.4 14.8 17.1 14.8 16.7V12.7C14.8 12.0 14.6 11.4 14.1 11.0C13.7 10.6 13.0 10.4 12.4 10.4C11.8 10.4 11.3 10.6 10.9 11.0C10.5 11.4 10.2 12.0 10.2 12.7V16.7C10.2 17.1 9.9 17.4 9.5 17.4H8.5C8.1 17.4 7.8 17.1 7.8 16.7V8.6C7.8 8.2 8.1 7.9 8.5 7.9H9.4C9.8 7.9 10.2 8.2 10.2 8.6V9.6C10.6 8.7 11.6 7.9 12.7 7.9C13.8 7.9 14.7 8.3 15.3 9.0C15.9 9.6 16.3 10.5 16.3 11.6V16.7C16.3 17.1 15.9 17.4 15.6 17.4H15.6ZM20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20Z"/></svg></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gray-500 text-sm mt-8 pt-6 border-t border-gray-700">
+            &copy; <span id="current-year"></span> DHL Express. สงวนลิขสิทธิ์.
+        </div>
+    </footer>
+
+    <script>
+        // --- Global Variables and Setup ---
+        const pageContents = document.querySelectorAll('.page-content');
+        let currentPageId = 'corporate-page'; // Default page
+        let isTransitioning = false; // Flag to prevent multiple transitions at once
+
+        // --- Utility Functions ---
+        function showPage(pageId, sectionId = null) {
+            if (isTransitioning) return; // Prevent new transition if one is already active
+
+            const oldPageElement = document.getElementById(currentPageId);
+            const newPageElement = document.getElementById(pageId);
+
+            // Check if navigating to the same page/section (no change needed)
+            if (currentPageId === pageId && !sectionId) {
+                return;
+            }
+
+            // Determine if it's a main page transition (from/to corporate-page)
+            const isMainPageTransition =
+                (currentPageId === 'corporate-page' && (pageId === 'quote-page' || pageId === 'ship-now-page')) ||
+                ((currentPageId === 'quote-page' || currentPageId === 'ship-now-page') && pageId === 'corporate-page');
+
+            if (isMainPageTransition && oldPageElement && newPageElement) {
+                isTransitioning = true;
+
+                // 1. Fade out current page
+                oldPageElement.style.transition = 'opacity 0.3s ease-in-out';
+                oldPageElement.style.opacity = '0';
+
+                setTimeout(() => {
+                    // 2. After fade out, hide old page and show new page
+                    oldPageElement.classList.add('hidden-page');
+                    oldPageElement.style.transition = ''; // Remove transition for next time
+                    oldPageElement.style.opacity = '1'; // Reset opacity for next fade-out
+
+                    newPageElement.classList.remove('hidden-page');
+                    newPageElement.style.opacity = '0'; // Start new page from transparent
+                    newPageElement.style.transition = 'opacity 0.3s ease-in-out';
+
+                    // Force reflow to ensure transition starts from opacity 0
+                    // This is crucial for the transition to work immediately after display change
+                    void newPageElement.offsetWidth;
+
+                    // 3. Fade in new page
+                    newPageElement.style.opacity = '1';
+
+                    // 4. Clean up after new page fades in
+                    setTimeout(() => {
+                        newPageElement.style.transition = ''; // Remove transition for next time
+                        isTransitioning = false;
+                        // Handle scrolling for new page if sectionId is provided
+                        if (sectionId) {
+                            const element = document.getElementById(sectionId);
+                            if (element) {
+                                element.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }
+                    }, 300); // Match transition duration (0.3s)
+                }, 300); // Match fade out duration (0.3s)
+            } else {
+                // Standard hide/show for non-main page transitions (e.g., steps in Ship Now)
+                pageContents.forEach(page => {
+                    page.classList.add('hidden-page');
+                });
+                newPageElement.classList.remove('hidden-page');
+                // Handle scrolling immediately for non-transition pages
+                if (sectionId) {
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+            currentPageId = pageId; // Update current page ID after all logic
+        }
+
+        function navigateTo(pageName, sectionId = null) {
+            if (pageName === 'corporate') {
+                showPage('corporate-page', sectionId);
+            } else if (pageName === 'ship-now') {
+                showPage('ship-now-page');
+                initializeShipNowForm(); // Re-initialize Ship Now form state
+                updateShipNowStep(0); // Go to first step of Ship Now
+            } else if (pageName === 'quote-page') {
+                showPage('quote-page');
+                resetQuoteForm(); // Reset quote form on navigation
+            }
+        }
+
+        // --- Header and Footer Logic ---
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('mobile-menu-open');
+            // Toggle SVG icon
+            const iconPath = mobileMenuButton.querySelector('path');
+            if (mobileMenu.classList.contains('mobile-menu-open')) {
+                iconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12'); // X icon
+            } else {
+                iconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); // Hamburger icon
+            }
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('mobile-menu-open');
+            const iconPath = mobileMenuButton.querySelector('path');
+            iconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); // Reset to Hamburger icon
+        }
+
+        // --- Tracking Section Logic ---
+        document.getElementById('track-button').addEventListener('click', () => {
+            const trackingNumberInput = document.getElementById('tracking-number');
+            const trackingResultDiv = document.getElementById('tracking-result');
+            const trackingNumber = trackingNumberInput.value.trim();
+
+            if (trackingNumber !== '') {
+                trackingResultDiv.textContent = `กำลังติดตามพัสดุหมายเลข: ${trackingNumber}... (จำลอง)`;
+                trackingResultDiv.classList.remove('hidden');
+
+                // In a real application, send this to your VB.NET backend.
+                // The backend would then call the DHL tracking API and return the status.
+                /*
+                fetch('YOUR_VB_NET_TRACKING_API_ENDPOINT', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ trackingNumber: trackingNumber })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    trackingResultDiv.textContent = `สถานะพัสดุ ${trackingNumber}: ${data.status} - ${data.location} เวลา ${data.timestamp}`;
+                })
+                .catch(error => {
+                    console.error('Error tracking shipment:', error);
+                    trackingResultDiv.textContent = 'เกิดข้อผิดพลาดในการติดตามพัสดุ';
+                });
+                */
+            } else {
+                trackingResultDiv.textContent = 'กรุณากรอกหมายเลขติดตามพัสดุ';
+                trackingResultDiv.classList.remove('hidden');
+            }
+        });
+
+        // --- Action Buttons Section Logic ---
+        document.getElementById('calculate-quote-button').addEventListener('click', () => {
+            navigateTo('quote-page');
+        });
+
+        document.getElementById('create-shipment-button').addEventListener('click', () => {
+            navigateTo('ship-now');
+        });
+
+
+        // --- Quote Page Logic ---
+        const quoteCountries = ['Thailand', 'United States', 'United Kingdom', 'Germany', 'Japan', 'China', 'Singapore'];
+        const quoteOriginCountrySelect = document.getElementById('quote-origin-country');
+        const quoteDestinationCountrySelect = document.getElementById('quote-destination-country');
+
+        function populateCountrySelects() {
+            quoteOriginCountrySelect.innerHTML = '<option value="">เลือกประเทศ</option>';
+            quoteDestinationCountrySelect.innerHTML = '<option value="">เลือกประเทศ</option>';
+            quoteCountries.forEach(country => {
+                const option1 = document.createElement('option');
+                option1.value = country;
+                option1.textContent = country;
+                quoteOriginCountrySelect.appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = country;
+                option2.textContent = country;
+                quoteDestinationCountrySelect.appendChild(option2);
+            });
+        }
+
+        function resetQuoteForm() {
+            document.getElementById('quote-form').reset();
+            populateCountrySelects(); // Re-populate to reset selected
+            document.getElementById('quote-result').classList.add('hidden');
+            document.getElementById('quote-result').textContent = '';
+        }
+
+        document.getElementById('quote-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const originCountry = quoteOriginCountrySelect.value;
+            const originCity = document.getElementById('quote-origin-city').value;
+            const destinationCountry = quoteDestinationCountrySelect.value;
+            const destinationCity = document.getElementById('quote-destination-city').value;
+            const length = document.getElementById('quote-length').value;
+            const width = document.getElementById('quote-width').value;
+            const height = document.getElementById('quote-height').value;
+            const weight = document.getElementById('quote-weight').value;
+            const quoteResultDiv = document.getElementById('quote-result');
+
+            if (!originCountry || !originCity || !destinationCountry || !destinationCity || !length || !width || !height || !weight) {
+                quoteResultDiv.textContent = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+                quoteResultDiv.classList.remove('hidden');
+                return;
+            }
+
+            const requestData = {
+                origin: { country: originCountry, city: originCity },
+                destination: { country: destinationCountry, city: destinationCity },
+                package: {
+                    dimensions: { length: parseFloat(length), width: parseFloat(width), height: parseFloat(height) },
+                    weight: parseFloat(weight)
+                }
+            };
+
+            console.log("Sending quote request data to backend:", requestData);
+            quoteResultDiv.textContent = `จำลองการขอใบเสนอราคาสำหรับ ${originCity}, ${originCountry} ไปยัง ${destinationCity}, ${destinationCity} ประมาณ ${weight} กก. (จำลอง)`;
+            quoteResultDiv.classList.remove('hidden');
+
+            /*
+            fetch('YOUR_VB_NET_QUOTE_API_ENDPOINT/getQuote', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                quoteResultDiv.textContent = `ราคาโดยประมาณ: ${data.quoteAmount} ${data.currency}`;
+                quoteResultDiv.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error getting quote:', error);
+                quoteResultDiv.textContent = 'เกิดข้อผิดพลาดในการขอใบเสนอราคา';
+                quoteResultDiv.classList.remove('hidden');
+            });
+            */
+        });
+
+        document.getElementById('quote-clear-button').addEventListener('click', resetQuoteForm);
+        document.getElementById('quote-back-to-main').addEventListener('click', () => navigateTo('corporate'));
+
+
+        // --- Ship Now Page Logic ---
+        const shipNowCountries = ['Thailand', 'United States', 'United Kingdom', 'Germany', 'Japan', 'China', 'Singapore'];
+        const shipNowOriginCountrySelect = document.getElementById('ship-origin-country');
+        const shipNowDestinationCountrySelect = document.getElementById('ship-destination-country');
+        const shipNowSteps = document.querySelectorAll('.ship-now-step');
+        const shipNowIndicators = document.querySelectorAll('[id^="step-"][id$="-indicator"]');
+        let currentShipNowStep = 0;
+        let packagePieces = [];
+
+        function initializeShipNowForm() {
+            // Reset form data and steps
+            document.getElementById('ship-now-form').reset();
+            populateShipNowCountrySelects();
+            currentShipNowStep = 0;
+            packagePieces = [{ length: '', width: '', height: '', weight: '' }]; // Start with one piece
+            renderPackagePieces();
+            updateShipNowStep(currentShipNowStep);
+            document.getElementById('shipment-result').classList.add('hidden');
+            document.getElementById('shipment-result').textContent = '';
+        }
+
+        function populateShipNowCountrySelects() {
+            shipNowOriginCountrySelect.innerHTML = '<option value="">เลือกประเทศ</option>';
+            shipNowDestinationCountrySelect.innerHTML = '<option value="">เลือกประเทศ</option>';
+            shipNowCountries.forEach(country => {
+                const option1 = document.createElement('option');
+                option1.value = country;
+                option1.textContent = country;
+                shipNowOriginCountrySelect.appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = country;
+                option2.textContent = country;
+                shipNowDestinationCountrySelect.appendChild(option2);
+            });
+        }
+
+        function updateShipNowStep(stepIndex) {
+            shipNowSteps.forEach((step, index) => {
+                if (index === stepIndex) {
+                    step.classList.remove('hidden-page');
+                } else {
+                    step.classList.add('hidden-page');
+                }
+            });
+
+            shipNowIndicators.forEach((indicator, index) => {
+                indicator.classList.remove('bg-red-600', 'bg-yellow-500', 'font-semibold', 'text-red-600'); /* Changed colors */
+                indicator.classList.add('bg-gray-400', 'text-gray-600'); // Reset all to gray
+
+                const textElement = indicator.nextElementSibling; // The <p> tag with step name
+                if (textElement) {
+                    textElement.classList.remove('font-semibold', 'text-red-600'); /* Changed colors */
+                    textElement.classList.add('text-gray-600');
+                }
+
+                if (index === stepIndex) {
+                    indicator.classList.add('bg-red-600'); /* Changed to red */
+                    const currentTextElement = indicator.nextElementSibling;
+                    if (currentTextElement) {
+                        currentTextElement.classList.add('font-semibold', 'text-red-600'); /* Changed to red */
+                    }
+                } else if (index < stepIndex) {
+                    indicator.classList.add('bg-yellow-500'); /* Changed to yellow for completed steps */
+                }
+            });
+
+            const prevButton = document.getElementById('ship-now-prev-step');
+            const nextButton = document.getElementById('ship-now-next-step');
+            const backToMainButton = document.getElementById('ship-now-back-to-main');
+
+            if (stepIndex === 0) {
+                prevButton.classList.add('hidden');
+                backToMainButton.classList.remove('hidden');
+            } else {
+                prevButton.classList.remove('hidden');
+                backToMainButton.classList.add('hidden'); // Hide "Back to main" if not on first step
+            }
+
+            if (stepIndex === shipNowSteps.length - 1) {
+                nextButton.classList.add('hidden');
+                document.getElementById('confirm-shipment-button').classList.remove('hidden'); // Show confirm button
+            } else {
+                nextButton.classList.remove('hidden');
+                document.getElementById('confirm-shipment-button').classList.add('hidden'); // Hide confirm button
+            }
+
+            // Populate review step if on last step
+            if (stepIndex === shipNowSteps.length - 1) {
+                populateReviewStep();
+            }
+        }
+
+        function validateShipNowStep(stepIndex) {
+            let isValid = true;
+            if (stepIndex === 0) { // Origin Step
+                const country = shipNowOriginCountrySelect.value;
+                const city = document.getElementById('ship-origin-city').value.trim();
+                if (!country || !city) {
+                    alert('กรุณากรอกประเทศและเมืองต้นทางให้ครบถ้วน'); // Use alert for simplicity, replace with custom modal
+                    isValid = false;
+                }
+            } else if (stepIndex === 1) { // Destination Step
+                const country = shipNowDestinationCountrySelect.value;
+                const city = document.getElementById('ship-destination-city').value.trim();
+                if (!country || !city) {
+                    alert('กรุณากรอกประเทศและเมืองปลายทางให้ครบถ้วน');
+                    isValid = false;
+                }
+            } else if (stepIndex === 2) { // Package Step
+                if (packagePieces.length === 0) {
+                    alert('กรุณาเพิ่มรายละเอียดพัสดุอย่างน้อยหนึ่งชิ้น');
+                    isValid = false;
+                } else {
+                    for (const piece of packagePieces) {
+                        if (!piece.length || !piece.width || !piece.height || !piece.weight) {
+                            alert('กรุณากรอกขนาดและน้ำหนักพัสดุให้ครบถ้วนในทุกชิ้น');
+                            isValid = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            return isValid;
+        }
+
+        document.getElementById('ship-now-next-step').addEventListener('click', () => {
+            if (validateShipNowStep(currentShipNowStep)) {
+                currentShipNowStep++;
+                updateShipNowStep(currentShipNowStep);
+            }
+        });
+
+        document.getElementById('ship-now-prev-step').addEventListener('click', () => {
+            currentShipNowStep--;
+            updateShipNowStep(currentShipNowStep);
+        });
+
+        document.getElementById('ship-now-back-to-main').addEventListener('click', () => {
+            navigateTo('corporate');
+        });
+
+        // Package Pieces Management
+        const packagePiecesContainer = document.getElementById('package-pieces-container');
+
+        function renderPackagePieces() {
+            packagePiecesContainer.innerHTML = ''; // Clear existing
+            packagePieces.forEach((piece, index) => {
+                const pieceDiv = document.createElement('div');
+                pieceDiv.className = 'border border-black rounded-md p-4 mb-4 bg-white shadow-sm relative'; /* Changed border-gray-300 to border-black */
+                pieceDiv.innerHTML = `
+                    <h3 class="text-lg font-medium text-gray-700 mb-3">ชิ้นที่ ${index + 1}</h3>
+                    ${packagePieces.length > 1 ? `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 rounded-full p-1 focus:outline-none focus:ring-2 focus:ring-red-500" data-index="${index}" aria-label="Remove piece">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                    ` : ''}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <label for="ship-length-${index}" class="block text-sm font-medium text-gray-700 mb-1">ความยาว (ซม.):</label>
+                            <input type="number" id="ship-length-${index}" placeholder="ยาว" min="0.1" step="0.1" class="input-field" value="${piece.length}" required data-field="length">
+                        </div>
+                        <div>
+                            <label for="ship-width-${index}" class="block text-sm font-medium text-gray-700 mb-1">ความกว้าง (ซม.):</label>
+                            <input type="number" id="ship-width-${index}" placeholder="กว้าง" min="0.1" step="0.1" class="input-field" value="${piece.width}" required data-field="width">
+                        </div>
+                        <div>
+                            <label for="ship-height-${index}" class="block text-sm font-medium text-gray-700 mb-1">ความสูง (ซม.):</label>
+                            <input type="number" id="ship-height-${index}" placeholder="สูง" min="0.1" step="0.1" class="input-field" value="${piece.height}" required data-field="height">
+                        </div>
+                        <div>
+                            <label for="ship-weight-${index}" class="block text-sm font-medium text-gray-700 mb-1">น้ำหนัก (กก.):</label>
+                            <input type="number" id="ship-weight-${index}" placeholder="น้ำหนัก" min="0.1" step="0.1" class="input-field" value="${piece.weight}" required data-field="weight">
+                        </div>
+                    </div>
+                `;
+                packagePiecesContainer.appendChild(pieceDiv);
+
+                // Add event listeners for inputs
+                pieceDiv.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('input', (e) => {
+                        const field = e.target.dataset.field;
+                        packagePieces[index][field] = e.target.value;
+                    });
+                });
+            });
+
+            // Add event listeners for remove buttons
+            packagePiecesContainer.querySelectorAll('button[data-index]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const indexToRemove = parseInt(e.currentTarget.dataset.index);
+                    packagePieces.splice(indexToRemove, 1);
+                    renderPackagePieces(); // Re-render after removal
+                });
+            });
+        }
+
+        document.getElementById('add-piece-button').addEventListener('click', () => {
+            packagePieces.push({ length: '', width: '', height: '', weight: '' });
+            renderPackagePieces();
+        });
+
+
+        // Review Step Population
+        function populateReviewStep() {
+            const reviewOrigin = document.getElementById('review-origin');
+            const reviewDestination = document.getElementById('review-destination');
+            const reviewPackageList = document.getElementById('review-package-list');
+
+            const originCountry = shipNowOriginCountrySelect.value;
+            const originCity = document.getElementById('ship-origin-city').value;
+            const originPostalCode = document.getElementById('ship-origin-postalcode').value;
+
+            const destinationCountry = shipNowDestinationCountrySelect.value;
+            const destinationCity = document.getElementById('ship-destination-city').value;
+            const destinationPostalCode = document.getElementById('ship-destination-postalcode').value;
+
+            reviewOrigin.textContent = `${originCity}, ${originCountry} ${originPostalCode ? '(' + originPostalCode + ')' : ''}`;
+            reviewDestination.textContent = `${destinationCity}, ${destinationCountry} ${destinationPostalCode ? '(' + destinationPostalCode + ')' : ''}`;
+
+            reviewPackageList.innerHTML = '';
+            packagePieces.forEach((piece, index) => {
+                const li = document.createElement('li');
+                li.textContent = `ชิ้นที่ ${index + 1}: ยาว ${piece.length} ซม., กว้าง ${piece.width} ซม., สูง ${piece.height} ซม., น้ำหนัก ${piece.weight} กก.`;
+                reviewPackageList.appendChild(li);
+            });
+        }
+
+        document.getElementById('confirm-shipment-button').addEventListener('click', () => {
+            // This is the final submission for Ship Now
+            const shipmentResultDiv = document.getElementById('shipment-result');
+            
+            const finalData = {
+                origin: {
+                    country: shipNowOriginCountrySelect.value,
+                    city: document.getElementById('ship-origin-city').value,
+                    postalCode: document.getElementById('ship-origin-postalcode').value
+                },
+                destination: {
+                    country: shipNowDestinationCountrySelect.value,
+                    city: document.getElementById('ship-destination-city').value,
+                    postalCode: document.getElementById('ship-destination-postalcode').value
+                },
+                package: packagePieces.map(piece => ({ // Ensure data is parsed to numbers
+                    length: parseFloat(piece.length),
+                    width: parseFloat(piece.width),
+                    height: parseFloat(piece.height),
+                    weight: parseFloat(piece.weight)
+                }))
+            };
+
+            console.log("Final shipment data to be sent:", finalData);
+            shipmentResultDiv.textContent = "ดำเนินการจัดส่งสำเร็จ! (นี่คือการจำลอง)";
+            shipmentResultDiv.classList.remove('hidden');
+
+            /*
+            fetch('YOUR_VB_NET_API_ENDPOINT/createShipment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(finalData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                shipmentResultDiv.textContent = `การจัดส่งของคุณ ${data.trackingNumber} ถูกสร้างขึ้นแล้ว!`;
+                shipmentResultDiv.classList.remove('hidden');
+                // Optionally redirect or provide next steps
+            })
+            .catch(error => {
+                console.error('Error creating shipment:', error);
+                shipmentResultDiv.textContent = 'เกิดข้อผิดพลาดในการสร้างการจัดส่ง';
+                shipmentResultDiv.classList.remove('hidden');
+            });
+            */
+        });
+
+
+        // --- Initial Load Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('corporate-page'); // Show corporate page by default
+            populateCountrySelects(); // Populate quote page countries
+            populateShipNowCountrySelects(); // Populate ship now countries
+            initializeShipNowForm(); // Initialize ship now form
+        });
+
+    </script>
+</body>
+</html>
