@@ -3,184 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL Backup Solution</title>
+    <title>DHL Backup Solution - ปิดปรับปรุง</title>
+    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Custom font for better readability */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Ensure dark mode styles are basic if theme-toggle is removed */
+        .dark-mode {
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+        }
+        .dark-mode .bg-white {
+            background-color: #2d3748; /* Darker card background */
+            color: #e2e8f0;
+        }
+        .dark-mode .text-gray-800 {
+            color: #e2e8f0;
+        }
+        .dark-mode .text-gray-600 {
+            color: #cbd5e0;
+        }
+        .dark-mode .text-gray-500 {
+            color: #a0aec0;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <!-- Header section, minimal changes from original -->
     <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10 rounded-b-xl">
-         <a href="index.html" class="flex items-center"><span class="text-4xl font-bold text-red-600">DHL</span><span class="ml-2 text-xl font-semibold text-gray-800 hidden sm:block">Backup Solution</span></a>
-        <nav id="desktop-utilities-nav" class="hidden md:flex items-center space-x-4">
-            <div class="relative">
-                <button id="language-toggle-button" class="utility-button px-4 py-2 flex items-center gap-2"><span id="current-language-display"></span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+         <a href="#" class="flex items-center"><span class="text-4xl font-bold text-red-600">DHL</span><span class="ml-2 text-xl font-semibold text-gray-800 hidden sm:block">Backup Solution</span></a>
+        <!-- Utility navigation (language/theme) can be removed or simplified as it's a temporary maintenance page -->
+        <nav id="desktop-utilities-nav" class="flex items-center space-x-4">
+            <!-- Language toggle can be removed if not needed for maintenance -->
+            <!-- <div class="relative">
+                <button id="language-toggle-button" class="utility-button px-4 py-2 flex items-center gap-2"><span id="current-language-display">TH</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                 <div id="language-dropdown" class="language-dropdown absolute right-0 mt-2 w-28 bg-white rounded-md shadow-lg hidden z-20">
                     <a href="#" class="block px-4 py-2" data-lang="th">ภาษาไทย</a><a href="#" class="block px-4 py-2" data-lang="en">English</a>
                 </div>
-            </div>
+            </div> -->
+            <!-- Theme toggle can be simplified or removed -->
             <button id="theme-toggle" class="utility-button">
                 <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <svg id="theme-icon-dark" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
             </button>
         </nav>
-        <button id="mobile-menu-button" class="md:hidden text-gray-700 p-2 rounded-md"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+        <button id="mobile-menu-button" class="md:hidden text-gray-700 p-2 rounded-md hidden"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
     </header>
 
-    <main class="container py-8">
-        <section id="corporate-page">
-            <section id="tracking-section" class="relative bg-cover bg-center h-80 flex flex-col items-center justify-center text-white text-center rounded-xl my-8 shadow-lg" style="background-image: url(https://placehold.co/1200x400/FFCC00/CC0000?text=TRACK+YOUR+SHIPMENT);">
-                <div class="absolute inset-0 bg-black opacity-50 rounded-xl"></div>
-                <div class="relative z-10 p-4">
-                    <h2 class="text-4xl md:text-5xl font-extrabold mb-4" data-i18n="trackYourPackageTitle"></h2>
-                    <p class="text-lg mb-6" data-i18n="enterTrackingNumber"></p>
-                    <div class="flex flex-col sm:flex-row max-w-xl mx-auto gap-2">
-                        <input type="text" id="tracking-number" class="w-full sm:flex-grow px-5 py-3 rounded-md text-gray-800" data-i18n-placeholder="enterTrackingNumberPlaceholder"/>
-                        <button id="track-button" class="btn-primary btn-red w-full sm:w-auto" data-i18n="trackButton"></button>
-                    </div>
-                    <div id="tracking-result" class="mt-4 p-3 bg-white text-black rounded-lg shadow-md hidden"></div>
-                </div>
-            </section>
-            
-            <section class="card my-8">
-                <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8" data-i18n="gettingStartedTitle"></h2>
-                <div class="flex flex-col md:flex-row justify-center gap-6 max-w-3xl mx-auto">
-                    <a href="quote.html" class="main-action-button bg-yellow-500 text-black hover:bg-yellow-600">
-                        <svg class="w-14 h-14 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m-3 4h.01M12 15h.01M12 11h.01M16 11h.01M16 15h.01M8 15h.01M8 11h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span data-i18n="calculateQuote"></span>
-                    </a>
-                    <a href="ship.html" class="main-action-button bg-yellow-500 text-black hover:bg-yellow-600">
-                        <svg class="w-14 h-14 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8.25V17.25H19V8.25L12 3L5 8.25Z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 8.25L12 13.5L5 8.25"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 13.5V21"></path></svg>
-                        <span data-i18n="createShipment"></span>
-                    </a>
-                </div>
-            </section>
+    <main class="container py-8 flex-grow flex items-center justify-center">
+        <section id="maintenance-page-content" class="bg-white p-8 rounded-lg shadow-xl text-center max-w-lg w-full mx-auto">
+            <!-- Maintenance icon (using a simple SVG for a modern look) -->
+            <svg class="mx-auto h-24 w-24 text-blue-500 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.534.296.96.657 1.298 1.065zm-.962 10.325a3 3 0 113-3 3 3 0 01-3 3z"></path>
+            </svg>
 
-            <section id="contact-info-section" class="card my-8">
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-4" data-i18n="emergencyOnlyTitle"></h2>
-                <p class="text-center text-gray-700 max-w-2xl mx-auto" data-i18n="emergencySystemMessage"></p>
-            </section>
-        </section>
-
-        <section id="tracking-display-page" class="hidden-page card max-w-4xl mx-auto">
-             <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-8" data-i18n="trackingDetailsTitle"></h2>
-             <div id="tracking-content" class="space-y-6"></div>
-             <button type="button" id="tracking-back-to-main" class="mt-8 w-full btn-primary btn-gray" data-i18n="backToMain"></button>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">เว็บไซต์ปิดให้บริการชั่วคราว</h1>
+            <p class="text-lg text-gray-600 mb-6">ขออภัยในความไม่สะดวก เว็บไซต์ของเรากำลังดำเนินการปรับปรุงและจะกลับมาให้บริการในไม่ช้า</p>
+            <p class="text-md text-gray-500 mb-4">ระบบจะเปลี่ยนเส้นทางไปยังหน้าหลักของ MyDHL Express ใน <span id="countdown">10</span> วินาที</p>
+            <p class="text-md text-gray-500">หากไม่ถูกเปลี่ยนเส้นทางโดยอัตโนมัติ กรุณาคลิกที่นี่: <a href="https://mydhl.express.dhl/th/en/home.html#/getQuoteTab" class="text-blue-600 hover:underline">MyDHL Express</a></p>
         </section>
     </main>
-    <footer class="bg-gray-800 text-white py-8 mt-8"><div class="text-center text-sm text-gray-400">&copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span></div></footer>
+
+    <!-- Footer section, minimal changes from original -->
+    <footer class="bg-gray-800 text-white py-8 mt-8">
+        <div class="text-center text-sm text-gray-400">&copy; <span id="current-year"></span> DHL Express. สงวนลิขสิทธิ์.</div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const translations = { 'th': { 'homepage': 'หน้าหลัก', 'trackYourPackageTitle': 'ติดตามพัสดุของคุณ', 'enterTrackingNumber': 'ป้อนหมายเลขติดตามพัสดุ', 'trackButton': 'Track', 'gettingStartedTitle': 'เริ่มต้นใช้งาน', 'calculateQuote': 'คำนวณค่าขนส่ง', 'createShipment': 'สร้างใบนำส่ง', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'enterTrackingNumberPlaceholder': 'กรอกหมายเลขติดตามพัสดุ', 'emergencyOnlyTitle': 'เฉพาะกรณีฉุกเฉิน', 'emergencySystemMessage': 'ระบบนี้จะถูกเปิดใช้งานในกรณีที่ระบบ MyDHL+ ไม่สามารถใช้งานได้เท่านั้น หากระบบ MyDHL+ สามารถกลับมาใช้งานได้ปกติแล้ว ระบบนี้จะถูกระงับใช้ภายใน 30 นาที ขอบคุณที่ใช้บริการ DHL Express', 'trackingDetailsTitle': 'รายละเอียดการจัดส่ง', 'trackingNumberDisplay': 'หมายเลขติดตามพัสดุ:', 'status': 'สถานะ:', 'origin': 'ส่งจาก:', 'destination': 'ไปยัง:', 'pieces': 'จำนวน:', 'eventHistory': 'อัพเดทการจัดส่งทั้งหมด', 'eventAt': 'ที่', 'eventOn': 'เมื่อ', 'noEventsFound': 'ไม่พบประวัติเหตุการณ์', 'backToMain': 'กลับหน้าหลัก', 'trackingSimulated': 'กำลังติดตาม: {trackingNumber}...', 'trackingError': 'เกิดข้อผิดพลาด:', 'serverError': 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'trackingResultUnexpected': 'ไม่พบข้อมูลการจัดส่ง' }, 'en': { 'homepage': 'Home', 'trackYourPackageTitle': 'Track Your Shipment', 'enterTrackingNumber': 'Enter your tracking number', 'trackButton': 'Track', 'gettingStartedTitle': 'Get Started', 'calculateQuote': 'Calculate Quote', 'createShipment': 'Create Shipment', 'allRightsReserved': 'All rights reserved.', 'enterTrackingNumberPlaceholder': 'Enter tracking number', 'emergencyOnlyTitle': 'For Emergency Only', 'emergencySystemMessage': 'This system will be activated only if the MyDHL+ system is unavailable. If MyDHL+ system becomes operational again, this system will be temporarily suspended within 30 minutes. Thank you for using DHL Express.', 'trackingDetailsTitle': 'Shipment Details', 'trackingNumberDisplay': 'Tracking Number:', 'status': 'Status:', 'origin': 'Origin:', 'destination': 'Destination:', 'pieces': 'Pieces:', 'eventHistory': 'All Shipment Updates', 'eventAt': 'at', 'eventOn': 'on', 'noEventsFound': 'No event history found', 'backToMain': 'Back to Main', 'trackingSimulated': 'Tracking: {trackingNumber}...', 'trackingError': 'An error occurred:', 'serverError': 'Could not connect to the server', 'trackingResultUnexpected': 'Shipment information not found' } };
-            let currentLanguage = localStorage.getItem('language') || 'th';
-            function getTranslatedText(key, replacements = {}) { let text = translations[currentLanguage]?.[key] || key; for (const p in replacements) { text = text.replace(`{${p}}`, replacements[p]); } return text; }
-            function updateContentLanguage() { document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = getTranslatedText(el.getAttribute('data-i18n')); }); document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = getTranslatedText(el.getAttribute('data-i18n-placeholder')); }); document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase(); document.title = `DHL Backup Solution - ${getTranslatedText('homepage')}`; }
-            function setupTheme() {
-                const themeToggle = document.getElementById('theme-toggle');
-                const lightIcon = document.getElementById('theme-icon-light');
-                const darkIcon = document.getElementById('theme-icon-dark');
-                const enableDarkMode = () => { document.body.classList.add('dark-mode'); localStorage.setItem('theme', 'dark'); lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden'); };
-                const disableDarkMode = () => { document.body.classList.remove('dark-mode'); localStorage.setItem('theme', 'light'); lightIcon.classList.add('hidden'); darkIcon.classList.remove('hidden'); };
-                themeToggle.addEventListener('click', () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode());
-                if (localStorage.getItem('theme') === 'dark') { enableDarkMode(); } else { disableDarkMode(); }
-            }
-            function setupLanguageSwitch() { document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden')); document.querySelectorAll('[data-lang]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); currentLanguage = e.target.dataset.lang; localStorage.setItem('language', currentLanguage); updateContentLanguage(); document.getElementById('language-dropdown').classList.add('hidden'); }); }); }
-            
-            const corporatePage = document.getElementById('corporate-page');
-            const trackingDisplayPage = document.getElementById('tracking-display-page');
+            // Setup current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            function displayTrackingResults(shipment) {
-                const contentDiv = document.getElementById('tracking-content');
-                const shipperCity = shipment.shipperDetails?.postalAddress?.cityName || '';
-                const shipperCountry = shipment.shipperDetails?.postalAddress?.countryCode || '';
-                const receiverCity = shipment.receiverDetails?.postalAddress?.cityName || '';
-                const receiverCountry = shipment.receiverDetails?.postalAddress?.countryCode || '';
-                const pieceCount = shipment.pieces?.length || 0;
-                
-                const eventsByDate = (shipment.events || []).reduce((acc, event) => {
-                    const date = new Date(event.date).toLocaleDateString('en-CA');
-                    if (!acc[date]) acc[date] = [];
-                    acc[date].push(event);
-                    return acc;
-                }, {});
+            // Simple theme toggle for this page
+            const themeToggle = document.getElementById('theme-toggle');
+            const lightIcon = document.getElementById('theme-icon-light');
+            const darkIcon = document.getElementById('theme-icon-dark');
 
-                const sortedDates = Object.keys(eventsByDate).sort((a, b) => new Date(b) - new Date(a));
+            const enableDarkMode = () => {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+                lightIcon.classList.remove('hidden');
+                darkIcon.classList.add('hidden');
+            };
 
-                contentDiv.innerHTML = `
-                    <div class="mb-6 pb-4 border-b border-gray-300 dark:border-gray-600">
-                        <p class="text-xl font-bold text-red-600">${getTranslatedText('trackingNumberDisplay')} ${shipment.shipmentTrackingNumber || 'N/A'}</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-sm">
-                            <div><p class="font-bold">${getTranslatedText('origin')}</p><p>${shipperCity}, ${shipperCountry}</p></div>
-                            <div><p class="font-bold">${getTranslatedText('destination')}</p><p>${receiverCity}, ${receiverCountry}</p></div>
-                            <div><p class="font-bold">${getTranslatedText('pieces')}</p><p>${pieceCount}</p></div>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold mb-4">${getTranslatedText('eventHistory')}</h3>
-                        ${sortedDates.length > 0 ? 
-                            sortedDates.map(date => `
-                                <div>
-                                    <h4 class="timeline-date-header">${new Date(date).toLocaleDateString(currentLanguage === 'th' ? 'th-TH' : 'en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h4>
-                                    <ul class="tracking-timeline">
-                                    ${eventsByDate[date]
-                                        .sort((a, b) => (b.time || '').localeCompare(a.time || ''))
-                                        .map((event, index) => `
-                                        <li class="timeline-item ${index === 0 && date === sortedDates[0] ? 'is-latest' : ''}">
-                                            <div class="timeline-icon">
-                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                                            </div>
-                                            <div class="timeline-content">
-                                                <p class="timeline-timestamp">${event.time || ''}</p>
-                                                <p class="timeline-status">${event.description || 'N/A'}</p>
-                                                <p class="timeline-location">${event.serviceArea?.[0]?.description || ''}</p>
-                                            </div>
-                                        </li>
-                                    `).join('')}
-                                    </ul>
-                                </div>
-                            `).join('') :
-                            `<p class="italic">${getTranslatedText('noEventsFound')}</p>`
-                        }
-                    </div>
-                `;
-            }
-            
-            document.getElementById('track-button').addEventListener('click', async () => {
-                const trackButton = document.getElementById('track-button');
-                const trackingNumber = document.getElementById('tracking-number').value.trim();
-                const trackingResultDiv = document.getElementById('tracking-result');
-                if (!trackingNumber) { trackingResultDiv.textContent = getTranslatedText('enterTrackingNumberPlaceholder'); trackingResultDiv.classList.remove('hidden'); return; }
-                trackingResultDiv.textContent = getTranslatedText('trackingSimulated', { trackingNumber });
-                trackingResultDiv.classList.remove('hidden');
-                trackButton.disabled = true;
-                try {
-                    const response = await fetch(`https://dbs-back-viruzjokes-projects.vercel.app/api/track?trackingNumber=${trackingNumber}`);
-                    if (!response.ok) throw new Error(getTranslatedText('serverError'));
-                    const data = await response.json();
-                    if (data?.shipments?.[0]) {
-                        displayTrackingResults(data.shipments[0]);
-                        corporatePage.classList.add('hidden-page');
-                        trackingDisplayPage.classList.remove('hidden-page');
-                        trackingResultDiv.classList.add('hidden');
-                    } else {
-                        trackingResultDiv.textContent = getTranslatedText('trackingResultUnexpected');
-                    }
-                } catch (error) {
-                    trackingResultDiv.textContent = `${getTranslatedText('trackingError')} ${error.message}`;
-                } finally {
-                    trackButton.disabled = false;
+            const disableDarkMode = () => {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
+            };
+
+            themeToggle.addEventListener('click', () => {
+                if (document.body.classList.contains('dark-mode')) {
+                    disableDarkMode();
+                } else {
+                    enableDarkMode();
                 }
             });
 
-            document.getElementById('tracking-back-to-main').addEventListener('click', () => {
-                trackingDisplayPage.classList.add('hidden-page');
-                corporatePage.classList.remove('hidden-page');
-                document.getElementById('tracking-number').value = '';
-            });
+            // Apply initial theme based on localStorage
+            if (localStorage.getItem('theme') === 'dark') {
+                enableDarkMode();
+            } else {
+                disableDarkMode();
+            }
 
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-            setupTheme();
-            setupLanguageSwitch();
-            updateContentLanguage();
+            // Countdown and Redirect Logic
+            let countdown = 10;
+            const countdownElement = document.getElementById('countdown');
+            const redirectUrl = 'https://mydhl.express.dhl/th/en/home.html#/getQuoteTab';
+
+            const interval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    window.location.href = redirectUrl;
+                }
+            }, 1000); // Update every 1 second
         });
     </script>
 </body>
