@@ -67,9 +67,10 @@
         </section>
     </main>
     <footer class="bg-gray-800 text-white py-8 mt-8"><div class="text-center text-sm text-gray-400">&copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span></div></footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const translations = { 'th': { 'homepage': 'หน้าหลัก', 'trackYourPackageTitle': 'ติดตามพัสดุของคุณ', 'enterTrackingNumber': 'ป้อนหมายเลขติดตามพัสดุ', 'trackButton': 'Track', 'gettingStartedTitle': 'เริ่มต้นใช้งาน', 'calculateQuote': 'คำนวณค่าขนส่ง', 'createShipment': 'สร้างใบนำส่ง', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'enterTrackingNumberPlaceholder': 'กรอกหมายเลขติดตามพัสดุ', 'emergencyOnlyTitle': 'เฉพาะกรณีฉุกเฉิน', 'emergencySystemMessage': 'ระบบนี้จะถูกเปิดใช้งานในกรณีที่ระบบ MyDHL+ ไม่สามารถใช้งานได้เท่านั้น หากระบบ MyDHL+ สามารถกลับมาใช้งานได้ปกติแล้ว ระบบนี้จะถูกระงับใช้ภายใน 30 นาที ขอบคุณที่ใช้บริการ DHL Express', 'trackingDetailsTitle': 'รายละเอียดการจัดส่ง', 'trackingNumberDisplay': 'หมายเลขติดตามพัสดุ:', 'status': 'สถานะ:', 'currentLocation': 'ตำแหน่งปัจจุบัน:', 'eventHistory': 'อัพเดทการจัดส่งทั้งหมด', 'eventAt': 'ที่', 'eventOn': 'เมื่อ', 'noEventsFound': 'ไม่พบประวัติเหตุการณ์', 'backToMain': 'กลับหน้าหลัก', 'trackingSimulated': 'กำลังติดตาม: {trackingNumber}...', 'trackingError': 'เกิดข้อผิดพลาด:', 'serverError': 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'trackingResultUnexpected': 'ไม่พบข้อมูลการจัดส่ง' }, 'en': { 'homepage': 'Home', 'trackYourPackageTitle': 'Track Your Shipment', 'enterTrackingNumber': 'Enter your tracking number', 'trackButton': 'Track', 'gettingStartedTitle': 'Get Started', 'calculateQuote': 'Calculate Quote', 'createShipment': 'Create Shipment', 'allRightsReserved': 'All rights reserved.', 'enterTrackingNumberPlaceholder': 'Enter tracking number', 'emergencyOnlyTitle': 'For Emergency Only', 'emergencySystemMessage': 'This system will be activated only if the MyDHL+ system is unavailable. If MyDHL+ system becomes operational again, this system will be temporarily suspended within 30 minutes. Thank you for using DHL Express.', 'trackingDetailsTitle': 'Shipment Details', 'trackingNumberDisplay': 'Tracking Number:', 'status': 'Status:', 'currentLocation': 'Current Location:', 'eventHistory': 'All Shipment Updates', 'eventAt': 'at', 'eventOn': 'on', 'noEventsFound': 'No event history found', 'backToMain': 'Back to Main', 'trackingSimulated': 'Tracking: {trackingNumber}...', 'trackingError': 'An error occurred:', 'serverError': 'Could not connect to the server', 'trackingResultUnexpected': 'Shipment information not found' } };
+            const translations = { 'th': { 'homepage': 'หน้าหลัก', 'trackYourPackageTitle': 'ติดตามพัสดุของคุณ', 'enterTrackingNumber': 'ป้อนหมายเลขติดตามพัสดุ', 'trackButton': 'Track', 'gettingStartedTitle': 'เริ่มต้นใช้งาน', 'calculateQuote': 'คำนวณค่าขนส่ง', 'createShipment': 'สร้างใบนำส่ง', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'enterTrackingNumberPlaceholder': 'กรอกหมายเลขติดตามพัสดุ', 'emergencyOnlyTitle': 'เฉพาะกรณีฉุกเฉิน', 'emergencySystemMessage': 'ระบบนี้จะถูกเปิดใช้งานในกรณีที่ระบบ MyDHL+ ไม่สามารถใช้งานได้เท่านั้น หากระบบ MyDHL+ สามารถกลับมาใช้งานได้ปกติแล้ว ระบบนี้จะถูกระงับใช้ภายใน 30 นาที ขอบคุณที่ใช้บริการ DHL Express', 'trackingDetailsTitle': 'รายละเอียดการจัดส่ง', 'trackingNumberDisplay': 'หมายเลขติดตามพัสดุ:', 'status': 'สถานะ:', 'origin': 'ส่งจาก:', 'destination': 'ไปยัง:', 'pieces': 'จำนวน:', 'eventHistory': 'อัพเดทการจัดส่งทั้งหมด', 'eventAt': 'ที่', 'eventOn': 'เมื่อ', 'noEventsFound': 'ไม่พบประวัติเหตุการณ์', 'backToMain': 'กลับหน้าหลัก', 'trackingSimulated': 'กำลังติดตาม: {trackingNumber}...', 'trackingError': 'เกิดข้อผิดพลาด:', 'serverError': 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'trackingResultUnexpected': 'ไม่พบข้อมูลการจัดส่ง' }, 'en': { 'homepage': 'Home', 'trackYourPackageTitle': 'Track Your Shipment', 'enterTrackingNumber': 'Enter your tracking number', 'trackButton': 'Track', 'gettingStartedTitle': 'Get Started', 'calculateQuote': 'Calculate Quote', 'createShipment': 'Create Shipment', 'allRightsReserved': 'All rights reserved.', 'enterTrackingNumberPlaceholder': 'Enter tracking number', 'emergencyOnlyTitle': 'For Emergency Only', 'emergencySystemMessage': 'This system will be activated only if the MyDHL+ system is unavailable. If MyDHL+ system becomes operational again, this system will be temporarily suspended within 30 minutes. Thank you for using DHL Express.', 'trackingDetailsTitle': 'Shipment Details', 'trackingNumberDisplay': 'Tracking Number:', 'status': 'Status:', 'origin': 'Origin:', 'destination': 'Destination:', 'pieces': 'Pieces:', 'eventHistory': 'All Shipment Updates', 'eventAt': 'at', 'eventOn': 'on', 'noEventsFound': 'No event history found', 'backToMain': 'Back to Main', 'trackingSimulated': 'Tracking: {trackingNumber}...', 'trackingError': 'An error occurred:', 'serverError': 'Could not connect to the server', 'trackingResultUnexpected': 'Shipment information not found' } };
             let currentLanguage = localStorage.getItem('language') || 'th';
             function getTranslatedText(key, replacements = {}) { let text = translations[currentLanguage]?.[key] || key; for (const p in replacements) { text = text.replace(`{${p}}`, replacements[p]); } return text; }
             function updateContentLanguage() { document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = getTranslatedText(el.getAttribute('data-i18n')); }); document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = getTranslatedText(el.getAttribute('data-i18n-placeholder')); }); document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase(); document.title = `DHL Backup Solution - ${getTranslatedText('homepage')}`; }
@@ -88,34 +89,55 @@
             const trackingDisplayPage = document.getElementById('tracking-display-page');
 
             function displayTrackingResults(shipment) {
-                const latestEvent = shipment.events?.slice(-1)[0] || {};
                 const contentDiv = document.getElementById('tracking-content');
-                const eventsReversed = shipment.events ? [...shipment.events].reverse() : [];
+                const shipperCity = shipment.shipperDetails?.postalAddress?.cityName || '';
+                const shipperCountry = shipment.shipperDetails?.postalAddress?.countryCode || '';
+                const receiverCity = shipment.receiverDetails?.postalAddress?.cityName || '';
+                const receiverCountry = shipment.receiverDetails?.postalAddress?.countryCode || '';
+                const pieceCount = shipment.pieces?.length || 0;
+                
+                const eventsByDate = (shipment.events || []).reduce((acc, event) => {
+                    const date = new Date(event.date).toLocaleDateString('en-CA');
+                    if (!acc[date]) acc[date] = [];
+                    acc[date].push(event);
+                    return acc;
+                }, {});
+
+                const sortedDates = Object.keys(eventsByDate).sort((a, b) => new Date(b) - new Date(a));
 
                 contentDiv.innerHTML = `
                     <div class="mb-6 pb-4 border-b border-gray-300 dark:border-gray-600">
                         <p class="text-xl font-bold text-red-600">${getTranslatedText('trackingNumberDisplay')} ${shipment.shipmentTrackingNumber || 'N/A'}</p>
-                        <p class="text-lg">${getTranslatedText('status')} <span class="font-semibold">${shipment.status || 'N/A'}</span></p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-sm">
+                            <div><p class="font-bold">${getTranslatedText('origin')}</p><p>${shipperCity}, ${shipperCountry}</p></div>
+                            <div><p class="font-bold">${getTranslatedText('destination')}</p><p>${receiverCity}, ${receiverCountry}</p></div>
+                            <div><p class="font-bold">${getTranslatedText('pieces')}</p><p>${pieceCount}</p></div>
+                        </div>
                     </div>
                     <div>
                         <h3 class="text-xl font-bold mb-4">${getTranslatedText('eventHistory')}</h3>
-                        <ul class="tracking-timeline">
-                        ${eventsReversed.length > 0 ? 
-                            eventsReversed.map((event, index) => `
-                                <li class="timeline-item ${index === 0 ? 'is-latest' : ''}">
-                                    <div class="timeline-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                                    </div>
-                                    <div class="timeline-content">
-                                        <p class="timeline-status">${event.description || 'N/A'}</p>
-                                        <p class="timeline-location">${event.serviceArea?.[0]?.description || ''}</p>
-                                        <p class="timeline-timestamp">${new Date(event.date).toLocaleDateString()} | ${event.time || ''}</p>
-                                    </div>
-                                </li>
+                        ${sortedDates.length > 0 ? 
+                            sortedDates.map(date => `
+                                <div>
+                                    <h4 class="timeline-date-header">${new Date(date).toLocaleDateString(currentLanguage === 'th' ? 'th-TH' : 'en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h4>
+                                    <ul class="tracking-timeline">
+                                    ${eventsByDate[date].map((event, index) => `
+                                        <li class="timeline-item ${index === 0 && date === sortedDates[0] ? 'is-latest' : ''}">
+                                            <div class="timeline-icon">
+                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <p class="timeline-timestamp">${event.time || ''}</p>
+                                                <p class="timeline-status">${event.description || 'N/A'}</p>
+                                                <p class="timeline-location">${event.serviceArea?.[0]?.description || ''}</p>
+                                            </div>
+                                        </li>
+                                    `).join('')}
+                                    </ul>
+                                </div>
                             `).join('') :
-                            `<li><p class="italic">${getTranslatedText('noEventsFound')}</p></li>`
+                            `<p class="italic">${getTranslatedText('noEventsFound')}</p>`
                         }
-                        </ul>
                     </div>
                 `;
             }
