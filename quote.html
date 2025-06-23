@@ -9,16 +9,16 @@
 </head>
 <body>
     <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10 rounded-b-xl">
-         <a href="main.html" class="flex items-center"><span class="text-4xl font-bold text-red-600">DHL</span><span class="ml-2 text-xl font-semibold text-gray-800 hidden sm:block">Backup Solution</span></a>
+         <a href="index.html" class="flex items-center"><span class="text-4xl font-bold text-red-600">DHL</span><span class="ml-2 text-xl font-semibold text-gray-800 hidden sm:block">Backup Solution</span></a>
         <nav id="desktop-utilities-nav" class="hidden md:flex items-center space-x-4">
             <div class="relative">
-                <button id="language-toggle-button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md flex items-center gap-2"><span id="current-language-display"></span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
-                <div id="language-dropdown" class="absolute right-0 mt-2 w-28 bg-white rounded-md shadow-lg hidden z-20">
+                <button id="language-toggle-button" class="utility-button px-4 py-2 flex items-center gap-2"><span id="current-language-display"></span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                <div id="language-dropdown" class="language-dropdown absolute right-0 mt-2 w-28 bg-white rounded-md shadow-lg hidden z-20">
                     <a href="#" class="block px-4 py-2" data-lang="th">ภาษาไทย</a>
                     <a href="#" class="block px-4 py-2" data-lang="en">English</a>
                 </div>
             </div>
-            <button id="theme-toggle" class="p-2 rounded-md btn-gray">
+            <button id="theme-toggle" class="utility-button">
                 <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                 <svg id="theme-icon-dark" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
             </button>
@@ -34,49 +34,22 @@
                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-4 p-4 border rounded-lg bg-yellow-50">
                         <h2 class="text-xl font-semibold" data-i18n="originInfo"></h2>
-                        <div>
-                            <label for="quote-origin-country" class="block text-sm font-medium mb-1" data-i18n="originCountry"></label>
-                            <select id="quote-origin-country" class="input-field" required><option value="" data-i18n="selectCountry"></option></select>
-                        </div>
-                        <div>
-                            <label for="quote-origin-city" class="block text-sm font-medium mb-1" data-i18n="originCity"></label>
-                            <input type="text" id="quote-origin-city" class="input-field" required data-i18n-placeholder="enterCity">
-                        </div>
-                        <div>
-                            <label for="quote-origin-postalcode" class="block text-sm font-medium mb-1" data-i18n="originPostalCodeRequired"></label>
-                            <input type="text" id="quote-origin-postalcode" class="input-field" required data-i18n-placeholder="enterPostalCode">
-                        </div>
+                        <div><label for="quote-origin-country" class="block text-sm font-medium mb-1" data-i18n="originCountry"></label><select id="quote-origin-country" class="input-field" required><option value="" data-i18n="selectCountry"></option></select></div>
+                        <div><label for="quote-origin-city" class="block text-sm font-medium mb-1" data-i18n="originCity"></label><input type="text" id="quote-origin-city" class="input-field" required data-i18n-placeholder="enterCity"></div>
+                        <div><label for="quote-origin-postalcode" class="block text-sm font-medium mb-1" data-i18n="originPostalCodeRequired"></label><input type="text" id="quote-origin-postalcode" class="input-field" required data-i18n-placeholder="enterPostalCode"></div>
                     </div>
                     <div class="space-y-4 p-4 border rounded-lg bg-yellow-50">
                         <h2 class="text-xl font-semibold" data-i18n="destinationInfo"></h2>
-                        <div>
-                            <label for="quote-destination-country" class="block text-sm font-medium mb-1" data-i18n="destinationCountry"></label>
-                            <select id="quote-destination-country" class="input-field" required><option value="" data-i18n="selectCountry"></option></select>
-                        </div>
-                        <div>
-                            <label for="quote-destination-city" class="block text-sm font-medium mb-1" data-i18n="destinationCity"></label>
-                            <input type="text" id="quote-destination-city" class="input-field" required data-i18n-placeholder="enterCity">
-                        </div>
-                        <div>
-                            <label for="quote-destination-postalcode" class="block text-sm font-medium mb-1" data-i18n="destinationPostalCodeRequired"></label>
-                            <input type="text" id="quote-destination-postalcode" class="input-field" required data-i18n-placeholder="enterPostalCode">
-                        </div>
+                        <div><label for="quote-destination-country" class="block text-sm font-medium mb-1" data-i18n="destinationCountry"></label><select id="quote-destination-country" class="input-field" required><option value="" data-i18n="selectCountry"></option></select></div>
+                        <div><label for="quote-destination-city" class="block text-sm font-medium mb-1" data-i18n="destinationCity"></label><input type="text" id="quote-destination-city" class="input-field" required data-i18n-placeholder="enterCity"></div>
+                        <div><label for="quote-destination-postalcode" class="block text-sm font-medium mb-1" data-i18n="destinationPostalCodeRequired"></label><input type="text" id="quote-destination-postalcode" class="input-field" required data-i18n-placeholder="enterPostalCode"></div>
                     </div>
                 </div>
                 <div class="space-y-4 p-4 border rounded-lg bg-yellow-50">
                     <h2 class="text-xl font-semibold" data-i18n="packageDetails"></h2>
-                    <div>
-                        <label for="quote-ship-date" class="block text-sm font-medium mb-1" data-i18n="shipmentDate"></label>
-                        <input type="date" id="quote-ship-date" class="input-field" required>
-                    </div>
-                    <div class="flex items-center mt-2">
-                        <input type="checkbox" id="quote-is-parcel" class="form-checkbox h-5 w-5 text-red-600 rounded-md">
-                        <label for="quote-is-parcel" class="ml-2 block text-sm font-medium" data-i18n="isParcel"></label>
-                    </div>
-                    <div id="quote-declared-value-container" class="hidden">
-                        <label for="quote-declared-value" class="block text-sm font-medium mb-1" data-i18n="declaredValue"></label>
-                        <input type="number" id="quote-declared-value" min="0" step="0.01" class="input-field" data-i18n-placeholder="enterDeclaredValue">
-                    </div>
+                    <div><label for="quote-ship-date" class="block text-sm font-medium mb-1" data-i18n="shipmentDate"></label><input type="date" id="quote-ship-date" class="input-field" required></div>
+                    <div class="flex items-center mt-2"><input type="checkbox" id="quote-is-parcel" class="form-checkbox h-5 w-5 text-red-600 rounded-md"><label for="quote-is-parcel" class="ml-2 block text-sm font-medium" data-i18n="isParcel"></label></div>
+                    <div id="quote-declared-value-container" class="hidden"><label for="quote-declared-value" class="block text-sm font-medium mb-1" data-i18n="declaredValue"></label><input type="number" id="quote-declared-value" min="0" step="0.01" class="input-field" data-i18n-placeholder="enterDeclaredValue"></div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div><label class="block text-sm" data-i18n="lengthCm"></label><input type="number" id="quote-length" min="0.1" step="0.1" class="input-field" required data-i18n-placeholder="lengthPlaceholder"></div>
                         <div><label class="block text-sm" data-i18n="widthCm"></label><input type="number" id="quote-width" min="0.1" step="0.1" class="input-field" required data-i18n-placeholder="widthPlaceholder"></div>
@@ -89,7 +62,7 @@
                     <button type="button" id="quote-clear-button" class="flex-1 btn-primary btn-gray" data-i18n="clearData"></button>
                 </div>
             </form>
-             <a href="main.html" class="mt-6 w-full btn-primary btn-gray text-center" data-i18n="backToMain"></a>
+             <a href="index.html" class="mt-6 w-full btn-primary btn-gray text-center" data-i18n="backToMain"></a>
         </section>
     </main>
     <footer class="bg-gray-800 text-white py-8 mt-8"><div class="text-center text-sm text-gray-400">&copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span></div></footer>
