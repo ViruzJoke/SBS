@@ -50,6 +50,7 @@ main { flex-grow: 1; padding: 1rem; }
 .btn-yellow:hover:not(:disabled) { background-color: #f59e0b; transform: translateY(-1px); }
 .btn-gray { background-color: #e5e7eb; color: #1f2937; }
 .btn-gray:hover:not(:disabled) { background-color: #d1d5db; transform: translateY(-1px); }
+
 .utility-button {
     background-color: #e5e7eb;
     color: #374151;
@@ -97,6 +98,8 @@ header, footer { width: 100%; z-index: 10; }
 .progress-step.is-complete .step-text { color: #4b5563; }
 
 /* --- Tracking Timeline (NEW) --- */
+.timeline-date-header { font-size: 1.125rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb; }
+.timeline-date-header:first-of-type { margin-top: 0; }
 .tracking-timeline { list-style: none; padding: 0; }
 .timeline-item { display: flex; gap: 1rem; position: relative; padding: 0.5rem 0 1.5rem 0; }
 .timeline-item:not(:last-child)::before { content: ''; position: absolute; left: 1.25rem; top: 1.25rem; bottom: -1.25rem; width: 2px; background-color: #e5e7eb; transform: translateX(-50%); }
@@ -120,7 +123,7 @@ body.dark-mode .btn-yellow { background-color: #f59e0b; color: #111827; }
 body.dark-mode .btn-gray, body.dark-mode .utility-button { background-color: #374151; color: #e5e7eb; }
 body.dark-mode .btn-gray:hover:not(:disabled), body.dark-mode .utility-button:hover { background-color: #4b5563; }
 body.dark-mode .bg-yellow-50 { background-color: #374151; border-color: #4b5563; }
-body.dark-mode .package-piece-item, body.dark-mode .timeline-item.is-latest .timeline-icon { background-color: #dc2626; }
+body.dark-mode .package-piece-item { background-color: #374151; }
 body.dark-mode .step-circle { border-color: #4b5563; background-color: #1f2937; color: #9ca3af; }
 body.dark-mode .progress-bar::before { background-color: #4b5563; }
 body.dark-mode .progress-line-fill { background-color: #fbbf24; }
@@ -129,6 +132,7 @@ body.dark-mode .progress-step.is-complete .step-text { color: #d1d5db; }
 body.dark-mode .language-dropdown { background-color: #1f2937; border: 1px solid #374151;}
 body.dark-mode .language-dropdown a { color: #d1d5db; }
 body.dark-mode .language-dropdown a:hover { background-color: #374151; }
+body.dark-mode .timeline-date-header { border-bottom-color: #374151; }
 body.dark-mode .timeline-item:not(:last-child)::before { background-color: #4b5563; }
 body.dark-mode .timeline-icon { background-color: #374151; }
 body.dark-mode .timeline-icon svg { color: #9ca3af; }
