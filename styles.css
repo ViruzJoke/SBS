@@ -1,6 +1,6 @@
 /*
   DHL Backup Solution - Central Stylesheet v7
-  เพิ่มสไตล์สำหรับ Tracking Timeline
+  เพิ่มสไตล์สำหรับ Tracking Timeline และ Accordion
 */
 
 /* --- Base and Layout --- */
@@ -64,7 +64,7 @@ main { flex-grow: 1; padding: 1rem; }
 .utility-button:hover { background-color: #d1d5db; }
 
 /* --- Components --- */
-.hidden-page { display: none !important; }
+.hidden-page, .hidden { display: none !important; }
 header, footer { width: 100%; z-index: 10; }
 .card {
     background-color: #ffffff;
@@ -85,19 +85,18 @@ header, footer { width: 100%; z-index: 10; }
 .main-action-button svg { width: 3.5rem; height: 3.5rem; margin-bottom: 0.75rem; }
 .main-action-button span { font-size: 1.25rem; font-weight: 600; text-align: center; line-height: 1.3; }
 
-/* --- Progress Bar --- */
-.progress-bar { display: flex; align-items: center; margin-bottom: 2rem; position: relative; }
-.progress-step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; }
-.step-circle { width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #d1d5db; background-color: #fff; color: #6b7280; transition: all 0.4s ease; }
-.step-text { font-size: 0.75rem; margin-top: 0.5rem; transition: color 0.4s ease; }
-.progress-bar::before { content: ''; position: absolute; top: 1.25rem; left: 12.5%; right: 12.5%; height: 2px; background-color: #e5e7eb; z-index: 1; }
-.progress-line-fill { position: absolute; top: 1.25rem; left: 12.5%; height: 2px; background-color: #fbbf24; z-index: 1; width: 0; transition: width 0.4s ease-in-out; }
-.progress-step.is-active .step-circle { background-color: #dc2626; border-color: #dc2626; color: white; }
-.progress-step.is-active .step-text { color: #dc2626; font-weight: 600; }
-.progress-step.is-complete .step-circle { background-color: #fbbf24; border-color: #fbbf24; color: #1f2937; }
-.progress-step.is-complete .step-text { color: #4b5563; }
+/* --- Accordion for Tracking (NEW) --- */
+.accordion-item { border-bottom: 1px solid #e5e7eb; }
+.accordion-item:last-child { border-bottom: none; }
+.accordion-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; cursor: pointer; }
+.accordion-header h4 { margin: 0; font-size: 1.125rem; font-weight: 700; }
+.accordion-header-info { font-size: 0.875rem; color: #6b7280; }
+.accordion-arrow { width: 1.5rem; height: 1.5rem; transition: transform 0.3s ease; }
+.accordion-header[aria-expanded="true"] .accordion-arrow { transform: rotate(180deg); }
+.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+.accordion-body-content { padding: 0 0 1rem 0; }
 
-/* --- Tracking Timeline (NEW) --- */
+/* --- Tracking Timeline --- */
 .timeline-date-header { font-size: 1.125rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb; }
 .timeline-date-header:first-of-type { margin-top: 0; }
 .tracking-timeline { list-style: none; padding: 0; }
@@ -112,7 +111,6 @@ header, footer { width: 100%; z-index: 10; }
 .timeline-location { color: #6b7280; font-size: 0.875rem; }
 .timeline-timestamp { font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem; }
 
-
 /* --- Dark Mode --- */
 body.dark-mode { background-color: #111827; color: #d1d5db; }
 body.dark-mode header, body.dark-mode footer, body.dark-mode .card { background-color: #1f2937; border-color: #374151; }
@@ -122,18 +120,12 @@ body.dark-mode .input-field:focus { border-color: #fbbf24; box-shadow: 0 0 0 3px
 body.dark-mode .btn-yellow { background-color: #f59e0b; color: #111827; }
 body.dark-mode .btn-gray, body.dark-mode .utility-button { background-color: #374151; color: #e5e7eb; }
 body.dark-mode .btn-gray:hover:not(:disabled), body.dark-mode .utility-button:hover { background-color: #4b5563; }
-body.dark-mode .bg-yellow-50 { background-color: #374151; border-color: #4b5563; }
-body.dark-mode .package-piece-item { background-color: #374151; }
-body.dark-mode .step-circle { border-color: #4b5563; background-color: #1f2937; color: #9ca3af; }
-body.dark-mode .progress-bar::before { background-color: #4b5563; }
-body.dark-mode .progress-line-fill { background-color: #fbbf24; }
-body.dark-mode .progress-step.is-active .step-text { color: #f87171; }
-body.dark-mode .progress-step.is-complete .step-text { color: #d1d5db; }
 body.dark-mode .language-dropdown { background-color: #1f2937; border: 1px solid #374151;}
 body.dark-mode .language-dropdown a { color: #d1d5db; }
 body.dark-mode .language-dropdown a:hover { background-color: #374151; }
-body.dark-mode .timeline-date-header { border-bottom-color: #374151; }
-body.dark-mode .timeline-item:not(:last-child)::before { background-color: #4b5563; }
+body.dark-mode .accordion-item { border-color: #374151; }
+body.dark-mode .accordion-header-info { color: #9ca3af; }
+body.dark-mode .timeline-date-header, body.dark-mode .timeline-item:not(:last-child)::before { border-color: #4b5563; }
 body.dark-mode .timeline-icon { background-color: #374151; }
 body.dark-mode .timeline-icon svg { color: #9ca3af; }
 body.dark-mode .timeline-location, body.dark-mode .timeline-timestamp { color: #9ca3af; }
