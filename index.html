@@ -29,9 +29,19 @@
         .dark-mode .text-gray-500 {
             color: #a0aec0;
         }
+        /* Specific dark mode adjustments for DHL theme elements */
+        .dark-mode .bg-yellow-50 {
+            background-color: #3b3c43; /* Darker yellow for dark mode body */
+        }
+        .dark-mode .text-red-500 {
+            color: #ef4444; /* Ensure red icon is visible */
+        }
+        .dark-mode .text-red-700 {
+            color: #ef4444; /* Ensure red text is visible */
+        }
     </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body class="bg-yellow-50 flex flex-col min-h-screen">
     <!-- Header section, minimal changes from original -->
     <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10 rounded-b-xl">
          <a href="#" class="flex items-center"><span class="text-4xl font-bold text-red-600">DHL</span><span class="ml-2 text-xl font-semibold text-gray-800 hidden sm:block">Backup Solution</span></a>
@@ -55,15 +65,16 @@
 
     <main class="container py-8 flex-grow flex items-center justify-center">
         <section id="maintenance-page-content" class="bg-white p-8 rounded-lg shadow-xl text-center max-w-lg w-full mx-auto">
-            <!-- Maintenance icon (using a simple SVG for a modern look) -->
-            <svg class="mx-auto h-24 w-24 text-blue-500 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.534.296.96.657 1.298 1.065zm-.962 10.325a3 3 0 113-3 3 3 0 01-3 3z"></path>
-            </svg>
+            <!-- Maintenance icon (updated to use the uploaded Gear.jpg image from the root of the repository) -->
+            <img src="Gear.jpg"
+                 onerror="this.onerror=null;this.src='https://placehold.co/96x96/FF0000/FFFFFF?text=Gear';"
+                 alt="Maintenance Gears"
+                 class="mx-auto h-24 w-24 mb-6">
 
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">เว็บไซต์ปิดให้บริการชั่วคราว</h1>
-            <p class="text-lg text-gray-600 mb-6">ขออภัยในความไม่สะดวก เว็บไซต์ของเรากำลังดำเนินการปรับปรุงและจะกลับมาให้บริการในไม่ช้า</p>
-            <p class="text-md text-gray-500 mb-4">ระบบจะเปลี่ยนเส้นทางไปยังหน้าหลักของ MyDHL Express ใน <span id="countdown">10</span> วินาที</p>
-            <p class="text-md text-gray-500">หากไม่ถูกเปลี่ยนเส้นทางโดยอัตโนมัติ กรุณาคลิกที่นี่: <a href="https://mydhl.express.dhl/th/en/home.html#/getQuoteTab" class="text-blue-600 hover:underline">MyDHL Express</a></p>
+            <h1 class="text-4xl font-bold text-red-700 mb-4">เว็บไซต์นี้ยังไม่เปิดให้บริการ</h1>
+            <p class="text-lg text-gray-700 mb-6">ขณะนี้เว็บไซต์ MyDHL+ สามารถให้บริการได้ตามปกติ</p>
+            <p class="text-md text-gray-600 mb-4">ระบบจะเปลี่ยนเส้นทางไปยังหน้าหลักของ MyDHL+ ใน <span id="countdown">10</span> วินาที</p>
+            <p class="text-md text-gray-600">หากไม่ถูกเปลี่ยนเส้นทางโดยอัตโนมัติ กรุณาคลิกที่นี่: <a href="https://mydhl.express.dhl/th/en/home.html#/getQuoteTab" class="text-blue-600 hover:underline">MyDHL+</a></p>
         </section>
     </main>
 
