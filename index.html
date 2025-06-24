@@ -33,8 +33,8 @@
                     <h2 class="text-4xl md:text-5xl font-extrabold mb-4" data-i18n="trackYourPackageTitle"></h2>
                     <p class="text-lg mb-6" data-i18n="enterTrackingNumber"></p>
                     <div class="flex flex-col sm:flex-row max-w-xl mx-auto gap-2">
-                        <input type="text" id="tracking-number" class="w-full sm:flex-grow px-5 py-3 rounded-md text-gray-800" data-i18n-placeholder="enterTrackingNumberPlaceholder"/>
-                        <button id="track-button" class="btn-primary btn-red w-full sm:w-auto" data-i18n="trackButton"></button>
+                        <textarea id="tracking-number" class="input-field w-full sm:flex-grow px-5 py-3 rounded-md text-gray-800 resize-none" rows="1" data-i18n-placeholder="enterTrackingNumberPlaceholder"></textarea>
+                        <button id="track-button" class="btn-primary btn-red w-full sm:w-auto mt-2 sm:mt-0" data-i18n="trackButton"></button>
                     </div>
                     <div id="tracking-result" class="mt-4 p-3 bg-white text-black rounded-lg shadow-md hidden"></div>
                 </div>
@@ -61,8 +61,8 @@
         </section>
 
         <section id="tracking-display-page" class="hidden-page card max-w-4xl mx-auto">
-             <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-8" data-i18n="trackingDetailsTitle"></h2>
-             <div id="tracking-content" class="space-y-6"></div>
+             <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-8" data-i18n="multiTrackingResultTitle"></h2>
+             <div id="tracking-content" class="space-y-4"></div>
              <button type="button" id="tracking-back-to-main" class="mt-8 w-full btn-primary btn-gray" data-i18n="backToMain"></button>
         </section>
     </main>
@@ -70,17 +70,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const translations = { 'th': { 'homepage': 'หน้าหลัก', 'trackYourPackageTitle': 'ติดตามพัสดุของคุณ', 'enterTrackingNumber': 'ป้อนหมายเลขติดตามพัสดุ', 'trackButton': 'Track', 'gettingStartedTitle': 'เริ่มต้นใช้งาน', 'calculateQuote': 'คำนวณค่าขนส่ง', 'createShipment': 'สร้างใบนำส่ง', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'enterTrackingNumberPlaceholder': 'กรอกหมายเลขติดตามพัสดุ', 'emergencyOnlyTitle': 'เฉพาะกรณีฉุกเฉิน', 'emergencySystemMessage': 'ระบบนี้จะถูกเปิดใช้งานในกรณีที่ระบบ MyDHL+ ไม่สามารถใช้งานได้เท่านั้น หากระบบ MyDHL+ สามารถกลับมาใช้งานได้ปกติแล้ว ระบบนี้จะถูกระงับใช้ภายใน 30 นาที ขอบคุณที่ใช้บริการ DHL Express', 'trackingDetailsTitle': 'รายละเอียดการจัดส่ง', 'trackingNumberDisplay': 'หมายเลขติดตามพัสดุ:', 'status': 'สถานะ:', 'origin': 'ต้นทาง:', 'destination': 'ปลายทาง:', 'pieces': 'จำนวนกล่อง:', 'totalWeight': 'น้ำหนักรวม:', 'eventHistory': 'อัพเดทการจัดส่งทั้งหมด', 'eventAt': 'ที่', 'eventOn': 'เมื่อ', 'noEventsFound': 'ไม่พบประวัติเหตุการณ์', 'backToMain': 'กลับหน้าหลัก', 'trackingSimulated': 'กำลังติดตาม: {trackingNumber}...', 'trackingError': 'เกิดข้อผิดพลาด:', 'serverError': 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'trackingResultUnexpected': 'ไม่พบข้อมูลการจัดส่ง' }, 'en': { 'homepage': 'Home', 'trackYourPackageTitle': 'Track Your Shipment', 'enterTrackingNumber': 'Enter your tracking number', 'trackButton': 'Track', 'gettingStartedTitle': 'Get Started', 'calculateQuote': 'Calculate Quote', 'createShipment': 'Create Shipment', 'allRightsReserved': 'All rights reserved.', 'enterTrackingNumberPlaceholder': 'Enter tracking number', 'emergencyOnlyTitle': 'For Emergency Only', 'emergencySystemMessage': 'This system will be activated only if the MyDHL+ system is unavailable. If MyDHL+ system becomes operational again, this system will be temporarily suspended within 30 minutes. Thank you for using DHL Express.', 'trackingDetailsTitle': 'Shipment Details', 'trackingNumberDisplay': 'Tracking Number:', 'status': 'Status:', 'origin': 'Origin:', 'destination': 'Destination:', 'pieces': 'Piece(s):', 'totalWeight': 'Total Weight:', 'eventHistory': 'All Shipment Updates', 'eventAt': 'at', 'eventOn': 'on', 'noEventsFound': 'No event history found', 'backToMain': 'Back to Main', 'trackingSimulated': 'Tracking: {trackingNumber}...', 'trackingError': 'An error occurred:', 'serverError': 'Could not connect to the server', 'trackingResultUnexpected': 'Shipment information not found' } };
+            const translations = { 'th': { 'homepage': 'หน้าหลัก', 'trackYourPackageTitle': 'ติดตามพัสดุของคุณ', 'enterTrackingNumber': 'ป้อนหมายเลขติดตามพัสดุได้สูงสุด 10 หมายเลข โดยคั่นด้วยเครื่องหมายจุลภาค (,) หรือขึ้นบรรทัดใหม่', 'trackButton': 'ติดตาม', 'gettingStartedTitle': 'เริ่มต้นใช้งาน', 'calculateQuote': 'คำนวณค่าขนส่ง', 'createShipment': 'สร้างใบนำส่ง', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'enterTrackingNumberPlaceholder': 'กรอกหมายเลขติดตามพัสดุ', 'emergencyOnlyTitle': 'เฉพาะกรณีฉุกเฉิน', 'emergencySystemMessage': 'ระบบนี้จะถูกเปิดใช้งานในกรณีที่ระบบ MyDHL+ ไม่สามารถใช้งานได้เท่านั้น หากระบบ MyDHL+ สามารถกลับมาใช้งานได้ปกติแล้ว ระบบนี้จะถูกระงับใช้ภายใน 30 นาที ขอบคุณที่ใช้บริการ DHL Express', 'trackingDetailsTitle': 'รายละเอียดการจัดส่ง', 'multiTrackingResultTitle': 'ผลการติดตามพัสดุ', 'trackingNumberDisplay': 'หมายเลขติดตามพัสดุ:', 'status': 'สถานะ:', 'origin': 'ต้นทาง:', 'destination': 'ปลายทาง:', 'pieces': 'จำนวนกล่อง:', 'totalWeight': 'น้ำหนักรวม:', 'eventHistory': 'อัพเดทการจัดส่งทั้งหมด', 'eventAt': 'ที่', 'eventOn': 'เมื่อ', 'noEventsFound': 'ไม่พบประวัติเหตุการณ์', 'backToMain': 'กลับหน้าหลัก', 'trackingSimulated': 'กำลังติดตาม...', 'trackingError': 'เกิดข้อผิดพลาด:', 'serverError': 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'trackingResultUnexpected': 'ไม่พบข้อมูลการจัดส่ง', 'noValidNumbers': 'กรุณากรอกหมายเลขติดตามพัสดุ 10 หลักที่ถูกต้อง' }, 'en': { 'homepage': 'Home', 'trackYourPackageTitle': 'Track Your Shipment', 'enterTrackingNumber': 'Enter up to 10 tracking numbers, separated by a comma (,) or a new line.', 'trackButton': 'Track', 'gettingStartedTitle': 'Get Started', 'calculateQuote': 'Calculate Quote', 'createShipment': 'Create Shipment', 'allRightsReserved': 'All rights reserved.', 'enterTrackingNumberPlaceholder': 'Enter tracking number(s)', 'emergencyOnlyTitle': 'For Emergency Only', 'emergencySystemMessage': 'This system will be activated only if the MyDHL+ system is unavailable. If MyDHL+ system becomes operational again, this system will be temporarily suspended within 30 minutes. Thank you for using DHL Express.', 'trackingDetailsTitle': 'Shipment Details', 'multiTrackingResultTitle': 'Shipment Tracking Results', 'trackingNumberDisplay': 'Tracking Number:', 'status': 'Status:', 'origin': 'Origin:', 'destination': 'Destination:', 'pieces': 'Piece(s):', 'totalWeight': 'Total Weight:', 'eventHistory': 'All Shipment Updates', 'eventAt': 'at', 'eventOn': 'on', 'noEventsFound': 'No event history found', 'backToMain': 'Back to Main', 'trackingSimulated': 'Tracking...', 'trackingError': 'An error occurred:', 'serverError': 'Could not connect to the server', 'trackingResultUnexpected': 'Shipment information not found', 'noValidNumbers': 'Please enter valid 10-digit tracking numbers.' } };
             let currentLanguage = localStorage.getItem('language') || 'th';
-            let lastShipmentData = null; // Store last fetched data
+            let lastResultsData = null;
 
             function getTranslatedText(key, replacements = {}) { let text = translations[currentLanguage]?.[key] || key; for (const p in replacements) { text = text.replace(`{${p}}`, replacements[p]); } return text; }
-            function updateContentLanguage() {
-                document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = getTranslatedText(el.getAttribute('data-i18n')); });
-                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = getTranslatedText(el.getAttribute('data-i18n-placeholder')); });
-                document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase();
-                document.title = `DHL Backup Solution - ${getTranslatedText('homepage')}`;
-            }
+            function updateContentLanguage() { document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = getTranslatedText(el.getAttribute('data-i18n')); }); document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = getTranslatedText(el.getAttribute('data-i18n-placeholder')); }); document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase(); document.title = `DHL Backup Solution - ${getTranslatedText('homepage')}`; }
             function setupTheme() {
                 const themeToggle = document.getElementById('theme-toggle');
                 const lightIcon = document.getElementById('theme-icon-light');
@@ -90,34 +85,18 @@
                 themeToggle.addEventListener('click', () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode());
                 if (localStorage.getItem('theme') === 'dark') { enableDarkMode(); } else { disableDarkMode(); }
             }
-            function setupLanguageSwitch() {
-                document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden'));
-                document.querySelectorAll('[data-lang]').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        currentLanguage = e.target.dataset.lang;
-                        localStorage.setItem('language', currentLanguage);
-                        updateContentLanguage();
-                        // If we are on the tracking details page, re-render it
-                        if (!trackingDisplayPage.classList.contains('hidden-page') && lastShipmentData) {
-                            displayTrackingResults(lastShipmentData);
-                        }
-                        document.getElementById('language-dropdown').classList.add('hidden');
-                    });
-                });
-            }
+            function setupLanguageSwitch() { document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden')); document.querySelectorAll('[data-lang]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); currentLanguage = e.target.dataset.lang; localStorage.setItem('language', currentLanguage); updateContentLanguage(); if (!trackingDisplayPage.classList.contains('hidden-page') && lastResultsData) { displayMultiTrackingResults(lastResultsData); } document.getElementById('language-dropdown').classList.add('hidden'); }); }); }
             
             const corporatePage = document.getElementById('corporate-page');
             const trackingDisplayPage = document.getElementById('tracking-display-page');
 
-            function displayTrackingResults(shipment) {
-                lastShipmentData = shipment; // Save data for re-translation
-                const contentDiv = document.getElementById('tracking-content');
+            function generateShipmentHTML(shipmentData) {
+                const { shipment, error } = shipmentData;
+                if (error) { return `<div class="p-4"><p class="font-bold text-red-500">${getTranslatedText('trackingError')} ${error}</p></div>`; }
+                
                 const shipperLocation = shipment.shipperDetails?.serviceArea?.[0]?.description || 'N/A';
                 const receiverLocation = shipment.receiverDetails?.serviceArea?.[0]?.description || 'N/A';
                 const pieceCount = shipment.numberOfPieces || 0;
-                
-                // Handle weight unit
                 const weightUnit = shipment.unitOfMeasurements?.toLowerCase() === 'metric' ? 'KG' : 'LBS';
                 const totalWeight = shipment.totalWeight ? `${shipment.totalWeight} ${weightUnit}` : 'N/A';
                 
@@ -127,13 +106,11 @@
                     acc[date].push(event);
                     return acc;
                 }, {});
-
                 const sortedDates = Object.keys(eventsByDate).sort((a, b) => new Date(b) - new Date(a));
 
-                contentDiv.innerHTML = `
-                    <div class="mb-6 pb-4 border-b border-gray-300 dark:border-gray-600">
-                        <p class="text-xl font-bold text-red-600">${getTranslatedText('trackingNumberDisplay')} ${shipment.shipmentTrackingNumber || 'N/A'}</p>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 text-sm">
+                return `
+                    <div class="mb-4 pb-4 border-b border-gray-300 dark:border-gray-600">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                             <div><p class="font-bold">${getTranslatedText('origin')}</p><p>${shipperLocation}</p></div>
                             <div><p class="font-bold">${getTranslatedText('destination')}</p><p>${receiverLocation}</p></div>
                             <div><p class="font-bold">${getTranslatedText('pieces')}</p><p>${pieceCount}</p></div>
@@ -141,24 +118,16 @@
                         </div>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold mb-4">${getTranslatedText('eventHistory')}</h3>
+                        <h3 class="text-lg font-bold mb-4">${getTranslatedText('eventHistory')}</h3>
                         ${sortedDates.length > 0 ? 
                             sortedDates.map(date => `
                                 <div>
                                     <h4 class="timeline-date-header">${new Date(date).toLocaleDateString(currentLanguage === 'th' ? 'th-TH' : 'en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h4>
                                     <ul class="tracking-timeline">
-                                    ${eventsByDate[date]
-                                        .sort((a, b) => (b.time || '').localeCompare(a.time || ''))
-                                        .map((event, index) => `
+                                    ${eventsByDate[date].sort((a, b) => (b.time || '').localeCompare(a.time || '')).map((event, index) => `
                                         <li class="timeline-item ${index === 0 && date === sortedDates[0] ? 'is-latest' : ''}">
-                                            <div class="timeline-icon">
-                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                                            </div>
-                                            <div class="timeline-content">
-                                                <p class="timeline-timestamp">${event.time || ''}</p>
-                                                <p class="timeline-status">${event.description || 'N/A'}</p>
-                                                <p class="timeline-location">${event.serviceArea?.[0]?.description || ''}</p>
-                                            </div>
+                                            <div class="timeline-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg></div>
+                                            <div class="timeline-content"><p class="timeline-timestamp">${event.time || ''}</p><p class="timeline-status">${event.description || 'N/A'}</p><p class="timeline-location">${event.serviceArea?.[0]?.description || ''}</p></div>
                                         </li>
                                     `).join('')}
                                     </ul>
@@ -166,44 +135,85 @@
                             `).join('') :
                             `<p class="italic">${getTranslatedText('noEventsFound')}</p>`
                         }
-                    </div>
-                `;
-                 // Update static text within the newly created content
-                contentDiv.querySelectorAll('[data-i18n]').forEach(el => el.textContent = getTranslatedText(el.getAttribute('data-i18n')));
+                    </div>`;
+            }
+
+            function displayMultiTrackingResults(results) {
+                lastResultsData = results; // Save for re-translation
+                const contentDiv = document.getElementById('tracking-content');
+                contentDiv.innerHTML = results.map(result => {
+                    const shipment = result.shipments?.[0];
+                    const trackingNumber = result.trackingNumber;
+                    const status = shipment?.status || getTranslatedText('trackingResultUnexpected');
+
+                    return `
+                        <div class="accordion-item">
+                            <button class="accordion-header w-full" aria-expanded="false">
+                                <div class="text-left">
+                                    <h4>${trackingNumber}</h4>
+                                    <p class="accordion-header-info">${status}</p>
+                                </div>
+                                <svg class="accordion-arrow w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="accordion-body">
+                                <div class="accordion-body-content">
+                                    ${shipment ? generateShipmentHTML(shipment) : `<div class="p-4">${getTranslatedText('trackingResultUnexpected')}</div>`}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                // Add event listeners for the new accordions
+                contentDiv.querySelectorAll('.accordion-header').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                        button.setAttribute('aria-expanded', !isExpanded);
+                        const body = button.nextElementSibling;
+                        if (!isExpanded) {
+                            body.style.maxHeight = body.scrollHeight + "px";
+                        } else {
+                            body.style.maxHeight = '0';
+                        }
+                    });
+                });
             }
             
             document.getElementById('track-button').addEventListener('click', async () => {
                 const trackButton = document.getElementById('track-button');
-                const trackingNumber = document.getElementById('tracking-number').value.trim();
+                const trackingInput = document.getElementById('tracking-number').value;
                 const trackingResultDiv = document.getElementById('tracking-result');
-                if (!trackingNumber) { trackingResultDiv.textContent = getTranslatedText('enterTrackingNumberPlaceholder'); trackingResultDiv.classList.remove('hidden'); return; }
-                trackingResultDiv.textContent = getTranslatedText('trackingSimulated', { trackingNumber });
+                
+                const cleanedNumbers = trackingInput.replace(/[^\d,\n]/g, '').split(/[,\n]/).map(s => s.trim()).filter(s => s.length === 10);
+                const uniqueNumbers = [...new Set(cleanedNumbers)].slice(0, 10); // Limit to 10 unique numbers
+
+                if (uniqueNumbers.length === 0) { trackingResultDiv.textContent = getTranslatedText('noValidNumbers'); trackingResultDiv.classList.remove('hidden'); return; }
+                
+                trackingResultDiv.textContent = getTranslatedText('trackingSimulated');
                 trackingResultDiv.classList.remove('hidden');
                 trackButton.disabled = true;
-                try {
-                    const response = await fetch(`https://dbs-back-viruzjokes-projects.vercel.app/api/track?trackingNumber=${trackingNumber}`);
-                    if (!response.ok) throw new Error(getTranslatedText('serverError'));
-                    const data = await response.json();
-                    if (data?.shipments?.[0]) {
-                        displayTrackingResults(data.shipments[0]);
-                        corporatePage.classList.add('hidden-page');
-                        trackingDisplayPage.classList.remove('hidden-page');
-                        trackingResultDiv.classList.add('hidden');
-                    } else {
-                        trackingResultDiv.textContent = getTranslatedText('trackingResultUnexpected');
-                    }
-                } catch (error) {
-                    trackingResultDiv.textContent = `${getTranslatedText('trackingError')} ${error.message}`;
-                } finally {
-                    trackButton.disabled = false;
-                }
+
+                const fetchPromises = uniqueNumbers.map(tn => 
+                    fetch(`https://dbs-back-viruzjokes-projects.vercel.app/api/track?trackingNumber=${tn}`)
+                    .then(res => res.json())
+                    .then(data => ({ trackingNumber: tn, ...data }))
+                    .catch(error => ({ trackingNumber: tn, error: error.message }))
+                );
+
+                const results = await Promise.all(fetchPromises);
+
+                displayMultiTrackingResults(results);
+                corporatePage.classList.add('hidden-page');
+                trackingDisplayPage.classList.remove('hidden-page');
+                trackingResultDiv.classList.add('hidden');
+                trackButton.disabled = false;
             });
 
             document.getElementById('tracking-back-to-main').addEventListener('click', () => {
                 trackingDisplayPage.classList.add('hidden-page');
                 corporatePage.classList.remove('hidden-page');
                 document.getElementById('tracking-number').value = '';
-                lastShipmentData = null; // Clear saved data
+                lastResultsData = null;
             });
 
             document.getElementById('current-year').textContent = new Date().getFullYear();
