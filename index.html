@@ -75,12 +75,7 @@
             let lastResultsData = null; 
 
             function getTranslatedText(key, replacements = {}) { let text = translations[currentLanguage]?.[key] || key; for (const p in replacements) { text = text.replace(`{${p}}`, replacements[p]); } return text; }
-            function updateContentLanguage() {
-                document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = getTranslatedText(el.getAttribute('data-i18n')); });
-                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = getTranslatedText(el.getAttribute('data-i18n-placeholder')); });
-                document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase();
-                document.title = `DHL Backup Solution - ${getTranslatedText('homepage')}`;
-            }
+            function updateContentLanguage() { document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = getTranslatedText(el.getAttribute('data-i18n')); }); document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = getTranslatedText(el.getAttribute('data-i18n-placeholder')); }); document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase(); document.title = `DHL Backup Solution - ${getTranslatedText('homepage')}`; }
             function setupTheme() {
                 const themeToggle = document.getElementById('theme-toggle');
                 const lightIcon = document.getElementById('theme-icon-light');
@@ -90,21 +85,7 @@
                 themeToggle.addEventListener('click', () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode());
                 if (localStorage.getItem('theme') === 'dark') { enableDarkMode(); } else { disableDarkMode(); }
             }
-            function setupLanguageSwitch() {
-                document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden'));
-                document.querySelectorAll('[data-lang]').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        currentLanguage = e.target.dataset.lang;
-                        localStorage.setItem('language', currentLanguage);
-                        updateContentLanguage();
-                        if (!trackingDisplayPage.classList.contains('hidden-page') && lastResultsData) {
-                            displayMultiTrackingResults(lastResultsData);
-                        }
-                        document.getElementById('language-dropdown').classList.add('hidden');
-                    });
-                });
-            }
+            function setupLanguageSwitch() { document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden')); document.querySelectorAll('[data-lang]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); currentLanguage = e.target.dataset.lang; localStorage.setItem('language', currentLanguage); updateContentLanguage(); if (!trackingDisplayPage.classList.contains('hidden-page') && lastResultsData) { displayMultiTrackingResults(lastResultsData); } document.getElementById('language-dropdown').classList.add('hidden'); }); }); }
             
             const corporatePage = document.getElementById('corporate-page');
             const trackingDisplayPage = document.getElementById('tracking-display-page');
@@ -141,7 +122,7 @@
             }
 
             function displayMultiTrackingResults(data) {
-                lastResultsData = data; // Save for re-translation
+                lastResultsData = data; 
                 const contentDiv = document.getElementById('tracking-content');
                 const shipments = data.shipments || [];
                 
@@ -184,21 +165,13 @@
             }
             
             function cleanTrackingNumbers(input) {
-                return input.replace(/[^0-9,\n]/g, '') // Remove invalid chars
-                            .replace(/[\n\s]+/g, ',') // Replace newlines/spaces with comma
-                            .split(',')
-                            .map(s => s.trim())
-                            .filter(s => s.length === 10) // Keep only 10-digit numbers
-                            .filter((item, index, self) => self.indexOf(item) === index) // Remove duplicates
-                            .slice(0, 10) // Limit to 10
-                            .join(',');
+                return input.replace(/[^0-9,\n]/g, '').replace(/[\n\s]+/g, ',').split(',').map(s => s.trim()).filter(s => s.length === 10).filter((item, index, self) => self.indexOf(item) === index).slice(0, 10).join(',');
             }
             
             document.getElementById('track-button').addEventListener('click', async () => {
                 const trackButton = document.getElementById('track-button');
                 const trackingInput = document.getElementById('tracking-number').value;
                 const trackingResultDiv = document.getElementById('tracking-result');
-                
                 const cleanedNumbersString = cleanTrackingNumbers(trackingInput);
                 
                 if (!cleanedNumbersString) { trackingResultDiv.textContent = getTranslatedText('noValidNumbers'); trackingResultDiv.classList.remove('hidden'); return; }
@@ -208,7 +181,8 @@
                 trackButton.disabled = true;
 
                 try {
-                    const response = await fetch(`https://dbs-back-viruzjokes-projects.vercel.app/api/track?shipmentTrackingNumber=${cleanedNumbersString}`);
+                    // FIX: Changed parameter name to 'trackingNumber'
+                    const response = await fetch(`https://dbs-back-viruzjokes-projects.vercel.app/api/track?trackingNumber=${cleanedNumbersString}`);
                     if (!response.ok) throw new Error(getTranslatedText('serverError'));
                     const data = await response.json();
 
