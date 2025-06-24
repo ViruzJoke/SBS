@@ -117,7 +117,7 @@ body.dark-mode .language-dropdown { background-color: #1f2937; border: 1px solid
 body.dark-mode .language-dropdown a { color: #d1d5db; }
 body.dark-mode .language-dropdown a:hover { background-color: #374151; }
 body.dark-mode .bg-yellow-50 { background-color: #374151; border-color: #4b5563; }
-body.dark-mode .package-piece-item { background-color: #374151; }
+body.dark-mode .package-piece-item { background-color: #1f2937; border-color: #4b5563;}
 body.dark-mode .step-circle { border-color: #4b5563; background-color: #1f2937; color: #9ca3af; }
 body.dark-mode .progress-bar::before { background-color: #4b5563; }
 body.dark-mode .progress-line-fill { background-color: #fbbf24; }
