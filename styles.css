@@ -1,6 +1,6 @@
 /*
-  DHL Backup Solution - Central Stylesheet v6
-  ไฟล์ CSS กลางสำหรับทุกหน้า ปรับปรุง Progress Bar, Dark Mode Buttons
+  DHL Backup Solution - Central Stylesheet v7
+  ไฟล์ CSS กลางสำหรับทุกหน้า ปรับปรุง Progress Bar, Dark Mode Buttons, และ Tracking Timeline
 */
 
 /* --- Base and Layout --- */
@@ -18,7 +18,7 @@ main { flex-grow: 1; padding: 1rem; }
 .container { max-width: 1280px; margin-left: auto; margin-right: auto; padding: 0 1rem; }
 
 /* --- Form Elements & Buttons --- */
-.input-field {
+.input-field, textarea.input-field {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #9ca3af;
@@ -26,7 +26,7 @@ main { flex-grow: 1; padding: 1rem; }
     background-color: #fff;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
 }
-.input-field:focus {
+.input-field:focus, textarea.input-field:focus {
     outline: none;
     border-color: #dc2626;
     box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
@@ -50,7 +50,6 @@ main { flex-grow: 1; padding: 1rem; }
 .btn-yellow:hover:not(:disabled) { background-color: #f59e0b; transform: translateY(-1px); }
 .btn-gray { background-color: #e5e7eb; color: #1f2937; }
 .btn-gray:hover:not(:disabled) { background-color: #d1d5db; transform: translateY(-1px); }
-
 .utility-button {
     background-color: #e5e7eb;
     color: #374151;
@@ -74,13 +73,7 @@ header, footer { width: 100%; z-index: 10; }
 }
 @media (min-width: 640px) { .card { padding: 2rem; } }
 
-.main-action-button {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;
-    padding: 2rem; border-radius: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    cursor: pointer; border: none; min-height: 10rem; text-decoration: none;
-}
+.main-action-button { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 2rem; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; cursor: pointer; border: none; min-height: 10rem; text-decoration: none; }
 .main-action-button:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
 .main-action-button svg { width: 3.5rem; height: 3.5rem; margin-bottom: 0.75rem; }
 .main-action-button span { font-size: 1.25rem; font-weight: 600; text-align: center; line-height: 1.3; }
@@ -88,14 +81,7 @@ header, footer { width: 100%; z-index: 10; }
 /* --- Progress Bar --- */
 .progress-bar { display: flex; align-items: center; margin-bottom: 2rem; position: relative; }
 .progress-step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; }
-.step-circle {
-    width: 2.5rem; height: 2.5rem;
-    border-radius: 50%; display: flex;
-    align-items: center; justify-content: center;
-    font-weight: bold; border: 2px solid #d1d5db;
-    background-color: #fff; color: #6b7280;
-    transition: all 0.4s ease;
-}
+.step-circle { width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #d1d5db; background-color: #fff; color: #6b7280; transition: all 0.4s ease; }
 .step-text { font-size: 0.75rem; margin-top: 0.5rem; transition: color 0.4s ease; }
 .progress-bar::before { content: ''; position: absolute; top: 1.25rem; left: 12.5%; right: 12.5%; height: 2px; background-color: #e5e7eb; z-index: 1; }
 .progress-line-fill { position: absolute; top: 1.25rem; left: 12.5%; height: 2px; background-color: #fbbf24; z-index: 1; width: 0; transition: width 0.4s ease-in-out; }
@@ -103,6 +89,32 @@ header, footer { width: 100%; z-index: 10; }
 .progress-step.is-active .step-text { color: #dc2626; font-weight: 600; }
 .progress-step.is-complete .step-circle { background-color: #fbbf24; border-color: #fbbf24; color: #1f2937; }
 .progress-step.is-complete .step-text { color: #4b5563; }
+
+/* --- Accordion for Tracking --- */
+.accordion-item { border-bottom: 1px solid #e5e7eb; }
+.accordion-item:last-child { border-bottom: none; }
+.accordion-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0.5rem; cursor: pointer; }
+.accordion-header h4 { margin: 0; font-size: 1.125rem; font-weight: 700; }
+.accordion-header-info { font-size: 0.875rem; color: #6b7280; }
+.accordion-arrow { width: 1.5rem; height: 1.5rem; transition: transform 0.3s ease; }
+.accordion-header[aria-expanded="true"] .accordion-arrow { transform: rotate(180deg); }
+.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+.accordion-body-content { padding: 0.5rem; }
+
+/* --- Tracking Timeline --- */
+.timeline-date-header { font-size: 1rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb; }
+.timeline-date-header:first-of-type { margin-top: 0; }
+.tracking-timeline { list-style: none; padding: 0; }
+.timeline-item { display: flex; gap: 1rem; position: relative; padding: 0.5rem 0 1.5rem 0; }
+.timeline-item:not(:last-child)::before { content: ''; position: absolute; left: 1rem; top: 1rem; bottom: -1rem; width: 2px; background-color: #e5e7eb; transform: translateX(-50%); }
+.timeline-icon { width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background-color: #e5e7eb; z-index: 1;}
+.timeline-icon svg { width: 1rem; height: 1rem; color: #6b7280; }
+.timeline-item.is-latest .timeline-icon { background-color: #dc2626; }
+.timeline-item.is-latest .timeline-icon svg { color: white; }
+.timeline-content { flex-grow: 1; padding-left: 0.5rem; }
+.timeline-status { font-weight: 600; }
+.timeline-location { color: #6b7280; font-size: 0.875rem; }
+.timeline-timestamp { font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem; }
 
 /* --- Dark Mode --- */
 body.dark-mode { background-color: #111827; color: #d1d5db; }
@@ -117,9 +129,15 @@ body.dark-mode .language-dropdown { background-color: #1f2937; border: 1px solid
 body.dark-mode .language-dropdown a { color: #d1d5db; }
 body.dark-mode .language-dropdown a:hover { background-color: #374151; }
 body.dark-mode .bg-yellow-50 { background-color: #374151; border-color: #4b5563; }
-body.dark-mode .package-piece-item { background-color: #1f2937; border-color: #4b5563;}
+body.dark-mode .package-piece-item { background-color: #1f2937; }
 body.dark-mode .step-circle { border-color: #4b5563; background-color: #1f2937; color: #9ca3af; }
 body.dark-mode .progress-bar::before { background-color: #4b5563; }
 body.dark-mode .progress-line-fill { background-color: #fbbf24; }
 body.dark-mode .progress-step.is-active .step-text { color: #f87171; }
 body.dark-mode .progress-step.is-complete .step-text { color: #d1d5db; }
+body.dark-mode .accordion-item { border-color: #374151; }
+body.dark-mode .accordion-header-info { color: #9ca3af; }
+body.dark-mode .timeline-date-header, body.dark-mode .timeline-item:not(:last-child)::before { border-color: #4b5563; }
+body.dark-mode .timeline-icon { background-color: #374151; }
+body.dark-mode .timeline-icon svg { color: #9ca3af; }
+body.dark-mode .timeline-location, body.dark-mode .timeline-timestamp { color: #9ca3af; }
