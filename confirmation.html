@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DHL Backup Solution - Shipment Confirmation</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- เพิ่ม PDF-LIB SCRIPT สำหรับรวมไฟล์ PDF -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 	<link rel="icon" href="DBS_Icon.png" type="image/png">
     <style>
@@ -71,8 +73,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- Translations ---
             const translations = {
-                'th': { 'confirmationTitle': 'สร้างใบนำส่งสำเร็จ!', 'confirmationSubtitle': 'ข้อมูลใบนำส่งสินค้าของคุณพร้อมสำหรับพิมพ์และดาวน์โหลด', 'awbLabel': 'หมายเลข AWB ของคุณคือ:', 'pickupNumberTitle': 'หมายเลขยืนยันการนัดรับสินค้า', 'downloadLabel': 'ดาวน์โหลดใบนำส่ง', 'downloadReceipt': 'ดาวน์โหลดใบสรุปการจัดส่ง', 'downloadInvoice': 'ดาวน์โหลดใบอินวอยซ์', 'pieceIdTitle': 'หมายเลข Piece ID', 'warningsTitle': 'คำเตือนจากระบบ', 'createNewShipment': 'สร้างใบนำส่งใหม่', 'backToMain': 'กลับหน้าหลัก', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'loadingData': 'กำลังโหลดข้อมูล...', 'noShipmentData': 'ไม่พบข้อมูลการจัดส่ง กรุณาสร้างใบนำส่งใหม่อีกครั้ง', 'downloadError': 'เกิดข้อผิดพลาดในการเตรียมไฟล์สำหรับดาวน์โหลด', 'downloadDisabled': 'ไฟล์นี้ไม่สามารถดาวน์โหลดได้' },
-                'en': { 'confirmationTitle': 'Shipment Created Successfully!', 'confirmationSubtitle': 'Your shipment documents are ready to print and download.', 'awbLabel': 'Your AWB Number is:', 'pickupNumberTitle': 'Pickup Confirmation #', 'downloadLabel': 'Download Label', 'downloadReceipt': 'Download Receipt', 'downloadInvoice': 'Download Invoice', 'pieceIdTitle': 'Piece ID Numbers', 'warningsTitle': 'System Warnings', 'createNewShipment': 'Create New Shipment', 'backToMain': 'Back to Main', 'allRightsReserved': 'All rights reserved.', 'loadingData': 'Loading data...', 'noShipmentData': 'Shipment data not found. Please create a new shipment.', 'downloadError': 'Error preparing file for download', 'downloadDisabled': 'This file is not available for download' }
+                'th': { 'confirmationTitle': 'สร้างใบนำส่งสำเร็จ!', 'confirmationSubtitle': 'ข้อมูลใบนำส่งสินค้าของคุณพร้อมสำหรับพิมพ์และดาวน์โหลด', 'awbLabel': 'หมายเลข AWB ของคุณคือ:', 'pickupNumberTitle': 'หมายเลขยืนยันการนัดรับสินค้า', 'downloadLabel': 'ดาวน์โหลดใบนำส่ง', 'downloadReceipt': 'ดาวน์โหลดใบสรุปการจัดส่ง', 'downloadInvoice': 'ดาวน์โหลดใบอินวอยซ์', 'pieceIdTitle': 'หมายเลข Piece ID', 'warningsTitle': 'คำเตือนจากระบบ', 'createNewShipment': 'สร้างใบนำส่งใหม่', 'backToMain': 'กลับหน้าหลัก', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'loadingData': 'กำลังโหลดข้อมูล...', 'noShipmentData': 'ไม่พบข้อมูลการจัดส่ง กรุณาสร้างใบนำส่งใหม่อีกครั้ง', 'downloadError': 'เกิดข้อผิดพลาดในการเตรียมไฟล์สำหรับดาวน์โหลด', 'downloadDisabled': 'ไฟล์นี้ไม่สามารถดาวน์โหลดได้', 'downloadLabelAndInvoice': 'ดาวน์โหลด Label และ Invoice' },
+                'en': { 'confirmationTitle': 'Shipment Created Successfully!', 'confirmationSubtitle': 'Your shipment documents are ready to print and download.', 'awbLabel': 'Your AWB Number is:', 'pickupNumberTitle': 'Pickup Confirmation #', 'downloadLabel': 'Download Label', 'downloadReceipt': 'Download Receipt', 'downloadInvoice': 'Download Invoice', 'pieceIdTitle': 'Piece ID Numbers', 'warningsTitle': 'System Warnings', 'createNewShipment': 'Create New Shipment', 'backToMain': 'Back to Main', 'allRightsReserved': 'All rights reserved.', 'loadingData': 'Loading data...', 'noShipmentData': 'Shipment data not found. Please create a new shipment.', 'downloadError': 'Error preparing file for download', 'downloadDisabled': 'This file is not available for download', 'downloadLabelAndInvoice': 'Download Label & Invoice' }
             };
 
             // --- Globals & Element Selectors ---
@@ -80,6 +82,7 @@
             const errorContainer = document.getElementById('error-message-container');
             const confirmationContainer = document.getElementById('confirmation-container');
             const blobUrls = []; // Store blob URLs for cleanup
+            const { PDFDocument } = PDFLib; // เข้าถึง library
 
             // --- Helper Functions ---
             function getTranslatedText(key) { return translations[currentLanguage]?.[key] || key; }
@@ -125,59 +128,137 @@
                 errorContainer.classList.remove('hidden');
             }
 
+            /**
+             * ฟังก์ชันสำหรับรวมไฟล์ PDF หลายไฟล์ (ในรูปแบบ Base64) ให้เป็นไฟล์เดียว
+             * @param {string[]} base64Pdfs - Array ของ Base64 string ของไฟล์ PDF
+             * @returns {Promise<Uint8Array>} - Promise ที่จะ resolve เป็น Uint8Array ของ PDF ที่รวมแล้ว
+             */
+            async function mergePdfs(base64Pdfs) {
+                const mergedPdf = await PDFDocument.create();
+                for (const base64Pdf of base64Pdfs) {
+                    if (!base64Pdf) continue;
+                    try {
+                        const pdfBytes = atob(base64Pdf);
+                        const uint8Array = new Uint8Array(pdfBytes.length);
+                        for (let i = 0; i < pdfBytes.length; i++) {
+                            uint8Array[i] = pdfBytes.charCodeAt(i);
+                        }
+                        const pdf = await PDFDocument.load(uint8Array);
+                        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                        copiedPages.forEach((page) => mergedPdf.addPage(page));
+                    } catch (e) {
+                         console.error("Failed to process a PDF for merging:", e);
+                    }
+                }
+                return await mergedPdf.save();
+            }
+
             // --- Main Logic ---
-            function renderConfirmationPage(data) {
+            async function renderConfirmationPage(data) {
                 
-                function createDocumentLinks(documents) {
+                // ตรวจสอบว่ามี warning '7988' หรือไม่
+                const needsToPrintAll = data.warnings?.some(w => w.startsWith('7988')) ?? false;
+
+                async function createDocumentLinks(documents) {
                     if (!documents || documents.length === 0) return '';
                     const awb = data.shipmentTrackingNumber;
-                    
-                    return documents.map(doc => {
-                        const docType = doc.typeCode.toLowerCase();
-                        let buttonTextKey = '', fileName = '', buttonClass = 'btn-gray', icon = '📄';
-                        
-                        switch(docType) {
-                            case 'waybilldoc': case 'label':
-                                buttonTextKey = 'downloadLabel'; fileName = `${awb}_Label.pdf`; buttonClass = 'btn-red';
-                                break;
-                            case 'shipmentreceipt': case 'receipt':
-                                buttonTextKey = 'downloadReceipt'; fileName = `${awb}_Receipt.pdf`;
-                                break;
-                            case 'invoice':
-                                buttonTextKey = 'downloadInvoice'; fileName = `${awb}_Invoice.pdf`;
-                                break;
-                            default: return '';
-                        }
-                        
-                        let href = '#';
-                        let isDisabled = true;
-                        if (doc.content) {
+                    let linksHtml = '';
+
+                    // กรณีที่ต้องรวม Label และ Invoice
+                    if (needsToPrintAll) {
+                        const labelDoc = documents.find(doc => doc.typeCode.toLowerCase() === 'waybilldoc' || doc.typeCode.toLowerCase() === 'label');
+                        const invoiceDoc = documents.find(doc => doc.typeCode.toLowerCase() === 'invoice');
+                        const receiptDoc = documents.find(doc => doc.typeCode.toLowerCase() === 'shipmentreceipt' || doc.typeCode.toLowerCase() === 'receipt');
+
+                        // สร้างปุ่มสำหรับ Label + Invoice
+                        if (labelDoc && invoiceDoc) {
                             try {
-                                const byteCharacters = atob(doc.content);
-                                const byteNumbers = new Array(byteCharacters.length);
-                                for (let i = 0; i < byteCharacters.length; i++) {
-                                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                                }
-                                const byteArray = new Uint8Array(byteNumbers);
-                                const blob = new Blob([byteArray], {type: 'application/pdf'});
+                                const mergedPdfBytes = await mergePdfs([labelDoc.content, invoiceDoc.content]);
+                                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
                                 const blobUrl = URL.createObjectURL(blob);
                                 blobUrls.push(blobUrl);
-                                href = blobUrl;
-                                isDisabled = false;
+
+                                linksHtml += `
+                                    <a href="${blobUrl}" 
+                                       download="${awb}_Label_Invoice.pdf" 
+                                       class="btn-primary btn-red flex-1">
+                                       📄 <span data-i18n="downloadLabelAndInvoice"></span>
+                                    </a>
+                                `;
                             } catch (e) {
-                                console.error(`Failed to decode Base64 for ${fileName}:`, e);
+                                console.error("Failed to merge Label and Invoice:", e);
+                                // ถ้าการรวมไฟล์ล้มเหลว ก็จะแสดงปุ่มแบบปกติแทน (Fallback)
+                                linksHtml += createSingleDocumentLink(labelDoc, awb);
+                                linksHtml += createSingleDocumentLink(invoiceDoc, awb);
                             }
+                        } else {
+                            // ถ้าหา Label หรือ Invoice ไม่เจอ ก็แสดงปุ่มแบบปกติ
+                             if(labelDoc) linksHtml += createSingleDocumentLink(labelDoc, awb);
+                             if(invoiceDoc) linksHtml += createSingleDocumentLink(invoiceDoc, awb);
                         }
-                        
-                        return `
-                            <a href="${href}" 
-                               download="${fileName}" 
-                               class="btn-primary ${buttonClass} flex-1 ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}"
-                               ${isDisabled ? `onclick="showError('downloadDisabled'); return false;"` : ''}>
-                               ${icon} <span data-i18n="${buttonTextKey}"></span>
-                            </a>
-                        `;
-                    }).join('');
+
+                        // สร้างปุ่มสำหรับ Receipt (แยกต่างหากเสมอ)
+                        if (receiptDoc) {
+                            linksHtml += createSingleDocumentLink(receiptDoc, awb);
+                        }
+
+                    } else {
+                        // กรณีปกติ: สร้างปุ่มแยกสำหรับทุกเอกสาร
+                        documents.forEach(doc => {
+                            linksHtml += createSingleDocumentLink(doc, awb);
+                        });
+                    }
+                    
+                    return linksHtml;
+                }
+                
+                function createSingleDocumentLink(doc, awb) {
+                    if (!doc) return '';
+                    
+                    const docType = doc.typeCode.toLowerCase();
+                    let buttonTextKey = '', fileName = '', buttonClass = 'btn-gray', icon = '📄';
+                    
+                    switch(docType) {
+                        case 'waybilldoc': case 'label':
+                            buttonTextKey = 'downloadLabel'; fileName = `${awb}_Label.pdf`; buttonClass = 'btn-red';
+                            break;
+                        case 'shipmentreceipt': case 'receipt':
+                            buttonTextKey = 'downloadReceipt'; fileName = `${awb}_Receipt.pdf`;
+                            break;
+                        case 'invoice':
+                            buttonTextKey = 'downloadInvoice'; fileName = `${awb}_Invoice.pdf`;
+                            break;
+                        default: return '';
+                    }
+                    
+                    let href = '#';
+                    let isDisabled = true;
+                    if (doc.content) {
+                        try {
+                            const byteCharacters = atob(doc.content);
+                            const byteNumbers = new Array(byteCharacters.length);
+                            for (let i = 0; i < byteCharacters.length; i++) {
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }
+                            const byteArray = new Uint8Array(byteNumbers);
+                            const blob = new Blob([byteArray], {type: 'application/pdf'});
+                            const blobUrl = URL.createObjectURL(blob);
+                            blobUrls.push(blobUrl);
+                            href = blobUrl;
+                            isDisabled = false;
+                        } catch (e) {
+                            console.error(`Failed to decode Base64 for ${fileName}:`, e);
+                        }
+                    }
+                    
+                    return `
+                        <a href="${href}" 
+                           download="${fileName}" 
+                           class="btn-primary ${buttonClass} flex-1 ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}"
+                           ${isDisabled ? `onclick="showError('downloadDisabled'); return false;"` : ''}>
+                           ${icon} <span data-i18n="${buttonTextKey}"></span>
+                        </a>
+                    `;
                 }
 
                 function createPickupConfirmationSection(data) {
@@ -202,18 +283,18 @@
                     const items = packages.map(pkg => `<li class="confirmation-piece-id py-2 px-3 rounded-md font-mono text-sm">${pkg.trackingNumber}</li>`).join('');
                     return `<div class="mt-6 border-t pt-4 text-left"><h3 class="font-semibold text-lg mb-3">📦 <span data-i18n="pieceIdTitle"></span> (${packages.length})</h3><ul class="space-y-2">${items}</ul></div>`;
                 }
-
-                // [FIX] แก้ไข Function เพื่อปรับดีไซน์และตำแหน่ง
+                
                 function createWarningsSection(warnings) {
                     if (!warnings || warnings.length === 0) return '';
+                    // กรอง warning 7987 ออก แต่เก็บ 7988 ไว้แสดง
                     const filteredWarnings = warnings.filter(warn => !warn.includes('7987'));
                     if (filteredWarnings.length === 0) return '';
                     const items = filteredWarnings.map(warn => `<li class="mt-1">${warn}</li>`).join('');
-                    // [FIX] นำเส้นคั่นบนออกและปรับ margin ด้านล่าง
                     return `<div class="confirmation-warnings-box mb-6 text-left"><h3 class="warnings-title font-bold text-lg">⚠️ <span data-i18n="warningsTitle"></span></h3><div class="warnings-content mt-2 p-4 rounded-md text-sm"><ul class="list-disc pl-5">${items}</ul></div></div>`;
                 }
                 
-                // [FIX] แก้ไขลำดับการแสดงผลใน HTML
+                const documentLinksHTML = await createDocumentLinks(data.documents);
+
                 const confirmationHTML = `
                     <div class="card text-center">
                         <h2 class="text-3xl font-extrabold text-green-600 dark:text-green-400" data-i18n="confirmationTitle"></h2>
@@ -227,7 +308,7 @@
                         ${createWarningsSection(data.warnings)}
 
                         <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
-                            ${createDocumentLinks(data.documents)}
+                            ${documentLinksHTML}
                         </div>
                         
                         ${createPickupConfirmationSection(data)}
