@@ -351,7 +351,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Step 5: Documents -->
+                                <!-- Step 5: Documents -->
                 <div id="ship-now-step-5" class="ship-now-step hidden space-y-4">
                     <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
                         <h3 class="text-xl font-semibold" data-i18n="uploadCustomsDocs"></h3>
@@ -522,7 +522,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const translations = {
-            'th': { 'leaveSiteTitle': 'ออกจากหน้านี้?', 'leaveSiteBody': 'การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก', 'stayButton': 'อยู่ต่อ', 'leaveButton': 'ออก', 'createShipment':'สร้างใบนำส่ง','addressStep':'ที่อยู่','shipmentDetailsStep':'ชิปเมนต์','packageStep':'แพ็คเกจ','paymentStep':'การชำระเงิน','docsStep':'เอกสาร','pickupStep':'การนัดรับสินค้า','summaryStep':'สรุป','shipperInfo':'ข้อมูลผู้ส่ง','receiverInfo':'ข้อมูลผู้รับ','shipperName':'ชื่อผู้ส่ง','shipperCompany':'บริษัทผู้ส่ง','shipperPhone':'เบอร์โทรผู้ส่ง','shipperAddress1':'ที่อยู่ 1','shipperAddress2':'ที่อยู่ 2','shipperAddress3':'ที่อยู่ 3','shipperCountry':'ประเทศ','shipperPostalCode':'รหัสไปรษณีย์','shipperCity':'เมือง','receiverName':'ชื่อผู้รับ','receiverCompany':'บริษัทผู้รับ','receiverPhone':'เบอร์โทรผู้รับ','receiverAddress1':'ที่อยู่ 1','receiverAddress2':'ที่อยู่ 2','receiverAddress3':'ที่อยู่ 3','receiverCountry':'ประเทศ','receiverPostalCode':'รหัสไปรษณีย์','receiverCity':'เมือง','document':'เอกสาร','package':'พัสดุ','addLineItem':'เพิ่มรายการสินค้า','shipmentRef':'เลขที่อ้างอิง (optional)','protectShipment':'เพิ่มความคุ้มครองการจัดส่ง (ประกัน)','packageDetails':'รายละเอียดแพ็คเกจ','addPiece':'เพิ่มกล่อง','shipperAccount':'บัญชีผู้ส่ง','billingAccount':'บัญชีสำหรับวางบิล', 'dutiesAccount':'บัญชีผู้ชำระภาษี','incoterm':'Incoterm','shipmentDate':'วันที่ส่ง','docUpload':'อัปโหลดเอกสาร','docUploadDesc':'อัปโหลดเอกสารเพิ่มเติม (ไม่เกิน 5MB)','summary':'สรุปข้อมูล','previous':'ย้อนกลับ','next':'ถัดไป','createShipmentBtn':'สร้างใบนำส่ง','allRightsReserved':'สงวนลิขสิทธิ์.','fillAllFields':'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน','typeOrSelectCountry': 'พิมพ์หรือเลือกประเทศ', 'backToMain': 'กลับหน้าหลัก', 'shipperEmail': 'อีเมลผู้ส่ง', 'receiverEmail': 'อีเมลผู้รับ', 'shipperVat': 'เลขประจำตัวผู้เสียภาษีผู้ส่ง', 'receiverVat': 'เลขประจำตัวผู้เสียภาษีผู้รับ', 'whatIsTheItem': 'สินค้าคืออะไร?', 'commodityCode': 'รหัสพิกัดศุลกากร', 'quantity': 'จำนวน', 'units': 'หน่วย', 'valuePerItem': 'มูลค่า (ต่อชิ้น)', 'weight': 'น้ำหนัก (KG)', 'whereWasItMade': 'ผลิตที่ประเทศ', 'totalUnits': 'จำนวนรวม:', 'totalWeight': 'น้ำหนักรวม:', 'totalValue': 'มูลค่ารวม:', 'insuredValue': 'มูลค่าประกัน', 'describeDocuments': 'ระบุประเภทเอกสารในชิปเมนต์ของคุณ', 'fillAllFieldsInItem': 'กรุณากรอกข้อมูลในรายการก่อนหน้าให้ครบถ้วน', 'customsInvoiceDetails': 'รายละเอียดใบกำกับสินค้า', 'createInvoice': 'สร้าง Invoice', 'useMyOwnInvoice': 'ใช้ Invoice ของฉัน', 'invoiceNumber': 'หมายเลข Invoice', 'itemDescription': 'รายละเอียดสินค้า', 'totalItemValue': 'มูลค่ารวม', 'summarizeShipment': 'สรุปรายการสินค้าในชิปเมนต์', 'shipmentDescription': '(shipment description)', 'totalPackages': 'จำนวนแพ็คเกจรวม:', 'totalWeightKg': 'น้ำหนักรวม:', 'lengthCm': 'ยาว (ซม.)', 'widthCm': 'กว้าง (ซม.)', 'heightCm': 'สูง (ซม.)', 'weightKg': 'น้ำหนัก (Kg)', 'dimensionsCm': 'ขนาด (ซม.)', 'fillAllFieldsInPiece': 'กรุณากรอกข้อมูลในแพ็คเกจก่อนหน้าให้ครบถ้วน', 'receiverWillPay': 'ผู้รับชำระภาษี', 'uploadCustomsDocs': 'อัปโหลดเอกสารศุลกากรของคุณ', 'uploadDocsDesc1': 'คุณสามารถอัปโหลดและส่งใบกำกับสินค้าหรือเอกสารทางศุลกากรอื่นๆ ในรูปแบบไฟล์ภาพและส่งมาให้เราทางอิเล็กทรอนิกส์ได้', 'uploadDocsDesc2': 'หากคุณไม่ได้อัปโหลดรูปภาพเอกสาร โปรดอย่าลืมพิมพ์และจัดเตรียมเอกสารของคุณมาพร้อมกับชิปเมนต์', 'uploadDocsQuestion': 'คุณต้องการอัปโหลดไฟล์ภาพหรือไม่?', 'yes': 'ใช่', 'browseForFile': 'เลือกไฟล์', 'orDropHere': ' หรือลากมาวางที่นี่', 'fileTypesAllowed': 'ประเภทไฟล์ที่อนุญาต: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, หรือ PDF', 'maxFileSize': 'ขนาดไฟล์สูงสุด: 5 MB', 'fileNameEnglishOnly': 'ชื่อไฟล์ต้องเป็นภาษาอังกฤษเท่านั้น', 'pickupYes': 'ใช่ – นัดรับสินค้า', 'pickupNo': 'ไม่ – ไม่ต้องการนัดรับ', 'pickupDropOffLink': 'ฉันสามารถนำส่งพัสดุได้ที่ไหน?', 'pickupSendingOn': 'ฉันจะส่งของในวันที่', 'pickupWindow': 'ช่วงเวลานัดรับ – เวลาที่พนักงานอาจมาถึงและพัสดุพร้อม', 'pickupWindowHint': 'กรุณาเผื่อช่วงเวลาอย่างน้อย 90 นาที', 'pickupLocation': 'พนักงานควรไปรับพัสดุที่ไหน?', 'pickupTotalWeight': 'น้ำหนักรวมของพัสดุ', 'pickupInstructions': 'คำแนะนำสำหรับพนักงาน (ถ้ามี)', 'pickupAddress': 'ที่อยู่สำหรับนัดรับ', 'editAddress': 'แก้ไข', 'saveAddress': 'บันทึก', 'editShipment': 'แก้ไขชิปเมนต์', 'summaryShipper': 'ผู้ส่ง', 'summaryReceiver': 'ผู้รับ', 'summaryShipmentInfo': 'ข้อมูลชิปเมนต์', 'summaryPackageInfo': 'ข้อมูลแพ็คเกจ', 'summaryPaymentInfo': 'ข้อมูลการชำระเงิน', 'summaryDocumentInfo': 'ข้อมูลเอกสาร', 'summaryPickupInfo': 'ข้อมูลการนัดรับสินค้า', 'requestPickup': 'ต้องการนัดรับสินค้า', 'summaryPickupDate': 'วันที่นัดรับ', 'summaryPickupTime': 'เวลานัดรับ', 'phoneMinLength': 'เบอร์โทรศัพท์ต้องมีอย่างน้อย 4 ตัวอักษร', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account Number ต้องมี 9 ตัวอักษร', 'uploadLabelOwnInvoice': 'อัปโหลดรูปภาพใบกำกับสินค้าของคุณ', 'uploadLabelCreateInvoice': 'DHL จะสร้างใบกำกับสินค้าอิเล็กทรอนิกส์จากรายละเอียดที่คุณให้ไว้สำหรับชิปเมนต์นี้', 'creatingShipment': 'กำลังสร้างใบนำส่ง...', 'apiErrorTitle': 'เกิดข้อผิดพลาด'
+            'th': { 'leaveSiteTitle': 'ออกจากหน้านี้?', 'leaveSiteBody': 'การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก', 'stayButton': 'อยู่ต่อ', 'leaveButton': 'ออก', 'createShipment':'สร้างใบนำส่ง','addressStep':'ที่อยู่','shipmentDetailsStep':'ชิปเมนต์','packageStep':'แพ็คเกจ','paymentStep':'การชำระเงิน','docsStep':'เอกสาร','pickupStep':'การนัดรับสินค้า','summaryStep':'สรุป','shipperInfo':'ข้อมูลผู้ส่ง','receiverInfo':'ข้อมูลผู้รับ','shipperName':'ชื่อผู้ส่ง','shipperCompany':'บริษัทผู้ส่ง','shipperPhone':'เบอร์โทรผู้ส่ง','shipperAddress1':'ที่อยู่ 1','shipperAddress2':'ที่อยู่ 2','shipperAddress3':'ที่อยู่ 3','shipperCountry':'ประเทศ','shipperPostalCode':'รหัสไปรษณีย์','shipperCity':'เมือง','receiverName':'ชื่อผู้รับ','receiverCompany':'บริษัทผู้รับ','receiverPhone':'เบอร์โทรผู้รับ','receiverAddress1':'ที่อยู่ 1','receiverAddress2':'ที่อยู่ 2','receiverAddress3':'ที่อยู่ 3','receiverCountry':'ประเทศ','receiverPostalCode':'รหัสไปรษณีย์','receiverCity':'เมือง','document':'เอกสาร','package':'พัสดุ','addLineItem':'เพิ่มรายการสินค้า','shipmentRef':'เลขที่อ้างอิง (optional)','protectShipment':'เพิ่มความคุ้มครองการจัดส่ง (ประกัน)','packageDetails':'รายละเอียดแพ็คเกจ','addPiece':'เพิ่มกล่อง','shipperAccount':'บัญชีผู้ส่ง','billingAccount':'บัญชีสำหรับวางบิล', 'dutiesAccount':'บัญชีผู้ชำระภาษี','incoterm':'Incoterm','shipmentDate':'วันที่ส่ง','docUpload':'อัปโหลดเอกสาร','docUploadDesc':'อัปโหลดเอกสารเพิ่มเติม (ไม่เกิน 5MB)','summary':'สรุปข้อมูล','previous':'ย้อนกลับ','next':'ถัดไป','createShipmentBtn':'สร้างใบนำส่ง','allRightsReserved':'สงวนลิขสิทธิ์.','fillAllFields':'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน','typeOrSelectCountry': 'พิมพ์หรือเลือกประเทศ', 'backToMain': 'กลับหน้าหลัก', 'shipperEmail': 'อีเมลผู้ส่ง', 'receiverEmail': 'อีเมลผู้รับ', 'shipperVat': 'เลขประจำตัวผู้เสียภาษีผู้ส่ง', 'receiverVat': 'เลขประจำตัวผู้เสียภาษีผู้รับ', 'whatIsTheItem': 'สินค้าคืออะไร?', 'commodityCode': 'รหัสพิกัดศุลกากร', 'quantity': 'จำนวน', 'units': 'หน่วย', 'valuePerItem': 'มูลค่า (ต่อชิ้น)', 'weight': 'น้ำหนัก (KG)', 'whereWasItMade': 'ผลิตที่ประเทศ', 'totalUnits': 'จำนวนรวม:', 'totalWeight': 'น้ำหนักรวม:', 'totalValue': 'มูลค่ารวม:', 'insuredValue': 'มูลค่าประกัน', 'describeDocuments': 'ระบุประเภทเอกสารในชิปเมนต์ของคุณ', 'fillAllFieldsInItem': 'กรุณากรอกข้อมูลในรายการก่อนหน้าให้ครบถ้วน', 'customsInvoiceDetails': 'รายละเอียดใบกำกับสินค้า', 'createInvoice': 'สร้าง Invoice', 'useMyOwnInvoice': 'ใช้ Invoice ของฉัน', 'invoiceNumber': 'หมายเลข Invoice', 'itemDescription': 'รายละเอียดสินค้า', 'totalItemValue': 'มูลค่ารวม', 'summarizeShipment': 'สรุปรายการสินค้าในชิปเมนต์', 'shipmentDescription': '(shipment description)', 'totalPackages': 'จำนวนแพ็คเกจรวม:', 'totalWeightKg': 'น้ำหนักรวม:', 'lengthCm': 'ยาว (ซม.)', 'widthCm': 'กว้าง (ซม.)', 'heightCm': 'สูง (ซม.)', 'weightKg': 'น้ำหนัก (Kg)', 'dimensionsCm': 'ขนาด (ซม.)', 'fillAllFieldsInPiece': 'กรุณากรอกข้อมูลในแพ็คเกจก่อนหน้าให้ครบถ้วน', 'receiverWillPay': 'ผู้รับชำระภาษี', 'uploadCustomsDocs': 'อัปโหลดเอกสารศุลกากรของคุณ', 'uploadDocsDesc1': 'คุณสามารถอัปโหลดและส่งใบกำกับสินค้าหรือเอกสารทางศุลกากรอื่นๆ ในรูปแบบไฟล์ภาพและส่งมาให้เราทางอิเล็กทรอนิกส์ได้', 'uploadDocsDesc2': 'หากคุณไม่ได้อัปโหลดรูปภาพเอกสาร โปรดอย่าลืมพิมพ์และจัดเตรียมเอกสารของคุณมาพร้อมกับชิปเมนต์', 'uploadDocsQuestion': 'คุณต้องการอัปโหลดไฟล์ภาพหรือไม่?', 'yes': 'ใช่', 'browseForFile': 'เลือกไฟล์', 'orDropHere': ' หรือลากมาวางที่นี่', 'fileTypesAllowed': 'ประเภทไฟล์ที่อนุญาต: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, หรือ PDF', 'maxFileSize': 'ขนาดไฟล์สูงสุด: 5 MB', 'fileNameEnglishOnly': 'ชื่อไฟล์ต้องเป็นภาษาอังกฤษเท่านั้น', 'pickupYes': 'ใช่ – นัดรับสินค้า', 'pickupNo': 'ไม่ – ไม่ต้องการนัดรับ', 'pickupDropOffLink': 'ฉันสามารถนำส่งพัสดุได้ที่ไหน?', 'pickupSendingOn': 'ฉันจะส่งของในวันที่', 'pickupWindow': 'ช่วงเวลานัดรับ – เวลาที่พนักงานอาจมาถึงและพัสดุพร้อม', 'pickupWindowHint': 'กรุณาเผื่อช่วงเวลาอย่างน้อย 90 นาที', 'pickupLocation': 'พนักงานควรไปรับพัสดุที่ไหน?', 'pickupTotalWeight': 'น้ำหนักรวมของพัสดุ', 'pickupInstructions': 'คำแนะนำสำหรับพนักงาน (ถ้ามี)', 'pickupAddress': 'ที่อยู่สำหรับนัดรับ', 'editAddress': 'แก้ไข', 'saveAddress': 'บันทึก', 'editShipment': 'แก้ไขชิปเมนต์', 'summaryShipper': 'ผู้ส่ง', 'summaryReceiver': 'ผู้รับ', 'summaryShipmentInfo': 'ข้อมูลชิปเมนต์', 'summaryPackageInfo': 'ข้อมูลแพ็คเกจ', 'summaryPaymentInfo': 'ข้อมูลการชำระเงิน', 'summaryDocumentInfo': 'ข้อมูลเอกสาร', 'summaryPickupInfo': 'ข้อมูลการนัดรับสินค้า', 'requestPickup': 'ต้องการนัดรับสินค้า', 'summaryPickupDate': 'วันที่นัดรับ', 'summaryPickupTime': 'เวลานัดรับ', 'phoneMinLength': 'เบอร์โทรศัพท์ต้องมีอย่างน้อย 4 ตัวอักษร', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account Number ต้องมี 9 ตัวอักษร', 'uploadLabelOwnInvoice': 'อัปโหลดรูปภาพใบกำกับสินค้าของคุณ', 'uploadLabelCreateInvoice': "DHL จะสร้างใบกำกับสินค้าอิเล็กทรอนิกส์จากรายละเอียดที่คุณให้ไว้สำหรับชิปเมนต์นี้", 'creatingShipment': 'กำลังสร้างใบนำส่ง...', 'apiErrorTitle': 'เกิดข้อผิดพลาด'
             },
             'en': { 'leaveSiteTitle': 'Leave Site?', 'leaveSiteBody': 'Changes you made may not be saved.', 'stayButton': 'Stay', 'leaveButton': 'Leave', 'createShipment':'Create Shipment','addressStep':'Address','shipmentDetailsStep':'Shipment','packageStep':'Package','paymentStep':'Payment','docsStep':'Documents','pickupStep':'Pickup','summaryStep':'Summary','shipperInfo':'Shipper Information','receiverInfo':'Receiver Information','shipperName':'Name','shipperCompany':'Company','shipperPhone':'Phone','shipperAddress1':'Address Line 1','shipperAddress2':'Address Line 2','shipperAddress3':'Address Line 3','shipperCountry':'Country','shipperPostalCode':'Postal Code','shipperCity':'City','receiverName':'Name','receiverCompany':'Company','receiverPhone':'Phone','receiverAddress1':'Address Line 1','receiverAddress2':'Address Line 2','receiverAddress3':'Address Line 3','receiverCountry':'Country','receiverPostalCode':'Postal Code','receiverCity':'City','document':'Document','package':'Package','addLineItem':'Add Line Item','shipmentRef':'Shipment Reference (optional)','protectShipment':'Protect Your Shipment (Insurance)','packageDetails':'Package Details','addPiece':'Add Piece','shipperAccount':'Shipper Account','billingAccount':'Billing Account', 'dutiesAccount':'Duties & Taxes Account','incoterm':'Incoterm','shipmentDate':'Shipment Date','docUpload':'Document Upload','docUploadDesc':'Upload additional documents (max 5MB)','pickupBooking':'Pickup Booking','requestPickup':'Request a pickup','pickupCloseTime':'Pickup Close Time','pickupLocation':'Pickup Location (e.g., Reception)','summary':'Summary','previous':'Previous','next':'Next','createShipmentBtn':'Create Shipment','allRightsReserved':'All rights reserved.','fillAllFields':'Please fill in all required fields.','typeOrSelectCountry': 'Type or select a country', 'backToMain': 'Back to Main', 'shipperEmail': 'Email Address', 'receiverEmail': 'Email Address', 'shipperVat': 'VAT / Tax ID', 'receiverVat': 'VAT / Tax ID', 'whatIsTheItem': 'What is the item?', 'commodityCode': 'Commodity Code', 'quantity': 'Quantity', 'units': 'Units', 'valuePerItem': 'Value (Per Item)', 'weight': 'Weight (KG)', 'whereWasItMade': 'Where was the item made?', 'totalUnits': 'Total Units:', 'totalWeight': 'Total Weight:', 'totalValue': 'Total Value:', 'insuredValue': 'Insured Value', 'describeDocuments': 'Describe the documents in your shipment', 'fillAllFieldsInItem': 'Please fill in the previous item completely.', 'customsInvoiceDetails': 'Customs Invoice Details', 'createInvoice': 'Create Invoice', 'useMyOwnInvoice': 'Use My Own Invoice', 'invoiceNumber': 'Invoice Number', 'itemDescription': 'Item Description', 'totalItemValue': 'Total Item Value', 'summarizeShipment': 'Summarize the contents of your shipment', 'shipmentDescription': '(shipment description)', 'totalPackages': 'Total Packages:', 'totalWeightKg': 'Total Weight:', 'lengthCm': 'Length (cm)', 'widthCm': 'Width (cm)', 'heightCm': 'Height (cm)', 'weightKg': 'Weight (Kg)', 'dimensionsCm': 'Dimensions (cm)', 'fillAllFieldsInPiece': 'Please fill in the previous package completely.', 'receiverWillPay': 'Receiver will pay', 'uploadCustomsDocs': 'Upload Your Customs Documents', 'uploadDocsDesc1': 'You can upload and submit your customs invoice or any other customs documents as image files and submit them to us electronically.', 'uploadDocsDesc2': 'If you do not upload document images, remember to print and provide your documents with your shipment.', 'uploadDocsQuestion': 'Would you like to upload image files?', 'yes': 'Yes', 'browseForFile': 'Browse for File', 'orDropHere': ' or Drop Here', 'fileTypesAllowed': 'File Type Allowed: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, or PDF', 'maxFileSize': 'Maximum file size: 5 MB', 'fileNameEnglishOnly': 'File name must be in English only', 'pickupYes': 'Yes – Schedule Pickup', 'pickupNo': 'No - Don\'t need to Pickup', 'pickupDropOffLink': 'Where can I drop off my shipment?', 'pickupSendingOn': 'I\'m sending my shipment on', 'pickupWindow': 'Pickup Window – When courier may arrive and shipment is ready', 'pickupWindowHint': 'Please allow at least 90 minutes for your Pickup Window', 'pickupLocation': 'Where should the courier pick up the shipment?', 'pickupTotalWeight': 'Total Pickup Weight', 'pickupInstructions': 'Instructions for the courier', 'pickupAddress': 'Pickup Address', 'editAddress': 'Edit', 'saveAddress': 'Save', 'editShipment': 'Edit Shipment', 'summaryShipper': 'Shipper', 'summaryReceiver': 'Receiver', 'summaryShipmentInfo': 'Shipment Information', 'summaryPackageInfo': 'Package Information', 'summaryPaymentInfo': 'Payment Information', 'summaryDocumentInfo': 'Document Information', 'summaryPickupInfo': 'Pickup Information', 'requestPickup': 'Request a pickup', 'summaryPickupDate': 'Pickup Date', 'summaryPickupTime': 'Pickup Time', 'phoneMinLength': 'Phone number must be at least 4 characters long', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account number must be 9 characters.', 'uploadLabelOwnInvoice': 'Upload an image of your customs invoice.', 'uploadLabelCreateInvoice': "DHL will create an electronic customs invoice from the details you've provided for this shipment.", 'creatingShipment': 'Creating shipment...', 'apiErrorTitle': 'An Error Occurred'
             }
@@ -1018,6 +1018,14 @@
             document.getElementById('summary-total-units').textContent = totalUnits;
             document.getElementById('summary-total-weight').textContent = `${totalWeight.toFixed(3)} KG`;
             document.getElementById('summary-total-value').textContent = `${totalValue.toFixed(3)} ${currency}`;
+            
+            // [FIX] Update insurance value when summary is updated
+            const insuranceInput = document.getElementById('insurance-value');
+            const protectShipmentCheckbox = document.getElementById('protect-shipment');
+            if (protectShipmentCheckbox.checked) {
+                insuranceInput.value = totalValue.toFixed(3);
+            }
+
             updateAllLineItemSummaries();
         }
 
@@ -1124,17 +1132,26 @@
             incotermSelect.required = true;
         });
         
+        // [FIX] Logic for insurance value
         document.getElementById('protect-shipment').addEventListener('change', (e) => {
             const isPackage = document.getElementById('ship-type-package').classList.contains('active');
             const insuranceInput = document.getElementById('insurance-value');
             const insuranceIndicator = document.getElementById('insurance-value-indicator');
+            const isChecked = e.target.checked;
+
             if (isPackage) {
-                const isChecked = e.target.checked;
                 insuranceValueContainer.classList.toggle('hidden', !isChecked);
                 insuranceInput.required = isChecked;
                 insuranceIndicator.classList.toggle('hidden', !isChecked);
-                if (!isChecked) {
+                
+                if (isChecked) {
+                    updateSummary(); // This will fill the value from total
+                    insuranceInput.disabled = true; // Disable the input
                     insuranceInput.classList.remove('is-invalid');
+                    updateInputValidationState(insuranceInput);
+                } else {
+                    insuranceInput.disabled = false; // Re-enable if unchecked
+                    insuranceInput.value = '';
                 }
             }
         });
@@ -1172,7 +1189,6 @@
             }
         }
 
-        // [FIX] Make Invoice Number mandatory in all cases
         function updateInvoiceSection() {
             const isPackage = document.getElementById('ship-type-package').classList.contains('active');
             if (!isPackage) return;
@@ -1503,6 +1519,7 @@
             });
         }
         
+        // [FIX] Logic for pickup address default
         function updatePickupStepData() {
             const getVal = (id) => document.getElementById(id)?.value || '';
             const shipperName = getVal('shipper-name');
@@ -1514,6 +1531,7 @@
             const shipperPostal = getVal('shipper-postalcode');
             const shipperPhone = getVal('shipper-phone');
 
+            // Populate the editable form fields
             document.getElementById('pickup-name').value = shipperName;
             document.getElementById('pickup-company').value = shipperCompany;
             document.getElementById('pickup-address1').value = shipperAddress1;
@@ -1523,13 +1541,14 @@
             document.getElementById('pickup-postalcode').value = shipperPostal;
             document.getElementById('pickup-phone').value = shipperPhone;
             
+            // Correctly populate the display view
             const addressHTML = `
-                <p><strong>${shipperName}</strong>, ${shipperCompany}</p>
-                <p>${shipperAddress1}</p>
+                <p><strong>${shipperName || ''}</strong>, ${shipperCompany || ''}</p>
+                <p>${shipperAddress1 || ''}</p>
                 ${shipperAddress2 ? `<p>${shipperAddress2}</p>` : ''}
-                ${address3 ? `<p>${address3}</p>` : ''}
-                <p>${city}, ${postal}</p>
-                <p>Tel: ${phone}</p>
+                ${shipperAddress3 ? `<p>${shipperAddress3}</p>` : ''}
+                <p>${shipperCity || ''}, ${shipperPostal || ''}</p>
+                <p>Tel: ${shipperPhone || ''}</p>
             `;
             document.getElementById('pickup-address-display').innerHTML = addressHTML;
         }
@@ -1851,3 +1870,4 @@
     </script>
 </body>
 </html>
+
