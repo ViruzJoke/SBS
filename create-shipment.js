@@ -283,8 +283,13 @@ async function buildShipmentPayload() {
         encodingFormat: "pdf",
         imageOptions: [
             {
+                typeCode: "label",
+                templateName: "ECOM26_84_A4_001",
+                isRequested: true,
+            },
+			{
                 typeCode: "waybillDoc",
-                templateName: "ARCH_8X4",
+                templateName: "ARCH_8X4_A4_002",
                 isRequested: true,
             },
             {
