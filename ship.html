@@ -5,12 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DHL Backup Solution - Create Shipment</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .country-dropdown, .document-dropdown { position: absolute; z-index: 20; width: 100%; background-color: white; border: 1px solid #d1d5db; border-radius: 0.375rem; margin-top: 0.25rem; max-height: 15rem; overflow-y: auto; }
+        .country-dropdown-item, .document-dropdown-item { padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; }
+        .country-dropdown-item:hover, .document-dropdown-item:hover { background-color: #f3f4f6; }
+        .country-dropdown-item img { width: 1.25rem; height: auto; flex-shrink: 0; }
+        .dark-mode .country-dropdown, .dark-mode .document-dropdown { background-color: #374151; border-color: #4b5563; }
+        .dark-mode .country-dropdown-item:hover, .dark-mode .document-dropdown-item:hover { background-color: #4b5563; }
+        
+        .input-field.is-invalid { border-color: #ef4444; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); }
+        .input-field:disabled { background-color: #e5e7eb; cursor: not-allowed; }
+        .dark-mode .input-field:disabled { background-color: #374151; opacity: 0.6; }
+
+        .input-indicator { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 1.25rem; line-height: 1; }
+        .indicator-required { color: #ef4444; }
+        .indicator-valid { color: #10b981; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #leave-confirm-modal { animation: fadeIn 0.2s ease-out; }
+
+        .shipment-type-button { border: 2px solid #d1d5db; transition: all 0.2s ease; }
+        .shipment-type-button.active { border-color: #f59e0b; background-color: #fefce8; }
+        .dark-mode .shipment-type-button.active { border-color: #f59e0b; background-color: #453315; }
+        
+        .line-item, .package-piece-item { border: 1px solid #e5e7eb; border-radius: 0.5rem; background-color: #ffffff; }
+        .dark-mode .line-item, .dark-mode .package-piece-item { border-color: #4b5563; background-color: #2d3748; }
+        .line-item-header, .package-piece-header { cursor: pointer; }
+        .line-item-body { max-height: 1000px; overflow: hidden; transition: all 0.4s ease-in-out; opacity: 1; }
+        .line-item.is-collapsed .line-item-body { max-height: 0 !important; opacity: 0; padding-top: 0; padding-bottom: 0; margin-top: 0; border-top: none; }
+        .line-item-arrow { transition: transform 0.3s ease; }
+        .line-item.is-collapsed .line-item-arrow { transform: rotate(-90deg); }
+        
+        .line-item .line-item-summary { display: none; }
+        .line-item.is-collapsed .line-item-summary { display: grid; }
+        
+        .dark-mode .language-dropdown { background-color: #374151; border-color: #4b5563; }
+        .dark-mode .language-dropdown a:hover { background-color: #4b5563; }
+        
+        .dark-mode .bg-yellow-50 { background-color: #1f2937; }
+        .dark-mode .input-field { background-color: #374151; }
+
+        .file-drop-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 1rem; border: 2px dashed #d1d5db; border-radius: 0.5rem; cursor: pointer; background-color: #f9fafb; transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out; }
+        .file-drop-zone:hover { background-color: #f3f4f6; border-color: #fbbf24; }
+        .dark-mode .file-drop-zone { background-color: #2d3748; border-color: #4b5563; }
+        .dark-mode .file-drop-zone:hover { background-color: #374151; border-color: #f59e0b; }
+
+        .uploaded-file-view { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; background-color: #f9fafb; }
+        .dark-mode .uploaded-file-view { background-color: #2d3748; border-color: #4b5563; }
+        .delete-file-btn { background: none; border: none; cursor: pointer; color: #9ca3af; }
+        .delete-file-btn:hover { color: #ef4444; }
+
+        .noUi-target { background: #e5e7eb; border: 1px solid #d1d5db; box-shadow: none; }
+        .dark-mode .noUi-target { background: #374151; border-color: #4b5563; }
+        .noUi-connect { background: #6b7280; }
+        .dark-mode .noUi-connect { background: #9ca3af; }
+        .noUi-handle { border: 1px solid #d1d5db; border-radius: 50%; background: #fbbf24; box-shadow: none; cursor: grab; }
+        .noUi-handle:active { cursor: grabbing; }
+        .noUi-handle:focus { outline: none; }
+        .noUi-handle::before, .noUi-handle::after { display: none; }
+        .noUi-tooltip { background: #fbbf24; color: #1f2937; border: none; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; padding: 2px 6px; transform: translateY(5px); }
+        
+        .noUi-pips { position: relative; color: #9ca3af; }
+        .dark-mode .noUi-pips { color: #6b7280; }
+        .noUi-pips-horizontal { padding: 10px 0; height: 30px; top: 100%; left: 0; width: 100%; margin-top: 5px; }
+        .noUi-marker-horizontal.noUi-marker { height: 8px; }
+        .noUi-marker-horizontal.noUi-marker-large { height: 12px; }
+        .noUi-value-horizontal { padding-top: 5px; transform: translate(-50%, 0); }
+        .noUi-value-large { font-weight: 600; font-size: 0.75rem; }
+
+        /* Responsive Progress Bar Styles */
+        .progress-bar-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 1rem;
+            margin-bottom: -1rem; /* Counteract padding for layout */
+            scrollbar-width: none; /* Hide scrollbar for Firefox */
+        }
+        .progress-bar-container::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+        }
+        .progress-bar {
+            min-width: 700px; /* Minimum width to prevent squishing */
+        }
+        .step-text {
+            white-space: nowrap; /* Prevent text from wrapping */
+        }
+    </style>
 </head>
 <body>
     <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10 rounded-b-xl">
         <a href="index.html" class="flex items-center"><span class="text-4xl font-bold text-red-600">DHL</span><span class="ml-2 text-xl font-semibold text-gray-800  sm:block">Backup Solution</span></a>
-        <nav id="desktop-utilities-nav" class=" md:flex items-center space-x-4">
+        <nav class="flex items-center space-x-2 sm:space-x-4">
             <div class="relative">
                 <button id="language-toggle-button" class="utility-button px-4 py-2 flex items-center gap-2"><span id="current-language-display"></span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                 <div id="language-dropdown" class="language-dropdown absolute right-0 mt-2 w-28 bg-white rounded-md shadow-lg hidden z-20">
@@ -19,96 +107,1750 @@
             </div>
             <button id="theme-toggle" class="utility-button">
                 <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <svg id="theme-icon-dark" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
             </button>
         </nav>
-        <button id="mobile-menu-button" class="md:hidden text-gray-700 p-2 rounded-md"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
     </header>
 
     <main class="container py-8">
-        <section id="ship-now-page" class="card max-w-4xl mx-auto">
+        <section id="ship-now-page" class="card max-w-5xl mx-auto">
             <h1 class="text-3xl font-extrabold text-center mb-8" data-i18n="createShipment"></h1>
-            <div class="relative">
-                <div class="progress-bar">
-                    <div class="progress-line-fill"></div>
-                    <div id="step-1" class="progress-step"><div class="step-circle">1</div><p class="step-text" data-i18n="originStep"></p></div>
-                    <div id="step-2" class="progress-step"><div class="step-circle">2</div><p class="step-text" data-i18n="destinationStep"></p></div>
-                    <div id="step-3" class="progress-step"><div class="step-circle">3</div><p class="step-text" data-i18n="packageStep"></p></div>
-                    <div id="step-4" class="progress-step"><div class="step-circle">4</div><p class="step-text" data-i18n="reviewConfirm"></p></div>
+            <div class="progress-bar-container">
+                <div class="relative mb-8">
+                    <div class="progress-bar">
+                        <div id="step-1" class="progress-step"><div class="step-circle"><span class="step-number">1</span><svg class="step-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div><p class="step-text" data-i18n="addressStep"></p></div>
+                        <div class="progress-separator">&gt;</div>
+                        <div id="step-2" class="progress-step"><div class="step-circle"><span class="step-number">2</span><svg class="step-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div><p class="step-text" data-i18n="shipmentDetailsStep"></p></div>
+                        <div class="progress-separator">&gt;</div>
+                        <div id="step-3" class="progress-step"><div class="step-circle"><span class="step-number">3</span><svg class="step-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div><p class="step-text" data-i18n="packageStep"></p></div>
+                        <div class="progress-separator">&gt;</div>
+                        <div id="step-4" class="progress-step"><div class="step-circle"><span class="step-number">4</span><svg class="step-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div><p class="step-text" data-i18n="paymentStep"></p></div>
+                        <div class="progress-separator">&gt;</div>
+                        <div id="step-5" class="progress-step"><div class="step-circle"><span class="step-number">5</span><svg class="step-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div><p class="step-text" data-i18n="docsStep"></p></div>
+                        <div class="progress-separator">&gt;</div>
+                        <div id="step-6" class="progress-step"><div class="step-circle"><span class="step-number">6</span><svg class="step-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div><p class="step-text" data-i18n="pickupStep"></p></div>
+                        <div class="progress-separator">&gt;</div>
+                        <div id="step-7" class="progress-step"><div class="step-circle"><span class="step-number">7</span><svg class="step-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div><p class="step-text" data-i18n="summaryStep"></p></div>
+                    </div>
                 </div>
             </div>
             
             <form id="ship-now-form" class="space-y-6" novalidate>
-                 <div id="form-message" class="p-4 rounded-md text-center hidden"></div>
-                 <div id="ship-now-step-1" class="ship-now-step space-y-4 p-4 border rounded-lg bg-yellow-50">
-                    <h2 class="text-xl font-semibold" data-i18n="originInfo"></h2>
-                    <div><label class="block text-sm font-medium mb-1" data-i18n="originCountry"></label><select id="ship-origin-country" class="input-field" required><option value="" data-i18n="selectCountry"></option></select></div>
-                    <div><label class="block text-sm font-medium mb-1" data-i18n="originCity"></label><input type="text" id="ship-origin-city" class="input-field" required data-i18n-placeholder="enterCity"></div>
-                    <div><label class="block text-sm font-medium mb-1" data-i18n="originPostalCodeRequired"></label><input type="text" id="ship-origin-postalcode" class="input-field" required data-i18n-placeholder="enterPostalCode"></div>
+                <div id="form-message" class="p-4 rounded-md text-center hidden break-words"></div>
+
+                <!-- Step 1: Address -->
+                <div id="ship-now-step-1" class="ship-now-step space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                            <h3 class="text-xl font-semibold" data-i18n="shipperInfo"></h3>
+                            <div><label for="shipper-name" class="block text-sm font-medium mb-1" data-i18n="shipperName">Name</label><div class="relative"><input type="text" id="shipper-name" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="shipper-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany">Company</label><div class="relative"><input type="text" id="shipper-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="shipper-country-input" class="block text-sm font-medium mb-1" data-i18n="shipperCountry">Country</label><div class="relative"><input type="text" id="shipper-country-input" class="input-field pr-8" autocomplete="off" required data-i18n-placeholder="typeOrSelectCountry"><input type="hidden" id="shipper-country-value"><div id="shipper-country-dropdown" class="country-dropdown hidden"></div><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="shipper-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1">Address Line 1</label><div class="relative"><input type="text" id="shipper-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="shipper-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><input type="text" id="shipper-address2" class="input-field"></div>
+                            <div><label for="shipper-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><input type="text" id="shipper-address3" class="input-field"></div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label for="shipper-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode">Postal Code</label><input type="text" id="shipper-postalcode" class="input-field"></div>
+                                <div><label for="shipper-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity">City</label><div class="relative"><input type="text" id="shipper-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            </div>
+                            <div><label for="shipper-email" class="block text-sm font-medium mb-1" data-i18n="shipperEmail">Email Address</label><input type="email" id="shipper-email" class="input-field"></div>
+                            <div><label for="shipper-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone">Phone</label><div class="relative"><input type="tel" id="shipper-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="shipper-vat" class="block text-sm font-medium mb-1" data-i18n="shipperVat">VAT / Tax ID</label><input type="text" id="shipper-vat" class="input-field"></div>
+                        </div>
+                        <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                            <h3 class="text-xl font-semibold" data-i18n="receiverInfo"></h3>
+                            <div><label for="receiver-name" class="block text-sm font-medium mb-1" data-i18n="receiverName">Name</label><div class="relative"><input type="text" id="receiver-name" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="receiver-company" class="block text-sm font-medium mb-1" data-i18n="receiverCompany">Company</label><div class="relative"><input type="text" id="receiver-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="receiver-country-input" class="block text-sm font-medium mb-1" data-i18n="receiverCountry">Country</label><div class="relative"><input type="text" id="receiver-country-input" class="input-field pr-8" autocomplete="off" required data-i18n-placeholder="typeOrSelectCountry"><input type="hidden" id="receiver-country-value"><div id="receiver-country-dropdown" class="country-dropdown hidden"></div><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="receiver-address1" class="block text-sm font-medium mb-1" data-i18n="receiverAddress1">Address Line 1</label><div class="relative"><input type="text" id="receiver-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field"></div>
+                             <div><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field"></div>
+                             <div class="grid grid-cols-2 gap-4">
+                                <div><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
+                                <div><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            </div>
+                            <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
+                            <div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
+                        </div>
+                    </div>
                 </div>
-                <div id="ship-now-step-2" class="ship-now-step space-y-4 p-4 border rounded-lg bg-yellow-50 hidden-page">
-                    <h2 class="text-xl font-semibold" data-i18n="destinationInfo"></h2>
-                    <div><label class="block text-sm font-medium mb-1" data-i18n="destinationCountry"></label><select id="ship-destination-country" class="input-field" required><option value="" data-i18n="selectCountry"></option></select></div>
-                    <div><label class="block text-sm font-medium mb-1" data-i18n="destinationCity"></label><input type="text" id="ship-destination-city" class="input-field" required data-i18n-placeholder="enterCity"></div>
-                    <div><label class="block text-sm font-medium mb-1" data-i18n="destinationPostalCodeRequired"></label><input type="text" id="ship-destination-postalcode" class="input-field" required data-i18n-placeholder="enterPostalCode"></div>
+
+                <!-- Step 2: Shipment Details -->
+                <div id="ship-now-step-2" class="ship-now-step hidden space-y-6">
+                    <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button type="button" id="ship-type-document" class="shipment-type-button p-4 rounded-lg flex flex-col items-center justify-center text-center">
+                                <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <span class="font-semibold" data-i18n="document"></span>
+                            </button>
+                            <button type="button" id="ship-type-package" class="shipment-type-button p-4 rounded-lg flex flex-col items-center justify-center text-center active">
+                                <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-14L4 7m0 10l8 4m-8-4v-4"></path></svg>
+                                <span class="font-semibold" data-i18n="package"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                        <label for="ship-date" class="block text-sm font-medium mb-1" data-i18n="shipmentDate">Shipment Date</label>
+                        <div class="relative">
+                            <input type="date" id="ship-date" class="input-field pr-8" required>
+                            <span class="input-indicator indicator-required">*</span>
+                        </div>
+                    </div>
+                    
+                    <div id="document-details-container" class="hidden p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                        <div>
+                            <label for="document-description-input" class="block text-sm font-medium mb-1" data-i18n="describeDocuments"></label>
+                            <div class="relative">
+                                <input type="text" id="document-description-input" class="input-field pr-8" autocomplete="off" required>
+                                <div id="document-description-dropdown" class="document-dropdown hidden"></div>
+                                <span class="input-indicator indicator-required">*</span>
+                            </div>
+                        </div>
+                        <div class="text-left space-y-2">
+                            <label for="shipment-reference-doc" class="block text-sm font-medium" data-i18n="shipmentRef"></label>
+                            <input type="text" id="shipment-reference-doc" class="input-field">
+                        </div>
+                    </div>
+
+                    <div id="package-details-container" class="space-y-4">
+                        <div id="line-items-container" class="space-y-4"></div>
+                        <button type="button" id="add-line-item-btn" class="w-full btn-primary btn-gray flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            <span data-i18n="addLineItem"></span>
+                        </button>
+                        
+                        <div class="p-4 border-t-2 border-dashed dark:border-gray-600 mt-4 space-y-4">
+                             <div class="space-y-2 text-right">
+                                <div class="flex justify-end items-center gap-4"><span class="font-semibold" data-i18n="totalUnits"></span><span id="summary-total-units" class="font-bold text-lg">0</span></div>
+                                <div class="flex justify-end items-center gap-4"><span class="font-semibold" data-i18n="totalWeight"></span><span id="summary-total-weight" class="font-bold text-lg">0.000 KG</span></div>
+                                <div class="flex justify-end items-center gap-4"><span class="font-semibold" data-i18n="totalValue"></span><span id="summary-total-value" class="font-bold text-lg text-red-600 dark:text-amber-400">0.000 THB</span></div>
+                            </div>
+
+                            <div id="summarize-shipment-container" class="hidden text-left space-y-2">
+                                 <!-- [FIX] Added description text and made it mandatory -->
+                                 <label for="summarize-shipment" class="block text-sm font-medium">
+                                     <span data-i18n="summarizeShipment"></span>
+                                     <span class="block text-xs text-gray-500 dark:text-gray-400" data-i18n="shipmentDescription"></span>
+                                 </label>
+                                 <div class="relative"><input type="text" id="summarize-shipment" class="input-field pr-8"><span class="input-indicator indicator-required hidden">*</span></div>
+                            </div>
+                            
+                            <div class="text-left space-y-2">
+                                <label for="shipment-reference-pkg" class="block text-sm font-medium" data-i18n="shipmentRef"></label>
+                                <input type="text" id="shipment-reference-pkg" class="input-field">
+                            </div>
+                        </div>
+
+                        <div class="p-4 border-t-2 border-dashed dark:border-gray-600 space-y-4">
+                            <h4 class="font-semibold text-lg text-left" data-i18n="customsInvoiceDetails"></h4>
+                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <button type="button" id="create-invoice-btn" class="shipment-type-button p-3 rounded-lg">
+                                    <span data-i18n="createInvoice"></span>
+                                </button>
+                                <button type="button" id="use-my-own-invoice-btn" class="shipment-type-button p-3 rounded-lg active">
+                                    <span data-i18n="useMyOwnInvoice"></span>
+                                </button>
+                            </div>
+                            
+                            <div id="invoice-options-container" class="hidden">
+                                <div class="border-t-2 border-dashed dark:border-gray-600 pt-4 mt-4">
+                                    <div id="invoice-type-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <button type="button" id="invoice-type-proforma" class="shipment-type-button p-3 rounded-lg active">
+                                            <span data-i18n="proformaInvoice"></span>
+                                        </button>
+                                        <button type="button" id="invoice-type-commercial" class="shipment-type-button p-3 rounded-lg">
+                                            <span data-i18n="commercialInvoice"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="invoice-number-container">
+                                <label id="invoice-number-label" for="invoice-number" class="block text-sm font-medium mb-1" data-i18n="invoiceNumber"></label>
+                                <div class="relative">
+                                    <input type="text" id="invoice-number" class="input-field pr-8">
+                                    <span id="invoice-number-indicator" class="input-indicator indicator-required hidden">*</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                        <div class="flex items-center"><input type="checkbox" id="protect-shipment" class="form-checkbox h-5 w-5 text-red-600"><label for="protect-shipment" class="ml-2" data-i18n="protectShipment"></label></div>
+                        <div id="insurance-value-container" class="hidden">
+                            <label for="insurance-value" class="block text-sm font-medium mb-1" data-i18n="insuredValue"></label>
+                            <div class="flex items-center gap-2">
+                                <div class="relative w-full">
+                                    <input type="text" id="insurance-value" class="input-field w-full pr-8">
+                                    <span id="insurance-value-indicator" class="input-indicator indicator-required hidden">*</span>
+                                </div>
+                                <span id="insurance-currency" class="font-semibold whitespace-nowrap">THB</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="ship-now-step-3" class="ship-now-step space-y-4 p-4 border rounded-lg bg-yellow-50 hidden-page">
-                    <h2 class="text-xl font-semibold" data-i18n="packageDetails"></h2>
-                    <div><label class="block text-sm font-medium mb-1" data-i18n="shipmentDate"></label><input type="date" id="ship-date" class="input-field" required></div>
-                    <div class="flex items-center mt-2"><input type="checkbox" id="is-parcel" class="form-checkbox h-5 w-5 text-red-600 rounded-md"><label for="is-parcel" class="ml-2 block text-sm" data-i18n="isParcel"></label></div>
-                    <div id="declared-value-container" class="hidden"><label class="block text-sm font-medium mb-1" data-i18n="declaredValue"></label><input type="number" id="declared-value" min="0" step="0.01" class="input-field" data-i18n-placeholder="enterDeclaredValue"></div>
-                    <div id="package-pieces-container"></div>
-                    <button type="button" id="add-piece-button" class="w-full btn-primary btn-red mt-2" data-i18n="addPiece"></button>
+
+                <!-- Step 3: Package -->
+                <div id="ship-now-step-3" class="ship-now-step hidden space-y-4">
+                    <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                        <h3 class="text-xl font-semibold" data-i18n="packageDetails"></h3>
+                        <div id="package-pieces-container" class="space-y-4"></div>
+                        <button type="button" id="add-piece-button" class="w-full btn-primary btn-gray flex items-center justify-center gap-2">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            <span data-i18n="addPiece"></span>
+                        </button>
+                    </div>
+                    <div class="p-4 border-t-2 border-dashed dark:border-gray-600 mt-4 space-y-2 text-right">
+                        <div class="flex justify-end items-center gap-4">
+                            <span class="font-semibold" data-i18n="totalPackages"></span>
+                            <span id="summary-total-packages" class="font-bold text-lg">0</span>
+                        </div>
+                        <div class="flex justify-end items-center gap-4">
+                            <span class="font-semibold" data-i18n="totalWeightKg"></span>
+                            <span id="summary-total-weight-kg" class="font-bold text-lg">0.000 KG</span>
+                        </div>
+                    </div>
                 </div>
-                <div id="ship-now-step-4" class="ship-now-step space-y-6 p-4 border rounded-lg bg-yellow-50 hidden-page">
-                    <h2 class="text-xl font-semibold" data-i18n="reviewConfirm"></h2>
-                    <div class="space-y-3"><p><strong data-i18n="originInfo"></strong> <span id="review-origin"></span></p><p><strong data-i18n="destinationInfo"></strong> <span id="review-destination"></span></p><p class="font-medium" data-i18n="packageDetails"></p><ul id="review-package-list" class="list-disc list-inside ml-4"></ul></div>
+
+                <!-- Step 4: Payment -->
+                <div id="ship-now-step-4" class="ship-now-step hidden space-y-4">
+                    <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                        <h3 class="text-xl font-semibold" data-i18n="paymentStep"></h3>
+                        <div>
+                            <label for="shipper-account" class="block text-sm font-medium mb-1" data-i18n="shipperAccount">Shipper Account</label>
+                            <div class="relative">
+                                <!-- [FIX] Added attributes for 9-digit numeric input -->
+                                <input type="text" id="shipper-account" class="input-field pr-8" required maxlength="9" pattern="[0-9]*" inputmode="numeric">
+                                <span class="input-indicator indicator-required">*</span>
+                            </div>
+                        </div>
+                        <!-- [NEW] Added Billing Account field -->
+                        <div>
+                            <label for="billing-account" class="block text-sm font-medium mb-1" data-i18n="billingAccount">Billing Account</label>
+                            <div class="relative">
+                                <input type="text" id="billing-account" class="input-field pr-8" maxlength="9" pattern="[0-9]*" inputmode="numeric">
+                                <span class="input-indicator indicator-required hidden">*</span>
+                            </div>
+                        </div>
+                        <div id="duties-account-container">
+                            <label for="duties-account" class="block text-sm font-medium mb-1" data-i18n="dutiesAccount">Duties & Taxes Account</label>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="receiver-pays-checkbox" class="form-checkbox h-5 w-5 text-red-600">
+                                    <label for="receiver-pays-checkbox" class="ml-2" data-i18n="receiverWillPay"></label>
+                                </div>
+                                <div class="relative flex-grow">
+                                    <!-- [FIX] Added attributes for 9-digit numeric input -->
+                                    <input type="text" id="duties-account" class="input-field pr-8" maxlength="9" pattern="[0-9]*" inputmode="numeric">
+                                    <span class="input-indicator indicator-required hidden">*</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="incoterm-container">
+                            <label for="incoterm" class="block text-sm font-medium mb-1" data-i18n="incoterm">Incoterm</label>
+                            <select id="incoterm" class="input-field" required></select>
+                        </div>
+                    </div>
                 </div>
-                 <div class="flex justify-between gap-4 mt-6">
-                    <button type="button" id="ship-now-prev-step" class="btn-primary btn-gray" data-i18n="previous"></button>
+                <!-- Step 5: Documents -->
+                <div id="ship-now-step-5" class="ship-now-step hidden space-y-4">
+                    <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                        <h3 class="text-xl font-semibold" data-i18n="uploadCustomsDocs"></h3>
+                        <p class="text-sm" data-i18n="uploadDocsDesc1"></p>
+                        <p class="text-sm" data-i18n="uploadDocsDesc2"></p>
+                        <p class="text-sm mt-2" data-i18n="uploadDocsQuestion"></p>
+
+                        <div class="flex items-center mt-2">
+                            <input type="checkbox" id="upload-documents-checkbox" class="form-checkbox h-5 w-5 text-red-600">
+                            <label for="upload-documents-checkbox" class="ml-2" data-i18n="yes">Yes</label>
+                        </div>
+                        
+                        <div id="file-upload-section" class="hidden mt-4 space-y-2">
+                            <p id="upload-label-own-invoice" class="text-sm font-semibold hidden" data-i18n="uploadLabelOwnInvoice"></p>
+                            <p id="upload-label-create-invoice" class="text-sm font-semibold hidden" data-i18n="uploadLabelCreateInvoice"></p>
+                            
+                            <div id="doc-uploader-container">
+                                <label for="doc-uploader" class="file-drop-zone">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center">
+                                        <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                            <span class="font-semibold" data-i18n="browseForFile"></span><span data-i18n="orDropHere"></span>
+                                        </p>
+                                    </div>
+                                    <input type="file" id="doc-uploader" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.gif,.tiff,.tif">
+                                </label>
+                            </div>
+                            <div id="uploaded-file-view" class="uploaded-file-view hidden">
+                                <div class="flex items-center gap-3 truncate">
+                                    <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                    <div class="truncate">
+                                        <p id="uploaded-file-name" class="text-sm font-medium truncate"></p>
+                                        <p id="uploaded-file-size" class="text-xs text-gray-500 dark:text-gray-400"></p>
+                                    </div>
+                                </div>
+                                <button type="button" id="delete-file-btn" class="delete-file-btn">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                                </button>
+                            </div>
+                             <div class="text-center text-xs text-gray-500 dark:text-gray-400 mt-2 space-y-1">
+                                <p data-i18n="fileTypesAllowed"></p>
+                                <p data-i18n="maxFileSize"></p>
+                                <p data-i18n="fileNameEnglishOnly"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 6: Pickup -->
+                <div id="ship-now-step-6" class="ship-now-step hidden space-y-4">
+                    <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                        <h3 class="text-xl font-semibold" data-i18n="pickupStep"></h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button type="button" id="pickup-yes-btn" class="shipment-type-button p-4 rounded-lg flex items-center justify-center text-center gap-2 active">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span class="font-semibold" data-i18n="pickupYes"></span>
+                            </button>
+                            <button type="button" id="pickup-no-btn" class="shipment-type-button p-4 rounded-lg flex items-center justify-center text-center gap-2">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                <span class="font-semibold" data-i18n="pickupNo"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="pickup-yes-container" class="space-y-6">
+                        <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                            <div>
+                                <label for="pickup-date" class="block text-sm font-medium mb-1" data-i18n="pickupSendingOn"></label>
+                                <div class="relative">
+                                    <input type="date" id="pickup-date" class="input-field">
+                                </div>
+                            </div>
+                             <div class="pt-4 pb-6">
+                                <label class="block text-sm font-medium" data-i18n="pickupWindow"></label>
+                                <div id="pickup-time-slider" class="mt-4 mb-8"></div>
+                                <p class="text-center text-xs text-gray-500 -mt-6" data-i18n="pickupWindowHint"></p>
+                            </div>
+                            <div>
+                                <label for="pickup-location-select" class="block text-sm font-medium mb-1" data-i18n="pickupLocation"></label>
+                                <select id="pickup-location-select" class="input-field"></select>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="pickup-weight" class="block text-sm font-medium mb-1" data-i18n="pickupTotalWeight"></label>
+                                    <div class="relative">
+                                        <input type="text" id="pickup-weight" class="input-field pr-8">
+                                        <span class="input-indicator indicator-required hidden">*</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="pickup-instructions" class="block text-sm font-medium mb-1" data-i18n="pickupInstructions"></label>
+                                    <input type="text" id="pickup-instructions" class="input-field">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700">
+                            <div id="pickup-address-display-container">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="text-lg font-semibold" data-i18n="pickupAddress"></h4>
+                                    <button type="button" id="edit-pickup-address-btn" class="text-sm font-semibold text-red-600 hover:text-red-800 dark:text-amber-400 dark:hover:text-amber-300" data-i18n="editAddress">Edit</button>
+                                </div>
+                                <div id="pickup-address-display" class="text-sm space-y-1"></div>
+                            </div>
+                            <div id="pickup-address-edit-container" class="hidden space-y-4">
+                                <div class="flex justify-between items-center mb-2">
+                                     <h4 class="text-lg font-semibold" data-i18n="pickupAddress"></h4>
+                                     <button type="button" id="save-pickup-address-btn" class="text-sm font-semibold text-red-600 hover:text-red-800 dark:text-amber-400 dark:hover:text-amber-300" data-i18n="saveAddress">Save</button>
+                                </div>
+                                <div><label for="pickup-name" class="block text-sm font-medium mb-1" data-i18n="shipperName"></label><input type="text" id="pickup-name" class="input-field"></div>
+                                <div><label for="pickup-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany"></label><input type="text" id="pickup-company" class="input-field"></div>
+                                <div><label for="pickup-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1"></label><input type="text" id="pickup-address1" class="input-field"></div>
+                                <div><label for="pickup-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2"></label><input type="text" id="pickup-address2" class="input-field"></div>
+                                <div><label for="pickup-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3"></label><input type="text" id="pickup-address3" class="input-field"></div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label for="pickup-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode"></label><input type="text" id="pickup-postalcode" class="input-field"></div>
+                                    <div><label for="pickup-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity"></label><input type="text" id="pickup-city" class="input-field"></div>
+                                </div>
+                                <div><label for="pickup-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone"></label><input type="tel" id="pickup-phone" class="input-field"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pickup-no-container" class="hidden text-center p-4">
+                        <a href="https://www.dhl.com/discover/th-th/contact-us" target="_blank" rel="noopener noreferrer" class="text-red-600 hover:text-red-800 dark:text-amber-400 dark:hover:text-amber-300 font-semibold underline" data-i18n="pickupDropOffLink"></a>
+                    </div>
+                </div>
+
+                <!-- Step 7: Summary -->
+                <div id="ship-now-step-7" class="ship-now-step hidden space-y-4">
+                    <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-semibold" data-i18n="summary"></h3>
+                            <button type="button" id="edit-summary-btn" class="text-sm font-semibold text-red-600 hover:text-red-800 dark:text-amber-400 dark:hover:text-amber-300" data-i18n="editShipment">Edit</button>
+                        </div>
+                        <div id="summary-details-content" class="text-sm space-y-6"></div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between gap-4 mt-6">
+                    <a href="index.html" id="back-to-main-btn" class="btn-primary btn-gray flex items-center justify-center whitespace-nowrap" data-i18n="backToMain"></a>
+                    <button type="button" id="ship-now-prev-step" class="btn-primary btn-gray hidden" data-i18n="previous"></button>
                     <button type="button" id="ship-now-next-step" class="flex-1 btn-primary btn-yellow" data-i18n="next"></button>
-                    <button type="submit" id="confirm-shipment-button" class="flex-1 btn-primary btn-red" data-i18n="confirmShipment"></button>
-                    <a href="index.html" id="back-to-main-link" class="btn-primary btn-gray" data-i18n="backToMain"></a>
+                    <button type="submit" id="confirm-shipment-button" class="flex-1 btn-primary btn-red hidden" data-i18n="createShipmentBtn"></button>
                 </div>
             </form>
         </section>
+
+        <div id="leave-confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-4" data-i18n="leaveSiteTitle"></h2>
+                <p class="text-gray-700 dark:text-gray-300 mb-6" data-i18n="leaveSiteBody"></p>
+                <div class="flex justify-end gap-4">
+                    <button id="stay-button" class="btn-primary btn-gray" data-i18n="stayButton"></button>
+                    <button id="leave-button" class="btn-primary btn-red" data-i18n="leaveButton"></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+            <div class="w-16 h-16 border-8 border-dashed rounded-full animate-spin border-yellow-400"></div>
+        </div>
+
     </main>
     <footer class="bg-gray-800 text-white py-8 mt-8"><div class="text-center text-sm text-gray-400">&copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span></div></footer>
+
+    <script src="create-shipment.js"></script>
     <script>
+    let timeSlider = null; 
+
     document.addEventListener('DOMContentLoaded', () => {
-        const translations = {'th':{'createShipment':'สร้างใบนำส่ง','originStep':'ต้นทาง','destinationStep':'ปลายทาง','packageStep':'พัสดุ','reviewConfirm':'สรุป','originInfo':'ข้อมูลต้นทาง:','destinationInfo':'ข้อมูลปลายทาง:','packageDetails':'รายละเอียดพัสดุ:','originCountry':'ประเทศต้นทาง:','destinationCountry':'ประเทศปลายทาง:','shipmentDate':'วันที่จัดส่ง:','isParcel':'พัสดุ','declaredValue':'มูลค่าสินค้า:','addPiece':'เพิ่มชิ้นพัสดุ','confirmShipment':'ยืนยันการจัดส่ง','previous':'ย้อนกลับ','next':'ถัดไป','backToMain':'กลับสู่หน้าหลัก','selectCountry':'เลือกประเทศ','fillAllFields':'กรุณากรอกข้อมูลให้ครบถ้วน','pieceNumber':'ชิ้นที่','lengthCm':'ยาว (ซม.):','widthCm':'กว้าง (ซม.):','heightCm':'สูง (ซม.):','weightKg':'นน. (กก.):','allRightsReserved':'สงวนลิขสิทธิ์.'},'en':{'createShipment':'Create Shipment','originStep':'Origin','destinationStep':'Destination','packageStep':'Package','reviewConfirm':'Summary','originInfo':'Origin:','destinationInfo':'Destination:','packageDetails':'Details:','originCountry':'Origin Country:','destinationCountry':'Destination Country:','shipmentDate':'Shipment Date:','isParcel':'Parcel','declaredValue':'Declared Value:','addPiece':'Add Piece','confirmShipment':'Confirm Shipment','previous':'Previous','next':'Next','backToMain':'Back to Main','selectCountry':'Select Country','fillAllFields':'Please fill all fields.','pieceNumber':'Piece','lengthCm':'Length(cm):','widthCm':'Width(cm):','heightCm':'Height(cm):','weightKg':'Weight(kg):','allRightsReserved':'All rights reserved.'}};
+        // [FIX] Added translations for new fields
+        const translations = {
+            'th': { 'leaveSiteTitle': 'ออกจากหน้านี้?', 'leaveSiteBody': 'การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก', 'stayButton': 'อยู่ต่อ', 'leaveButton': 'ออก', 'createShipment':'สร้างใบนำส่ง','addressStep':'ที่อยู่','shipmentDetailsStep':'ชิปเมนต์','packageStep':'แพ็คเกจ','paymentStep':'การชำระเงิน','docsStep':'เอกสาร','pickupStep':'การนัดรับสินค้า','summaryStep':'สรุป','shipperInfo':'ข้อมูลผู้ส่ง','receiverInfo':'ข้อมูลผู้รับ','shipperName':'ชื่อผู้ส่ง','shipperCompany':'บริษัทผู้ส่ง','shipperPhone':'เบอร์โทรผู้ส่ง','shipperAddress1':'ที่อยู่ 1','shipperAddress2':'ที่อยู่ 2','shipperAddress3':'ที่อยู่ 3','shipperCountry':'ประเทศ','shipperPostalCode':'รหัสไปรษณีย์','shipperCity':'เมือง','receiverName':'ชื่อผู้รับ','receiverCompany':'บริษัทผู้รับ','receiverPhone':'เบอร์โทรผู้รับ','receiverAddress1':'ที่อยู่ 1','receiverAddress2':'ที่อยู่ 2','receiverAddress3':'ที่อยู่ 3','receiverCountry':'ประเทศ','receiverPostalCode':'รหัสไปรษณีย์','receiverCity':'เมือง','document':'เอกสาร','package':'พัสดุ','addLineItem':'เพิ่มรายการสินค้า','shipmentRef':'เลขที่อ้างอิง (optional)','protectShipment':'เพิ่มความคุ้มครองการจัดส่ง (ประกัน)','packageDetails':'รายละเอียดแพ็คเกจ','addPiece':'เพิ่มกล่อง','shipperAccount':'บัญชีผู้ส่ง','billingAccount':'บัญชีสำหรับวางบิล', 'dutiesAccount':'บัญชีผู้ชำระภาษี','incoterm':'Incoterm','shipmentDate':'วันที่ส่ง','docUpload':'อัปโหลดเอกสาร','docUploadDesc':'อัปโหลดเอกสารเพิ่มเติม (ไม่เกิน 5MB)','summary':'สรุปข้อมูล','previous':'ย้อนกลับ','next':'ถัดไป','createShipmentBtn':'สร้างใบนำส่ง','allRightsReserved':'สงวนลิขสิทธิ์.','fillAllFields':'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน','typeOrSelectCountry': 'พิมพ์หรือเลือกประเทศ', 'backToMain': 'กลับหน้าหลัก', 'shipperEmail': 'อีเมลผู้ส่ง', 'receiverEmail': 'อีเมลผู้รับ', 'shipperVat': 'เลขประจำตัวผู้เสียภาษีผู้ส่ง', 'receiverVat': 'เลขประจำตัวผู้เสียภาษีผู้รับ', 'whatIsTheItem': 'สินค้าคืออะไร?', 'commodityCode': 'รหัสพิกัดศุลกากร', 'quantity': 'จำนวน', 'units': 'หน่วย', 'valuePerItem': 'มูลค่า (ต่อชิ้น)', 'weight': 'น้ำหนัก (KG)', 'whereWasItMade': 'ผลิตที่ประเทศ', 'totalUnits': 'จำนวนรวม:', 'totalWeight': 'น้ำหนักรวม:', 'totalValue': 'มูลค่ารวม:', 'insuredValue': 'มูลค่าประกัน', 'describeDocuments': 'ระบุประเภทเอกสารในชิปเมนต์ของคุณ', 'fillAllFieldsInItem': 'กรุณากรอกข้อมูลในรายการก่อนหน้าให้ครบถ้วน', 'customsInvoiceDetails': 'รายละเอียดใบกำกับสินค้า', 'createInvoice': 'สร้าง Invoice', 'useMyOwnInvoice': 'ใช้ Invoice ของฉัน', 'invoiceNumber': 'หมายเลข Invoice', 'itemDescription': 'รายละเอียดสินค้า', 'totalItemValue': 'มูลค่ารวม', 'summarizeShipment': 'สรุปรายการสินค้าในชิปเมนต์', 'shipmentDescription': '(shipment description)', 'totalPackages': 'จำนวนแพ็คเกจรวม:', 'totalWeightKg': 'น้ำหนักรวม:', 'lengthCm': 'ยาว (ซม.)', 'widthCm': 'กว้าง (ซม.)', 'heightCm': 'สูง (ซม.)', 'weightKg': 'น้ำหนัก (Kg)', 'dimensionsCm': 'ขนาด (ซม.)', 'fillAllFieldsInPiece': 'กรุณากรอกข้อมูลในแพ็คเกจก่อนหน้าให้ครบถ้วน', 'receiverWillPay': 'ผู้รับชำระภาษี', 'uploadCustomsDocs': 'อัปโหลดเอกสารศุลกากรของคุณ', 'uploadDocsDesc1': 'คุณสามารถอัปโหลดและส่งใบกำกับสินค้าหรือเอกสารทางศุลกากรอื่นๆ ในรูปแบบไฟล์ภาพและส่งมาให้เราทางอิเล็กทรอนิกส์ได้', 'uploadDocsDesc2': 'หากคุณไม่ได้อัปโหลดรูปภาพเอกสาร โปรดอย่าลืมพิมพ์และจัดเตรียมเอกสารของคุณมาพร้อมกับชิปเมนต์', 'uploadDocsQuestion': 'คุณต้องการอัปโหลดไฟล์ภาพหรือไม่?', 'yes': 'ใช่', 'browseForFile': 'เลือกไฟล์', 'orDropHere': ' หรือลากมาวางที่นี่', 'fileTypesAllowed': 'ประเภทไฟล์ที่อนุญาต: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, หรือ PDF', 'maxFileSize': 'ขนาดไฟล์สูงสุด: 5 MB', 'fileNameEnglishOnly': 'ชื่อไฟล์ต้องเป็นภาษาอังกฤษเท่านั้น', 'pickupYes': 'ใช่ – นัดรับสินค้า', 'pickupNo': 'ไม่ – ไม่ต้องการนัดรับ', 'pickupDropOffLink': 'ฉันสามารถนำส่งพัสดุได้ที่ไหน?', 'pickupSendingOn': 'ฉันจะส่งของในวันที่', 'pickupWindow': 'ช่วงเวลานัดรับ – เวลาที่พนักงานอาจมาถึงและพัสดุพร้อม', 'pickupWindowHint': 'กรุณาเผื่อช่วงเวลาอย่างน้อย 90 นาที', 'pickupLocation': 'พนักงานควรไปรับพัสดุที่ไหน?', 'pickupTotalWeight': 'น้ำหนักรวมของพัสดุ', 'pickupInstructions': 'คำแนะนำสำหรับพนักงาน (ถ้ามี)', 'pickupAddress': 'ที่อยู่สำหรับนัดรับ', 'editAddress': 'แก้ไข', 'saveAddress': 'บันทึก', 'editShipment': 'แก้ไขชิปเมนต์', 'summaryShipper': 'ผู้ส่ง', 'summaryReceiver': 'ผู้รับ', 'summaryShipmentInfo': 'ข้อมูลชิปเมนต์', 'summaryPackageInfo': 'ข้อมูลแพ็คเกจ', 'summaryPaymentInfo': 'ข้อมูลการชำระเงิน', 'summaryDocumentInfo': 'ข้อมูลเอกสาร', 'summaryPickupInfo': 'ข้อมูลการนัดรับสินค้า', 'requestPickup': 'ต้องการนัดรับสินค้า', 'summaryPickupDate': 'วันที่นัดรับ', 'summaryPickupTime': 'เวลานัดรับ', 'phoneMinLength': 'เบอร์โทรศัพท์ต้องมีอย่างน้อย 4 ตัวอักษร', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account Number ต้องมี 9 ตัวอักษร', 'uploadLabelOwnInvoice': 'อัปโหลดรูปภาพใบกำกับสินค้าของคุณ', 'uploadLabelCreateInvoice': 'DHL จะสร้างใบกำกับสินค้าอิเล็กทรอนิกส์จากรายละเอียดที่คุณให้ไว้สำหรับชิปเมนต์นี้', 'creatingShipment': 'กำลังสร้างใบนำส่ง...', 'apiErrorTitle': 'เกิดข้อผิดพลาด'
+            },
+            'en': { 'leaveSiteTitle': 'Leave Site?', 'leaveSiteBody': 'Changes you made may not be saved.', 'stayButton': 'Stay', 'leaveButton': 'Leave', 'createShipment':'Create Shipment','addressStep':'Address','shipmentDetailsStep':'Shipment','packageStep':'Package','paymentStep':'Payment','docsStep':'Documents','pickupStep':'Pickup','summaryStep':'Summary','shipperInfo':'Shipper Information','receiverInfo':'Receiver Information','shipperName':'Name','shipperCompany':'Company','shipperPhone':'Phone','shipperAddress1':'Address Line 1','shipperAddress2':'Address Line 2','shipperAddress3':'Address Line 3','shipperCountry':'Country','shipperPostalCode':'Postal Code','shipperCity':'City','receiverName':'Name','receiverCompany':'Company','receiverPhone':'Phone','receiverAddress1':'Address Line 1','receiverAddress2':'Address Line 2','receiverAddress3':'Address Line 3','receiverCountry':'Country','receiverPostalCode':'Postal Code','receiverCity':'City','document':'Document','package':'Package','addLineItem':'Add Line Item','shipmentRef':'Shipment Reference (optional)','protectShipment':'Protect Your Shipment (Insurance)','packageDetails':'Package Details','addPiece':'Add Piece','shipperAccount':'Shipper Account','billingAccount':'Billing Account', 'dutiesAccount':'Duties & Taxes Account','incoterm':'Incoterm','shipmentDate':'Shipment Date','docUpload':'Document Upload','docUploadDesc':'Upload additional documents (max 5MB)','pickupBooking':'Pickup Booking','requestPickup':'Request a pickup','pickupCloseTime':'Pickup Close Time','pickupLocation':'Pickup Location (e.g., Reception)','summary':'Summary','previous':'Previous','next':'Next','createShipmentBtn':'Create Shipment','allRightsReserved':'All rights reserved.','fillAllFields':'Please fill in all required fields.','typeOrSelectCountry': 'Type or select a country', 'backToMain': 'Back to Main', 'shipperEmail': 'Email Address', 'receiverEmail': 'Email Address', 'shipperVat': 'VAT / Tax ID', 'receiverVat': 'VAT / Tax ID', 'whatIsTheItem': 'What is the item?', 'commodityCode': 'Commodity Code', 'quantity': 'Quantity', 'units': 'Units', 'valuePerItem': 'Value (Per Item)', 'weight': 'Weight (KG)', 'whereWasItMade': 'Where was the item made?', 'totalUnits': 'Total Units:', 'totalWeight': 'Total Weight:', 'totalValue': 'Total Value:', 'insuredValue': 'Insured Value', 'describeDocuments': 'Describe the documents in your shipment', 'fillAllFieldsInItem': 'Please fill in the previous item completely.', 'customsInvoiceDetails': 'Customs Invoice Details', 'createInvoice': 'Create Invoice', 'useMyOwnInvoice': 'Use My Own Invoice', 'invoiceNumber': 'Invoice Number', 'itemDescription': 'Item Description', 'totalItemValue': 'Total Item Value', 'summarizeShipment': 'Summarize the contents of your shipment', 'shipmentDescription': '(shipment description)', 'totalPackages': 'Total Packages:', 'totalWeightKg': 'Total Weight:', 'lengthCm': 'Length (cm)', 'widthCm': 'Width (cm)', 'heightCm': 'Height (cm)', 'weightKg': 'Weight (Kg)', 'dimensionsCm': 'Dimensions (cm)', 'fillAllFieldsInPiece': 'Please fill in the previous package completely.', 'receiverWillPay': 'Receiver will pay', 'uploadCustomsDocs': 'Upload Your Customs Documents', 'uploadDocsDesc1': 'You can upload and submit your customs invoice or any other customs documents as image files and submit them to us electronically.', 'uploadDocsDesc2': 'If you do not upload document images, remember to print and provide your documents with your shipment.', 'uploadDocsQuestion': 'Would you like to upload image files?', 'yes': 'Yes', 'browseForFile': 'Browse for File', 'orDropHere': ' or Drop Here', 'fileTypesAllowed': 'File Type Allowed: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, or PDF', 'maxFileSize': 'Maximum file size: 5 MB', 'fileNameEnglishOnly': 'File name must be in English only', 'pickupYes': 'Yes – Schedule Pickup', 'pickupNo': 'No - Don\'t need to Pickup', 'pickupDropOffLink': 'Where can I drop off my shipment?', 'pickupSendingOn': 'I\'m sending my shipment on', 'pickupWindow': 'Pickup Window – When courier may arrive and shipment is ready', 'pickupWindowHint': 'Please allow at least 90 minutes for your Pickup Window', 'pickupLocation': 'Where should the courier pick up the shipment?', 'pickupTotalWeight': 'Total Pickup Weight', 'pickupInstructions': 'Instructions for the courier', 'pickupAddress': 'Pickup Address', 'editAddress': 'Edit', 'saveAddress': 'Save', 'editShipment': 'Edit Shipment', 'summaryShipper': 'Shipper', 'summaryReceiver': 'Receiver', 'summaryShipmentInfo': 'Shipment Information', 'summaryPackageInfo': 'Package Information', 'summaryPaymentInfo': 'Payment Information', 'summaryDocumentInfo': 'Document Information', 'summaryPickupInfo': 'Pickup Information', 'requestPickup': 'Request a pickup', 'summaryPickupDate': 'Pickup Date', 'summaryPickupTime': 'Pickup Time', 'phoneMinLength': 'Phone number must be at least 4 characters long', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account number must be 9 characters.', 'uploadLabelOwnInvoice': 'Upload an image of your customs invoice.', 'uploadLabelCreateInvoice': "DHL will create an electronic customs invoice from the details you've provided for this shipment.", 'creatingShipment': 'Creating shipment...', 'apiErrorTitle': 'An Error Occurred'
+            }
+        };
         const countryList = [ { "name": "Afghanistan", "code": "AF" }, { "name": "Albania", "code": "AL" }, { "name": "Algeria", "code": "DZ" }, { "name": "American Samoa", "code": "AS" }, { "name": "Andorra", "code": "AD" }, { "name": "Angola", "code": "AO" }, { "name": "Anguilla", "code": "AI" }, { "name": "Antigua", "code": "AG" }, { "name": "Argentina", "code": "AR" }, { "name": "Armenia", "code": "AM" }, { "name": "Aruba", "code": "AW" }, { "name": "Australia", "code": "AU" }, { "name": "Austria", "code": "AT" }, { "name": "Azerbaijan", "code": "AZ" }, { "name": "Bahamas", "code": "BS" }, { "name": "Bahrain", "code": "BH" }, { "name": "Bangladesh", "code": "BD" }, { "name": "Barbados", "code": "BB" }, { "name": "Belarus", "code": "BY" }, { "name": "Belgium", "code": "BE" }, { "name": "Belize", "code": "BZ" }, { "name": "Benin", "code": "BJ" }, { "name": "Bermuda", "code": "BM" }, { "name": "Bhutan", "code": "BT" }, { "name": "Bolivia", "code": "BO" }, { "name": "Bonaire", "code": "BQ" }, { "name": "Bosnia and Herzegovina", "code": "BA" }, { "name": "Botswana", "code": "BW" }, { "name": "Brazil", "code": "BR" }, { "name": "Brunei", "code": "BN" }, { "name": "Bulgaria", "code": "BG" }, { "name": "Burkina Faso", "code": "BF" }, { "name": "Burundi", "code": "BI" }, { "name": "Cambodia", "code": "KH" }, { "name": "Cameroon", "code": "CM" }, { "name": "Canada", "code": "CA" }, { "name": "Canary Islands, The", "code": "IC" }, { "name": "Cape Verde", "code": "CV" }, { "name": "Cayman Islands", "code": "KY" }, { "name": "Central African Republic", "code": "CF" }, { "name": "Chad", "code": "TD" }, { "name": "Chile", "code": "CL" }, { "name": "China, People's Republic", "code": "CN" }, { "name": "Colombia", "code": "CO" }, { "name": "Comoros", "code": "KM" }, { "name": "Congo", "code": "CG" }, { "name": "Congo, The Democratic Republic of", "code": "CD" }, { "name": "Cook Islands", "code": "CK" }, { "name": "Costa Rica", "code": "CR" }, { "name": "Cote D'ivoire", "code": "CI" }, { "name": "Croatia", "code": "HR" }, { "name": "Cuba", "code": "CU" }, { "name": "Curacao", "code": "CW" }, { "name": "Cyprus", "code": "CY" }, { "name": "Czech Republic, The", "code": "CZ" }, { "name": "Denmark", "code": "DK" }, { "name": "Djibouti", "code": "DJ" }, { "name": "Dominica", "code": "DM" }, { "name": "Dominican Republic", "code": "DO" }, { "name": "East Timor", "code": "TL" }, { "name": "Ecuador", "code": "EC" }, { "name": "Egypt", "code": "EG" }, { "name": "El Salvador", "code": "SV" }, { "name": "Eritrea", "code": "ER" }, { "name": "Estonia", "code": "EE" }, { "name": "Ethiopia", "code": "ET" }, { "name": "Falkland Islands", "code": "FK" }, { "name": "Faroe Islands", "code": "FO" }, { "name": "Fiji", "code": "FJ" }, { "name": "Finland", "code": "FI" }, { "name": "France", "code": "FR" }, { "name": "French Guyana", "code": "GF" }, { "name": "Gabon", "code": "GA" }, { "name": "Gambia", "code": "GM" }, { "name": "Georgia", "code": "GE" }, { "name": "Germany", "code": "DE" }, { "name": "Ghana", "code": "GH" }, { "name": "Gibraltar", "code": "GI" }, { "name": "Greece", "code": "GR" }, { "name": "Greenland", "code": "GL" }, { "name": "Grenada", "code": "GD" }, { "name": "Guadeloupe", "code": "GP" }, { "name": "Guam", "code": "GU" }, { "name": "Guatemala", "code": "GT" }, { "name": "Guernsey", "code": "GG" }, { "name": "Guinea Republic", "code": "GN" }, { "name": "Guinea-Bissau", "code": "GW" }, { "name": "Guinea-Equatorial", "code": "GQ" }, { "name": "Guyana", "code": "GY" }, { "name": "Haiti", "code": "HT" }, { "name": "Honduras", "code": "HN" }, { "name": "Hong Kong", "code": "HK" }, { "name": "Hungary", "code": "HU" }, { "name": "Iceland", "code": "IS" }, { "name": "India", "code": "IN" }, { "name": "Indonesia", "code": "ID" }, { "name": "Iran (Islamic Republic of)", "code": "IR" }, { "name": "Iraq", "code": "IQ" }, { "name": "Ireland, Republic of", "code": "IE" }, { "name": "Israel", "code": "IL" }, { "name": "Italy", "code": "IT" }, { "name": "Jamaica", "code": "JM" }, { "name": "Japan", "code": "JP" }, { "name": "Jersey", "code": "JE" }, { "name": "Jordan", "code": "JO" }, { "name": "Kazakhstan", "code": "KZ" }, { "name": "Kenya", "code": "KE" }, { "name": "Kiribati", "code": "KI" }, { "name": "Korea, Republic of", "code": "KR" }, { "name": "Korea, The D.P.R of (North K.)", "code": "KP" }, { "name": "Kosovo", "code": "KV" }, { "name": "Kuwait", "code": "KW" }, { "name": "Kyrgyzstan", "code": "KG" }, { "name": "Lao People's Democratic Republic", "code": "LA" }, { "name": "Latvia", "code": "LV" }, { "name": "Lebanon", "code": "LB" }, { "name": "Lesotho", "code": "LS" }, { "name": "Liberia", "code": "LR" }, { "name": "Libya", "code": "LY" }, { "name": "Liechtenstein", "code": "LI" }, { "name": "Lithuania", "code": "LT" }, { "name": "Luxembourg", "code": "LU" }, { "name": "Macau", "code": "MO" }, { "name": "Macedonia, Republic of", "code": "MK" }, { "name": "Madagascar", "code": "MG" }, { "name": "Malawi", "code": "MW" }, { "name": "Malaysia", "code": "MY" }, { "name": "Maldives", "code": "MV" }, { "name": "Mali", "code": "ML" }, { "name": "Malta", "code": "MT" }, { "name": "Marshall Islands", "code": "MH" }, { "name": "Martinique", "code": "MQ" }, { "name": "Mauritania", "code": "MR" }, { "name": "Mauritius", "code": "MU" }, { "name": "Mayotte", "code": "YT" }, { "name": "Mexico", "code": "MX" }, { "name": "Micronesia, Federated States of", "code": "FM" }, { "name": "Moldova, Republic of", "code": "MD" }, { "name": "Monaco", "code": "MC" }, { "name": "Mongolia", "code": "MN" }, { "name": "Montenegro, Republic of", "code": "ME" }, { "name": "Montserrat", "code": "MS" }, { "name": "Morocco", "code": "MA" }, { "name": "Mozambique", "code": "MZ" }, { "name": "Myanmar", "code": "MM" }, { "name": "Namibia", "code": "NA" }, { "name": "Nauru, Republic of", "code": "NR" }, { "name": "Nepal", "code": "NP" }, { "name": "Netherlands, The", "code": "NL" }, { "name": "New Caledonia", "code": "NC" }, { "name": "New Zealand", "code": "NZ" }, { "name": "Nicaragua", "code": "NI" }, { "name": "Niger", "code": "NE" }, { "name": "Nigeria", "code": "NG" }, { "name": "Niue", "code": "NU" }, { "name": "Northern Mariana Islands", "code": "MP" }, { "name": "Norway", "code": "NO" }, { "name": "Oman", "code": "OM" }, { "name": "Pakistan", "code": "PK" }, { "name": "Palau", "code": "PW" }, { "name": "Panama", "code": "PA" }, { "name": "Papua New Guinea", "code": "PG" }, { "name": "Paraguay", "code": "PY" }, { "name": "Peru", "code": "PE" }, { "name": "Philippines, The", "code": "PH" }, { "name": "Poland", "code": "PL" }, { "name": "Portugal", "code": "PT" }, { "name": "Puerto Rico", "code": "PR" }, { "name": "Qatar", "code": "QA" }, { "name": "Reunion, Island of", "code": "RE" }, { "name": "Romania", "code": "RO" }, { "name": "Russian Federation, The", "code": "RU" }, { "name": "Rwanda", "code": "RW" }, { "name": "Saipan", "code": "SP" }, { "name": "San Marino", "code": "SM" }, { "name": "Sao Tome and Principe", "code": "ST" }, { "name": "Saudi Arabia", "code": "SA" }, { "name": "Senegal", "code": "SN" }, { "name": "Serbia, Republic of", "code": "RS" }, { "name": "Seychelles", "code": "SC" }, { "name": "Sierra Leone", "code": "SL" }, { "name": "Singapore", "code": "SG" }, { "name": "Slovakia", "code": "SK" }, { "name": "Slovenia", "code": "SI" }, { "name": "Solomon Islands", "code": "SB" }, { "name": "Somalia", "code": "SO" }, { "name": "Somaliland, Rep of (North Somalia)", "code": "XS" }, { "name": "South Africa", "code": "ZA" }, { "name": "South Sudan", "code": "SS" }, { "name": "Spain", "code": "ES" }, { "name": "Sri Lanka", "code": "LK" }, { "name": "St. Barthelemy", "code": "XY" }, { "name": "St. Eustatius", "code": "XE" }, { "name": "St. Helena", "code": "SH" }, { "name": "St. Kitts and Nevis", "code": "KN" }, { "name": "St. Lucia", "code": "LC" }, { "name": "St. Maarten", "code": "SX" }, { "name": "St. Vincent", "code": "VC" }, { "name": "Sudan", "code": "SD" }, { "name": "Suriname", "code": "SR" }, { "name": "Swaziland", "code": "SZ" }, { "name": "Sweden", "code": "SE" }, { "name": "Switzerland", "code": "CH" }, { "name": "Syria", "code": "SY" }, { "name": "Tahiti", "code": "PF" }, { "name": "Taiwan", "code": "TW" }, { "name": "Tanzania", "code": "TZ" }, { "name": "Thailand", "code": "TH" }, { "name": "Togo", "code": "TG" }, { "name": "Tonga", "code": "TO" }, { "name": "Trinidad and Tobago", "code": "TT" }, { "name": "Tunisia", "code": "TN" }, { "name": "Turkey", "code": "TR" }, { "name": "Turkmenistan", "code": "TM" }, { "name": "Turks and Caicos Islands", "code": "TC" }, { "name": "Tuvalu", "code": "TV" }, { "name": "Uganda", "code": "UG" }, { "name": "Ukraine", "code": "UA" }, { "name": "United Arab Emirates", "code": "AE" }, { "name": "United Kingdom", "code": "GB" }, { "name": "United States of America", "code": "US" }, { "name": "Uruguay", "code": "UY" }, { "name": "Uzbekistan", "code": "UZ" }, { "name": "Vanuatu", "code": "VU" }, { "name": "Vatican City", "code": "VA" }, { "name": "Venezuela", "code": "VE" }, { "name": "Vietnam", "code": "VN" }, { "name": "Virgin Islands (British)", "code": "VG" }, { "name": "Virgin Islands (US)", "code": "VI" }, { "name": "Yemen, Republic of", "code": "YE" }, { "name": "Zambia", "code": "ZM" }, { "name": "Zimbabwe", "code": "ZW" } ];
+        const documentTypes = [ "Annual reports", "Bill of lading", "Blank forms", "Certificates", "Completed Forms", "Contract", "Credit note", "Deeds", "Documents - general business", "Educational material printed", "Examination papers", "Identity document", "Invoices - not blank", "Letter correspondence", "Manuals technical", "Manuscripts", "Maps", "Medical Examination Result", "Music - printed, manuscript", "Passports", "Plans, drawings - for architectural industrial engineering purposes", "Printed matter", "Ship manifest - computer generated", "Shipping schedules", "Transparencies", "Visa applications" ];
+        const uomList = [ { unitOfMeasurement: 'BOX', description: 'Boxes' }, { unitOfMeasurement: '2M2', description: 'Cubic Meters' }, { unitOfMeasurement: 'DPR', description: 'Dozen Pairs' }, { unitOfMeasurement: 'DOZ', description: 'Dozen' }, { unitOfMeasurement: 'PCS', description: 'Pieces' }, { unitOfMeasurement: 'GM', description: 'Grams' }, { unitOfMeasurement: 'GRS', description: 'Gross' }, { unitOfMeasurement: 'KG', description: 'Kilograms' }, { unitOfMeasurement: '3GM', description: 'Milligrams' }, { unitOfMeasurement: 'X', description: 'No Unit Required' }, { unitOfMeasurement: 'NO', description: 'Number' }, { unitOfMeasurement: 'PRS', description: 'Pairs' }, { unitOfMeasurement: 'CM2', description: 'Square Centimeters' }, { unitOfMeasurement: '2M2', description: 'Square Feet' }, { unitOfMeasurement: '3M2', description: 'Square Inches' }, { unitOfMeasurement: 'M2', description: 'Square Meters' }, { unitOfMeasurement: '4M2', description: 'Square Yards' }, { unitOfMeasurement: 'CM', description: 'Centimeters' }, { unitOfMeasurement: 'CONE', description: 'Cone' }, { unitOfMeasurement: 'CT', description: 'Carat' }, { unitOfMeasurement: 'EA', description: 'Each' }, { unitOfMeasurement: 'LBS', description: 'Pounds' }, { unitOfMeasurement: 'RILL', description: 'Rill' }, { unitOfMeasurement: 'ROLL', description: 'Roll' }, { unitOfMeasurement: 'SET', description: 'Set' }, { unitOfMeasurement: 'TU', description: 'Time Unit' }, { unitOfMeasurement: '2GM', description: 'centigram' }, { unitOfMeasurement: 'KM', description: 'kilometre' }, { unitOfMeasurement: 'IN', description: 'inch' }, { "name": "foot", "code": "FT" }, { unitOfMeasurement: 'YD', description: 'yard' }, { unitOfMeasurement: 'MI', description: 'mile (statute mile)' }, { unitOfMeasurement: 'LTR', description: 'litre' }, { unitOfMeasurement: 'MMQ', description: 'cubic millimetre' }, { unitOfMeasurement: 'CM3', description: 'cubic centimetre' }, { unitOfMeasurement: 'DMQ', 'description': 'cubic decimetre' }, { unitOfMeasurement: 'MLT', description: 'millilitre' }, { unitOfMeasurement: 'CLT', description: 'centilitre' }, { unitOfMeasurement: 'DLT', description: 'decilitre' }, { unitOfMeasurement: 'INQ', description: 'cubic inch' }, { unitOfMeasurement: 'FT3', description: 'cubic foot' }, { unitOfMeasurement: 'YD3', description: 'cubic yard' }, { unitOfMeasurement: 'GLL', description: 'gallon (UK)' }, { unitOfMeasurement: 'GLI', description: 'gallon (US)' }, { unitOfMeasurement: 'PT', description: 'pint (US)' }, { unitOfMeasurement: 'PTI', description: 'pint (UK)' }, { unitOfMeasurement: 'QTI', description: 'quart (UK)' }, { unitOfMeasurement: 'QTL', description: 'liquid quart (US)' }, { unitOfMeasurement: 'PTL', description: 'liquid pint (US)' }, { unitOfMeasurement: 'PTD', description: 'dry pint (US)' }, { unitOfMeasurement: 'OZI', description: 'fluid ounce (UK)' }, { unitOfMeasurement: 'J57', description: 'barrel (UK petroleum)' }, { unitOfMeasurement: 'NM3', description: 'Normalised cubic metre' }, { unitOfMeasurement: 'SM3', description: 'Standard cubic metre' }, { unitOfMeasurement: 'TNE', description: 'tonne (metric ton)' }, { unitOfMeasurement: 'LB', description: 'Pound' }, { unitOfMeasurement: 'ONZ', description: 'ounce (avoirdupois)' }, { unitOfMeasurement: 'CEL', description: 'degree Celsius' }, { unitOfMeasurement: 'M', description: 'Meters' } ];
+        const incotermList = [ { incoterm: 'DAP', incotermName: 'Delivered at Place' }, { incoterm: 'DDU', incotermName: 'Delivered Duty Unpaid' }, { incoterm: 'DDP', incotermName: 'Delivered Duty Paid' }, { incoterm: 'DEQ', incotermName: 'Delivery ex Quay' }, { incoterm: 'FCA', incotermName: 'Free Carrier' }, { incoterm: 'FAS', incotermName: 'Free Alongside Ship' }, { incoterm: 'DAF', incotermName: 'Delivered at Frontier' }, { incoterm: 'FOB', incotermName: 'Free on Board' }, { incoterm: 'EXW', incotermName: 'Ex Works' }, { incoterm: 'CPT', incotermName: 'Carriage Paid To' }, { incoterm: 'DES', incotermName: 'Delivered ex Ship' }, { incoterm: 'CFR', incotermName: 'Cost and Freight' }, { incoterm: 'CIF', incotermName: 'Cost Insurance and Freight' }, { incoterm: 'CIP', incotermName: 'Carriage and Insurance Paid to' }, { incoterm: 'DAT', incotermName: 'Delivered at Terminal' }, { incoterm: 'DPU', incotermName: 'Delivered at Place Unloaded' } ];
+        const pickupLocations = ["Reception", "Lobby", "Guard House", "Warehouse", "Mailroom"];
+
         let currentLanguage = localStorage.getItem('language') || 'th';
-        let currentStep = 0;
-        let packagePieces = [{ length: '', width: '', height: '', weight: '' }];
+        let currentStep = 1;
+        const totalSteps = 7;
         let hasUnsavedChanges = false;
-        const totalSteps = 4;
+        let navigationTargetUrl = null;
+        let lineItemCounter = 0;
+        let packagePieceCounter = 0;
+
+        const leaveModal = document.getElementById('leave-confirm-modal');
+        const stayButton = document.getElementById('stay-button');
+        const leaveButton = document.getElementById('leave-button');
         const formMessage = document.getElementById('form-message');
-        const shipNowForm = document.getElementById('ship-now-form');
-        function getTranslatedText(key, replacements = {}) { let text = translations[currentLanguage]?.[key] || key; for (const placeholder in replacements) { text = text.replace(`{${placeholder}}`, replacements[placeholder]); } return text; }
-        const populateShipNowCountrySelects = () => { ['ship-origin-country', 'ship-destination-country'].forEach(id => { const select = document.getElementById(id); if (!select) return; const currentValue = select.value; select.innerHTML = `<option value="">${getTranslatedText('selectCountry')}</option>`; countryList.forEach(country => { select.innerHTML += `<option value="${country.code}">${country.name}</option>`; }); select.value = currentValue; }); };
-        const renderPackagePieces = () => { const container = document.getElementById('package-pieces-container'); if(!container) return; container.innerHTML = ''; packagePieces.forEach((piece, index) => { const pieceDiv = document.createElement('div'); pieceDiv.className = 'package-piece-item border rounded-md p-4 mb-4 bg-white shadow-sm relative'; pieceDiv.innerHTML = `<h3 class="text-lg font-medium mb-3">${getTranslatedText('pieceNumber')} ${index + 1}</h3> ${packagePieces.length > 1 ? `<button type="button" class="absolute top-2 right-2 text-red-500 font-bold" data-index="${index}">✖</button>` : ''} <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"> <div><label class="block text-sm">${getTranslatedText('lengthCm')}</label><input type="number" min="0.1" step="0.1" class="input-field" value="${piece.length}" data-field="length" required></div> <div><label class="block text-sm">${getTranslatedText('widthCm')}</label><input type="number" min="0.1" step="0.1" class="input-field" value="${piece.width}" data-field="width" required></div> <div><label class="block text-sm">${getTranslatedText('heightCm')}</label><input type="number" min="0.1" step="0.1" class="input-field" value="${piece.height}" data-field="height" required></div> <div><label class="block text-sm">${getTranslatedText('weightKg')}</label><input type="number" min="0.1" step="0.1" class="input-field" value="${piece.weight}" data-field="weight" required></div> </div>`; container.appendChild(pieceDiv); }); container.querySelectorAll('input').forEach(input => { const pieceDiv = input.closest('.package-piece-item'); const index = Array.from(container.children).indexOf(pieceDiv); input.addEventListener('input', e => { packagePieces[index][e.target.dataset.field] = e.target.value; hasUnsavedChanges = true; }); }); container.querySelectorAll('button[data-index]').forEach(button => { button.addEventListener('click', e => { packagePieces.splice(parseInt(e.currentTarget.dataset.index), 1); renderPackagePieces(); hasUnsavedChanges = true; }); }); };
-        const updateStepIndicator = () => { const lineFill = document.querySelector('.progress-line-fill'); for (let i = 0; i < totalSteps; i++) { const stepEl = document.getElementById(`step-${i + 1}`); stepEl.classList.remove('is-active', 'is-complete'); if (i === currentStep) { stepEl.classList.add('is-active'); } else if (i < currentStep) { stepEl.classList.add('is-complete'); } } if(lineFill) { const percentage = currentStep > 0 ? (currentStep / (totalSteps - 1)) * 75 : 0; lineFill.style.width = `${percentage}%`; }};
-        const updateNavButtons = () => { document.getElementById('ship-now-prev-step').classList.toggle('hidden', currentStep === 0); document.getElementById('back-to-main-link').classList.toggle('hidden', currentStep !== 0); document.getElementById('ship-now-next-step').classList.toggle('hidden', currentStep >= totalSteps - 1); document.getElementById('confirm-shipment-button').classList.toggle('hidden', currentStep !== totalSteps - 1); };
-        const populateReviewStep = () => { const originCountrySelect = document.getElementById('ship-origin-country'); const destinationCountrySelect = document.getElementById('ship-destination-country'); const originCountryName = originCountrySelect.options[originCountrySelect.selectedIndex].text; const destinationCountryName = destinationCountrySelect.options[destinationCountrySelect.selectedIndex].text; document.getElementById('review-origin').textContent = `${document.getElementById('ship-origin-city').value}, ${originCountryName}`; document.getElementById('review-destination').textContent = `${document.getElementById('ship-destination-city').value}, ${destinationCountryName}`; const list = document.getElementById('review-package-list'); list.innerHTML = ''; packagePieces.forEach((p, i) => { const li = document.createElement('li'); li.textContent = `${getTranslatedText('pieceNumber')} ${i+1}: ${p.length || 0}x${p.width || 0}x${p.height || 0} cm, ${p.weight || 0} kg`; list.appendChild(li); }); };
-        const changeStep = (newStep) => { document.getElementById(`ship-now-step-${currentStep + 1}`).classList.add('hidden-page'); currentStep = newStep; document.getElementById(`ship-now-step-${currentStep + 1}`).classList.remove('hidden-page'); updateStepIndicator(); updateNavButtons(); if (currentStep === totalSteps - 1) populateReviewStep(); };
-        const validateCurrentStep = () => { let isValid = true; const stepDiv = document.getElementById(`ship-now-step-${currentStep + 1}`); stepDiv.querySelectorAll('input[required], select[required]').forEach(i => { if (!i.value.trim()) isValid = false; }); if (currentStep === 2) { if (packagePieces.length === 0) isValid = false; packagePieces.forEach(p => { if (!p.length || !p.width || !p.height || !p.weight) isValid = false; }); } formMessage.classList.toggle('hidden', isValid); if (!isValid) formMessage.textContent = getTranslatedText('fillAllFields'); return isValid; };
-        function updateContentLanguage(pageSpecificSetup) { document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = getTranslatedText(el.getAttribute('data-i18n')); }); document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = getTranslatedText(el.getAttribute('data-i18n-placeholder')); }); document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase(); if (typeof pageSpecificSetup === 'function') pageSpecificSetup(); }
-        function setupTheme() { const themeToggle = document.getElementById('theme-toggle'); const lightIcon = document.getElementById('theme-icon-light'); const darkIcon = document.getElementById('theme-icon-dark'); const enableDarkMode = () => { document.body.classList.add('dark-mode'); localStorage.setItem('theme', 'dark'); lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden'); }; const disableDarkMode = () => { document.body.classList.remove('dark-mode'); localStorage.setItem('theme', 'light'); lightIcon.classList.add('hidden'); darkIcon.classList.remove('hidden'); }; themeToggle.addEventListener('click', () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode()); if (localStorage.getItem('theme') === 'dark') { enableDarkMode(); } else { disableDarkMode(); } }
-        function setupLanguageSwitch(pageSpecificSetup) { document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden')); document.querySelectorAll('[data-lang]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); currentLanguage = e.target.dataset.lang; localStorage.setItem('language', currentLanguage); updateContentLanguage(pageSpecificSetup); document.getElementById('language-dropdown').classList.add('hidden'); }); }); }
-        function initializeSharedComponents(pageSpecificSetup) { setupTheme(); setupLanguageSwitch(pageSpecificSetup); document.getElementById('current-year').textContent = new Date().getFullYear(); updateContentLanguage(pageSpecificSetup); }
-        function pageSetup() { document.title = `DHL Backup Solution - ${getTranslatedText('createShipment')}`; populateShipNowCountrySelects(); renderPackagePieces(); updateStepIndicator(); }
-        initializeSharedComponents(pageSetup);
-        const shipDateInput = document.getElementById('ship-date');
-        if(shipDateInput) shipDateInput.value = new Date().toISOString().slice(0, 10);
-        changeStep(0);
-        shipNowForm.addEventListener('input', () => { hasUnsavedChanges = true; });
-        window.addEventListener('beforeunload', (e) => { if (hasUnsavedChanges) { e.preventDefault(); e.returnValue = ''; }});
-        document.getElementById('ship-now-next-step').addEventListener('click', () => { if (validateCurrentStep()) changeStep(currentStep + 1); });
-        document.getElementById('ship-now-prev-step').addEventListener('click', () => changeStep(currentStep - 1));
-        document.getElementById('add-piece-button').addEventListener('click', () => { packagePieces.push({ length: '', width: '', height: '', weight: '' }); renderPackagePieces(); });
-        document.getElementById('is-parcel').addEventListener('change', e => document.getElementById('declared-value-container').classList.toggle('hidden', !e.target.checked));
-        shipNowForm.addEventListener('submit', (e) => { e.preventDefault(); hasUnsavedChanges = false; formMessage.textContent = getTranslatedText('shipmentInProgress'); formMessage.className = 'p-4 rounded-md text-center bg-green-100 text-green-700'; formMessage.classList.remove('hidden'); });
+        const packagePiecesContainer = document.getElementById('package-pieces-container');
+
+        function getTranslatedText(key, replacements = {}) { 
+            let text = translations[currentLanguage]?.[key] || key; 
+            for (const placeholder in replacements) { text = text.replace(`{${placeholder}}`, replacements[placeholder]); }
+            return text; 
+        }
+        
+        function updateContentLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (el.placeholder !== undefined && (el.hasAttribute('data-i18n-placeholder') || el.matches('[data-i18n-placeholder]'))) {
+                    el.placeholder = getTranslatedText(key);
+                } else {
+                     if (!el.closest('.line-item-summary')) {
+                        el.textContent = getTranslatedText(key);
+                    }
+                }
+            });
+            document.querySelectorAll('label[data-i18n]').forEach(label => {
+                const key = label.getAttribute('data-i18n');
+                const asterisk = label.querySelector('.text-red-500');
+                if (key !== 'invoiceNumber' && key !== 'summarizeShipment') {
+                   label.innerHTML = getTranslatedText(key) + (asterisk ? ' <span class="text-red-500">*</span>' : '');
+                } else if (key === 'summarizeShipment') {
+                    // [FIX] Handle summarizeShipment label specifically
+                    label.innerHTML = `
+                        <span data-i18n="summarizeShipment">${getTranslatedText('summarizeShipment')}</span>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400" data-i18n="shipmentDescription">${getTranslatedText('shipmentDescription')}</span>
+                    `;
+                }
+                 else {
+                   label.innerHTML = getTranslatedText(key);
+                }
+            });
+            document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase();
+            document.title = `DHL Backup Solution - ${getTranslatedText('createShipment')}`;
+            document.querySelectorAll('.line-item-summary strong[data-i18n]').forEach(el => {
+                 el.textContent = getTranslatedText(el.getAttribute('data-i18n'));
+            });
+        }
+
+        function setupTheme() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const lightIcon = document.getElementById('theme-icon-light');
+            const darkIcon = document.getElementById('theme-icon-dark');
+            const enableDarkMode = () => { document.body.classList.add('dark-mode'); localStorage.setItem('theme', 'dark'); lightIcon.classList.add('hidden'); darkIcon.classList.remove('hidden'); };
+            const disableDarkMode = () => { document.body.classList.remove('dark-mode'); localStorage.setItem('theme', 'light'); lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden'); };
+            themeToggle.addEventListener('click', () => { document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode(); });
+            if (localStorage.getItem('theme') === 'dark') { enableDarkMode(); } else { disableDarkMode(); }
+        }
+
+        function setupLanguageSwitch() {
+            const langToggleButton = document.getElementById('language-toggle-button');
+            const langDropdown = document.getElementById('language-dropdown');
+            langToggleButton.addEventListener('click', () => langDropdown.classList.toggle('hidden'));
+            document.querySelectorAll('[data-lang]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentLanguage = e.target.dataset.lang;
+                    localStorage.setItem('language', currentLanguage);
+                    updateContentLanguage();
+                    if (currentStep === 7) {
+                        generateSummary();
+                    }
+                    langDropdown.classList.add('hidden');
+                });
+            });
+        }
+        
+        function setupCountryComboBox(inputId, valueId, dropdownId, isPickup = false) {
+            const input = document.getElementById(inputId);
+            const valueHolder = document.getElementById(valueId);
+            const dropdown = document.getElementById(dropdownId);
+            if (!input || !dropdown) {
+                console.error("ComboBox setup failed for:", inputId);
+                return;
+            }
+            if (!isPickup && !valueHolder) {
+                 console.error("Value holder missing for:", inputId);
+                return;
+            }
+
+            input.setAttribute('data-i18n-placeholder', 'typeOrSelectCountry');
+            const renderDropdown = (filter = '') => {
+                const filteredList = countryList.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()));
+                dropdown.innerHTML = filteredList.map(c => 
+                    `<div class="country-dropdown-item" data-code="${c.code}" data-name="${c.name}">
+                        <img src="https://flagcdn.com/w20/${c.code.toLowerCase()}.png" alt="${c.name} flag">
+                        <span>${c.name}</span>
+                    </div>`
+                ).join('');
+            };
+            input.addEventListener('focus', () => { renderDropdown(input.value); dropdown.classList.remove('hidden'); });
+            input.addEventListener('input', () => { 
+                renderDropdown(input.value); 
+                if(valueHolder) valueHolder.value = '';
+                dropdown.classList.remove('hidden'); 
+                updateInputValidationState(input);
+            });
+            dropdown.addEventListener('click', (e) => {
+                const item = e.target.closest('.country-dropdown-item');
+                if (item) {
+                    input.value = item.dataset.name;
+                    if(valueHolder) valueHolder.value = item.dataset.code;
+                    dropdown.classList.add('hidden');
+                    updateInputValidationState(input);
+                }
+            });
+            document.addEventListener('click', (e) => { if (!input.contains(e.target) && !dropdown.contains(e.target)) { dropdown.classList.add('hidden'); } });
+        }
+        
+        function updateInputValidationState(inputElement) {
+            if (!inputElement.hasAttribute('required')) return;
+            const wrapper = inputElement.closest('.relative');
+            if (!wrapper) return;
+            const indicator = wrapper.querySelector('.input-indicator');
+            if (!indicator) return;
+
+            let isValid = true;
+            if (inputElement.id.includes('-country-input')) {
+                const valueHolderId = inputElement.id.replace('-input', '-value');
+                const valueHolder = document.getElementById(valueHolderId);
+                isValid = !!valueHolder && !!valueHolder.value;
+            } else if (inputElement.id.includes('-account')) {
+                 isValid = inputElement.value.length === 9;
+            }
+            else {
+                isValid = inputElement.value.trim() !== '';
+            }
+
+            if (inputElement.type === 'tel' && inputElement.value.trim().length > 0 && inputElement.value.trim().length < 4) {
+                isValid = false;
+            }
+
+            if (isValid) {
+                indicator.textContent = '✓';
+                indicator.classList.remove('indicator-required');
+                indicator.classList.add('indicator-valid');
+                inputElement.classList.remove('is-invalid');
+            } else {
+                indicator.textContent = '*';
+                indicator.classList.remove('indicator-valid');
+                indicator.classList.add('indicator-required');
+            }
+        }
+        
+        function setupDocumentCombobox() {
+            const input = document.getElementById('document-description-input');
+            const dropdown = document.getElementById('document-description-dropdown');
+
+            input.value = "Documents - general business";
+            updateInputValidationState(input);
+
+            const renderDropdown = (filter = '') => {
+                const filteredList = documentTypes.filter(d => d.toLowerCase().includes(filter.toLowerCase()));
+                dropdown.innerHTML = filteredList.map(d => `<div class="document-dropdown-item" data-value="${d}">${d}</div>`).join('');
+            };
+
+            input.addEventListener('focus', () => {
+                renderDropdown(input.value);
+                dropdown.classList.remove('hidden');
+            });
+
+            input.addEventListener('input', () => {
+                renderDropdown(input.value);
+                dropdown.classList.remove('hidden');
+                updateInputValidationState(input);
+            });
+
+            dropdown.addEventListener('click', (e) => {
+                const item = e.target.closest('.document-dropdown-item');
+                if (item) {
+                    input.value = item.dataset.value;
+                    dropdown.classList.add('hidden');
+                    updateInputValidationState(input);
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        function populateStaticDropdowns() {
+            const incotermSelect = document.getElementById('incoterm');
+            if (incotermSelect) {
+                incotermSelect.innerHTML = incotermList.map(item =>
+                    `<option value="${item.incoterm}">${item.incoterm} - ${item.incotermName}</option>`
+                ).join('');
+            }
+            
+            const pickupLocationSelect = document.getElementById('pickup-location-select');
+            if(pickupLocationSelect) {
+                pickupLocationSelect.innerHTML = pickupLocations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
+            }
+        }
+
+        const prevButton = document.getElementById('ship-now-prev-step');
+        const nextButton = document.getElementById('ship-now-next-step');
+        
+        function changeStep(step) {
+            document.querySelectorAll('.ship-now-step').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`ship-now-step-${step}`).classList.remove('hidden');
+            currentStep = step;
+            updateStepIndicator();
+            updateNavButtons();
+            
+            // Scroll to top of the form section
+            document.getElementById('ship-now-page').scrollIntoView({ behavior: 'smooth' });
+
+            if (step === 6) {
+                updatePickupStepData();
+            }
+            if (step === 7) {
+                generateSummary();
+            }
+        }
+
+        function updateNavButtons() {
+            const backToMainBtn = document.getElementById('back-to-main-btn');
+            const confirmButton = document.getElementById('confirm-shipment-button');
+            prevButton.classList.toggle('hidden', currentStep === 1);
+            nextButton.classList.toggle('hidden', currentStep === totalSteps);
+            confirmButton.classList.toggle('hidden', currentStep !== totalSteps);
+            backToMainBtn.classList.toggle('hidden', currentStep !== 1);
+            nextButton.classList.toggle('w-full', currentStep === 1);
+            nextButton.classList.toggle('flex-1', currentStep > 1 && currentStep < totalSteps);
+            prevButton.classList.toggle('flex-1', currentStep > 1);
+        }
+
+        function updateStepIndicator() {
+            const separators = document.querySelectorAll('.progress-separator');
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepEl = document.getElementById(`step-${i}`);
+                stepEl.classList.remove('is-active', 'is-complete');
+                if (i === currentStep) {
+                    stepEl.classList.add('is-active');
+                } else if (i < currentStep) {
+                    stepEl.classList.add('is-complete');
+                }
+                
+                if (i <= separators.length) {
+                    const separatorEl = separators[i - 1];
+                    if (i < currentStep) {
+                        separatorEl.classList.add('is-complete');
+                    } else {
+                        separatorEl.classList.remove('is-complete');
+                    }
+                }
+            }
+        }
+
+        function validateCurrentStep() {
+            let isValid = true;
+            let firstInvalidElement = null;
+            let errorMessage = getTranslatedText('fillAllFields');
+            const stepDiv = document.getElementById(`ship-now-step-${currentStep}`);
+            stepDiv.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+            let requiredInputs;
+            
+            // Define required inputs based on the current step and user selections
+            if (currentStep === 2) {
+                const isDocument = document.getElementById('ship-type-document').classList.contains('active');
+                if (isDocument) {
+                    requiredInputs = stepDiv.querySelectorAll('#document-details-container input[required], #ship-date');
+                } else {
+                    requiredInputs = stepDiv.querySelectorAll('#package-details-container input[required], #package-details-container select[required], #ship-date');
+                }
+            } else if (currentStep === 4) {
+                 requiredInputs = stepDiv.querySelectorAll('input[required]:not(:disabled)');
+            } else if (currentStep === 5) {
+                requiredInputs = stepDiv.querySelectorAll('input[required]:not(:disabled)');
+            }
+            else {
+                requiredInputs = stepDiv.querySelectorAll('input[required]:not(:disabled), select[required]:not(:disabled)');
+            }
+
+            // Perform validation
+            requiredInputs.forEach(input => {
+                let isInputValid = true;
+                if (input.id.includes('-country-input')) {
+                    const valueHolderId = input.id.replace('-input', '-value');
+                    isInputValid = !!document.getElementById(valueHolderId).value;
+                } else if (input.type === 'file') {
+                    isInputValid = input.files.length > 0;
+                } else if (input.id.includes('-account')) {
+                    isInputValid = input.value.length === 9;
+                    if (!isInputValid && input.value.length > 0) {
+                        errorMessage = getTranslatedText('accountNumberInvalid');
+                    }
+                } else if (input.type === 'tel') {
+                    isInputValid = input.value.trim().length >= 4;
+                     if (!isInputValid && input.value.trim().length > 0) {
+                        errorMessage = getTranslatedText('phoneMinLength');
+                    }
+                } else {
+                    isInputValid = input.value.trim() !== '';
+                }
+
+                if (!isInputValid) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                    if (!firstInvalidElement) {
+                        firstInvalidElement = input;
+                    }
+                }
+            });
+
+            formMessage.classList.toggle('hidden', isValid);
+            if (!isValid) {
+                formMessage.textContent = errorMessage;
+                formMessage.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
+                if (firstInvalidElement) {
+                    firstInvalidElement.focus();
+                    firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+            return isValid;
+        }
+
+
+        const lineItemsContainer = document.getElementById('line-items-container');
+        const packageDetailsContainer = document.getElementById('package-details-container');
+        const documentDetailsContainer = document.getElementById('document-details-container');
+        const insuranceValueContainer = document.getElementById('insurance-value-container');
+        const summarizeShipmentContainer = document.getElementById('summarize-shipment-container');
+
+        // [FIX] Make summarize shipment mandatory
+        function renumberLineItemHeaders() {
+            const headers = lineItemsContainer.querySelectorAll('.line-item-header h4');
+            const summarizeInput = document.getElementById('summarize-shipment');
+            const summarizeIndicator = document.querySelector('#summarize-shipment-container .input-indicator');
+            
+            headers.forEach((header, index) => {
+                header.textContent = `Item #${index + 1}`;
+            });
+            
+            const showSummarize = headers.length > 1;
+            summarizeShipmentContainer.classList.toggle('hidden', !showSummarize);
+            summarizeInput.required = showSummarize;
+
+            if (summarizeIndicator) {
+                summarizeIndicator.classList.toggle('hidden', !showSummarize);
+            }
+            if (!showSummarize) {
+                summarizeInput.classList.remove('is-invalid');
+            }
+            updateInputValidationState(summarizeInput);
+        }
+        
+        function createLineItem() {
+            lineItemCounter++;
+            const itemId = lineItemCounter;
+            const currencyOptions = ['THB', 'USD', 'EUR', 'GBP', 'JPY', 'CNY'].map(c => `<option value="${c}">${c}</option>`).join('');
+            const unitOptions = uomList.map(u => `<option value="${u.unitOfMeasurement}">${u.description}</option>`).join('');
+            const countryOptions = countryList.map(c => `<option value="${c.code}" ${c.code === 'TH' ? 'selected' : ''}>${c.name}</option>`).join('');
+
+            const itemHTML = `
+                <div class="line-item" id="item-wrapper-${itemId}">
+                    <div class="line-item-header flex justify-between items-center p-4">
+                        <div>
+                            <h4 class="font-bold text-lg">Item #${itemId}</h4>
+                            <div class="line-item-summary text-sm text-gray-500 dark:text-gray-400 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-1 mt-2">
+                                <div class="truncate"><strong data-i18n="itemDescription" class="font-semibold text-current"></strong>: <span class="summary-description">...</span></div>
+                                <div><strong data-i18n="quantity" class="font-semibold text-current"></strong>: <span class="summary-quantity">...</span></div>
+                                <div><strong data-i18n="totalWeight" class="font-semibold text-current"></strong>: <span class="summary-weight">...</span></div>
+                                <div><strong data-i18n="totalItemValue" class="font-semibold text-current"></strong>: <span class="summary-value font-semibold">...</span></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="delete-item-btn text-gray-400 hover:text-red-500">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                            <div class="line-item-arrow p-1">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="line-item-body p-4 space-y-4 border-t border-gray-200 dark:border-gray-700 mt-4">
+                        <div><label class="block text-sm font-medium mb-1" data-i18n="whatIsTheItem"></label><div class="relative"><input type="text" class="input-field item-description pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                        <div><label class="block text-sm font-medium mb-1" data-i18n="commodityCode"></label><input type="text" class="input-field commodity-code" placeholder="xxxx.xx.xxxxxx"></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div><label class="block text-sm font-medium mb-1" data-i18n="quantity"></label><div class="relative"><input type="number" min="1" step="1" value="1" class="input-field item-quantity pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label class="block text-sm font-medium mb-1" data-i18n="units"></label><select class="input-field item-units">${unitOptions}</select></div>
+                            <div><label class="block text-sm font-medium mb-1" data-i18n="weight"></label><div class="relative"><input type="number" min="0.001" step="0.001" value="0.5" class="input-field item-weight pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1" data-i18n="valuePerItem"></label>
+                                <div class="flex items-center">
+                                    <div class="relative w-full"><input type="number" min="0" step="0.001" value="1" class="input-field item-value rounded-r-none pr-8" required><span class="input-indicator indicator-required">*</span></div>
+                                    <select class="input-field item-currency rounded-l-none border-l-0 w-24">${currencyOptions}</select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1" data-i18n="whereWasItMade"></label>
+                                <select class="input-field item-made-in">${countryOptions}</select>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            lineItemsContainer.insertAdjacentHTML('beforeend', itemHTML);
+            const newItem = document.getElementById(`item-wrapper-${itemId}`);
+            newItem.querySelectorAll('input[required], select[required]').forEach(updateInputValidationState);
+            updateLineItemSummary(newItem);
+            newItem.classList.add('is-collapsed');
+            updateContentLanguage();
+            renumberLineItemHeaders();
+        }
+
+        function validateLastLineItem() {
+            const lastItem = lineItemsContainer.querySelector('.line-item:last-child');
+            if (!lastItem) return true;
+            let isLastItemValid = true;
+            const requiredInputs = lastItem.querySelectorAll('input[required], select[required]');
+            requiredInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isLastItemValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+            return isLastItemValid;
+        }
+        
+        function updateLineItemSummary(itemElement) {
+            const summaryDiv = itemElement.querySelector('.line-item-summary');
+            if (!summaryDiv) return;
+            const descSpan = summaryDiv.querySelector('.summary-description');
+            const qtySpan = summaryDiv.querySelector('.summary-quantity');
+            const weightSpan = summaryDiv.querySelector('.summary-weight');
+            const valSpan = summaryDiv.querySelector('.summary-value');
+
+            const description = itemElement.querySelector('.item-description').value;
+            const quantity = itemElement.querySelector('.item-quantity').value;
+            const weight = parseFloat(itemElement.querySelector('.item-weight').value) || 0;
+            const value = parseFloat(itemElement.querySelector('.item-value').value) || 0;
+            const currency = itemElement.querySelector('.item-currency').value;
+            const totalItemWeight = (quantity * weight).toFixed(3);
+            const totalValue = (quantity * value).toFixed(3);
+            
+            descSpan.textContent = description || '...';
+            qtySpan.textContent = quantity;
+            weightSpan.textContent = `${totalItemWeight} KG`;
+            valSpan.textContent = `${totalValue} ${currency}`;
+        }
+
+        function updateAllLineItemSummaries() {
+            document.querySelectorAll('.line-item').forEach(updateLineItemSummary);
+        }
+
+        function updateSummary() {
+            let totalUnits = 0;
+            let totalWeight = 0;
+            let totalValue = 0;
+            const currency = document.querySelector('.item-currency')?.value || 'THB';
+
+            document.querySelectorAll('.line-item').forEach(item => {
+                const quantity = parseInt(item.querySelector('.item-quantity')?.value, 10) || 0;
+                const weight = parseFloat(item.querySelector('.item-weight')?.value) || 0;
+                const value = parseFloat(item.querySelector('.item-value')?.value) || 0;
+                totalUnits += quantity;
+                totalWeight += weight * quantity;
+                totalValue += value * quantity;
+            });
+
+            document.getElementById('summary-total-units').textContent = totalUnits;
+            document.getElementById('summary-total-weight').textContent = `${totalWeight.toFixed(3)} KG`;
+            document.getElementById('summary-total-value').textContent = `${totalValue.toFixed(3)} ${currency}`;
+            updateAllLineItemSummaries();
+        }
+
+        document.getElementById('add-line-item-btn').addEventListener('click', () => {
+             const lastItem = lineItemsContainer.querySelector('.line-item:last-child');
+             if (lastItem && !lastItem.classList.contains('is-collapsed')) {
+                 lastItem.classList.add('is-collapsed');
+             }
+            if (validateLastLineItem()) {
+                formMessage.classList.add('hidden');
+                createLineItem();
+                updateSummary();
+                const newItem = lineItemsContainer.querySelector('.line-item:last-child');
+                if (newItem) {
+                    newItem.classList.remove('is-collapsed');
+                }
+            } else {
+                formMessage.textContent = getTranslatedText('fillAllFieldsInItem');
+                formMessage.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
+                formMessage.classList.remove('hidden');
+            }
+        });
+
+        lineItemsContainer.addEventListener('click', (e) => {
+            const itemWrapper = e.target.closest('.line-item');
+            if (!itemWrapper) return;
+
+            if (e.target.closest('.delete-item-btn')) {
+                itemWrapper.remove();
+                renumberLineItemHeaders();
+                updateSummary();
+            } else if (e.target.closest('.line-item-header')) {
+                itemWrapper.classList.toggle('is-collapsed');
+            }
+        });
+
+        lineItemsContainer.addEventListener('input', (e) => {
+            const target = e.target;
+            const item = target.closest('.line-item');
+            if (item) {
+                updateLineItemSummary(item);
+            }
+            if (target.matches('.item-quantity, .item-weight, .item-value, .item-currency')) {
+                updateSummary();
+            }
+            if (target.matches('.item-currency')) {
+                const newCurrency = target.value;
+                document.querySelectorAll('.item-currency').forEach(select => select.value = newCurrency);
+                document.getElementById('insurance-currency').textContent = newCurrency;
+            }
+            if (target.matches('.commodity-code')) {
+                let val = target.value.replace(/[^\d]/g, '');
+                if (val.length > 4) val = val.slice(0, 4) + '.' + val.slice(4);
+                if (val.length > 7) val = val.slice(0, 7) + '.' + val.slice(7);
+                target.value = val.slice(0, 14);
+            }
+            if (target.matches('.item-quantity')) {
+                target.value = target.value.replace(/\D/g, '');
+            }
+            if (target.matches('.item-weight, .item-value')) {
+                const value = target.value;
+                const decimalIndex = value.indexOf('.');
+                if (decimalIndex !== -1 && value.length - decimalIndex - 1 > 3) {
+                    target.value = value.substring(0, decimalIndex + 4);
+                }
+            }
+        });
+
+        const docDescInput = document.getElementById('document-description-input');
+        const incotermContainer = document.getElementById('incoterm-container');
+        const incotermSelect = document.getElementById('incoterm');
+        const dutiesAccountContainer = document.getElementById('duties-account-container');
+
+        document.getElementById('ship-type-document').addEventListener('click', (e) => {
+            e.currentTarget.classList.add('active');
+            document.getElementById('ship-type-package').classList.remove('active');
+            packageDetailsContainer.classList.add('hidden');
+            documentDetailsContainer.classList.remove('hidden');
+            insuranceValueContainer.classList.add('hidden');
+            document.getElementById('insurance-value').required = false;
+            docDescInput.required = true;
+            updateInputValidationState(docDescInput);
+            
+            dutiesAccountContainer.classList.add('hidden');
+            incotermContainer.classList.add('hidden');
+            incotermSelect.required = false;
+        });
+
+        document.getElementById('ship-type-package').addEventListener('click', (e) => {
+            e.currentTarget.classList.add('active');
+            document.getElementById('ship-type-document').classList.remove('active');
+            packageDetailsContainer.classList.remove('hidden');
+            documentDetailsContainer.classList.add('hidden');
+            if (document.getElementById('protect-shipment').checked) {
+                insuranceValueContainer.classList.remove('hidden');
+                document.getElementById('insurance-value').required = true;
+            }
+            docDescInput.required = false;
+            docDescInput.classList.remove('is-invalid');
+            updateInputValidationState(docDescInput);
+
+            dutiesAccountContainer.classList.remove('hidden');
+            incotermContainer.classList.remove('hidden');
+            incotermSelect.required = true;
+        });
+        
+        document.getElementById('protect-shipment').addEventListener('change', (e) => {
+            const isPackage = document.getElementById('ship-type-package').classList.contains('active');
+            const insuranceInput = document.getElementById('insurance-value');
+            const insuranceIndicator = document.getElementById('insurance-value-indicator');
+            if (isPackage) {
+                const isChecked = e.target.checked;
+                insuranceValueContainer.classList.toggle('hidden', !isChecked);
+                insuranceInput.required = isChecked;
+                insuranceIndicator.classList.toggle('hidden', !isChecked);
+                if (!isChecked) {
+                    insuranceInput.classList.remove('is-invalid');
+                }
+            }
+        });
+        
+        const createInvoiceBtn = document.getElementById('create-invoice-btn');
+        const useMyOwnInvoiceBtn = document.getElementById('use-my-own-invoice-btn');
+        const invoiceOptionsContainer = document.getElementById('invoice-options-container');
+        const invoiceNumberContainer = document.getElementById('invoice-number-container');
+        const invoiceNumberInput = document.getElementById('invoice-number');
+        const invoiceNumberIndicator = document.getElementById('invoice-number-indicator');
+
+        function updateUploadSectionLogic() {
+            const uploadCheckbox = document.getElementById('upload-documents-checkbox');
+            if (!uploadCheckbox.checked) {
+                document.getElementById('file-upload-section').classList.add('hidden');
+                document.getElementById('doc-uploader').required = false;
+                return;
+            };
+
+            document.getElementById('file-upload-section').classList.remove('hidden');
+            const useMyOwn = useMyOwnInvoiceBtn.classList.contains('active');
+            const uploadLabelOwn = document.getElementById('upload-label-own-invoice');
+            const uploadLabelCreate = document.getElementById('upload-label-create-invoice');
+            const docUploaderContainer = document.getElementById('doc-uploader-container');
+            const docUploader = document.getElementById('doc-uploader');
+
+            uploadLabelOwn.classList.toggle('hidden', !useMyOwn);
+            uploadLabelCreate.classList.toggle('hidden', useMyOwn);
+            docUploaderContainer.classList.toggle('hidden', !useMyOwn);
+            docUploader.required = useMyOwn;
+            
+            if (!useMyOwn) {
+                docUploader.value = '';
+                docUploader.dispatchEvent(new Event('change'));
+            }
+        }
+
+        createInvoiceBtn.addEventListener('click', (e) => {
+            e.currentTarget.classList.add('active');
+            useMyOwnInvoiceBtn.classList.remove('active');
+            invoiceOptionsContainer.classList.remove('hidden');
+            invoiceNumberContainer.classList.remove('hidden');
+            invoiceNumberInput.required = true;
+            invoiceNumberIndicator.classList.remove('hidden');
+            updateInputValidationState(invoiceNumberInput);
+            updateUploadSectionLogic();
+        });
+
+        useMyOwnInvoiceBtn.addEventListener('click', (e) => {
+            e.currentTarget.classList.add('active');
+            createInvoiceBtn.classList.remove('active');
+            invoiceOptionsContainer.classList.add('hidden');
+            invoiceNumberContainer.classList.remove('hidden');
+            invoiceNumberInput.required = false;
+            invoiceNumberIndicator.classList.add('hidden');
+            invoiceNumberInput.classList.remove('is-invalid');
+            updateInputValidationState(invoiceNumberInput);
+            updateUploadSectionLogic();
+        });
+
+        document.getElementById('invoice-type-proforma').addEventListener('click', (e) => {
+            e.currentTarget.classList.add('active');
+            document.getElementById('invoice-type-commercial').classList.remove('active');
+        });
+
+        document.getElementById('invoice-type-commercial').addEventListener('click', (e) => {
+            e.currentTarget.classList.add('active');
+            document.getElementById('invoice-type-proforma').classList.remove('active');
+        });
+
+        function updatePackageSummary() {
+            let totalPackages = 0;
+            let totalWeight = 0;
+            document.querySelectorAll('.package-piece-item').forEach(piece => {
+                const quantity = parseInt(piece.querySelector('.piece-quantity')?.value, 10) || 0;
+                const weight = parseFloat(piece.querySelector('.piece-weight')?.value) || 0;
+                totalPackages += quantity;
+                totalWeight += weight * quantity;
+            });
+            document.getElementById('summary-total-packages').textContent = totalPackages;
+            const totalWeightKgString = `${totalWeight.toFixed(3)} KG`;
+            document.getElementById('summary-total-weight-kg').textContent = totalWeightKgString;
+
+            const pickupWeightInput = document.getElementById('pickup-weight');
+            if (pickupWeightInput) {
+                pickupWeightInput.value = totalWeightKgString;
+            }
+        }
+
+        function renumberPackageHeaders() {
+            const headers = packagePiecesContainer.querySelectorAll('.package-piece-header h4');
+            headers.forEach((header, index) => {
+                header.textContent = `${getTranslatedText('package')} #${index + 1}`;
+            });
+        }
+
+        function createPackagePiece() {
+            packagePieceCounter++;
+            const pieceId = packagePieceCounter;
+            const pieceHTML = `
+                <div class="package-piece-item p-4" id="piece-wrapper-${pieceId}">
+                    <div class="package-piece-header flex justify-between items-center mb-4">
+                        <h4 class="font-bold text-lg">${getTranslatedText('package')} #${pieceId}</h4>
+                        <button type="button" class="delete-piece-btn text-gray-400 hover:text-red-500 ${pieceId === 1 ? 'hidden' : ''}">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1" data-i18n="quantity"></label>
+                                <div class="relative"><input type="number" min="1" step="1" value="1" class="input-field piece-quantity pr-8" required placeholder="1"><span class="input-indicator indicator-required">*</span></div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1" data-i18n="weightKg"></label>
+                                <div class="relative"><input type="number" min="0.001" step="0.001" class="input-field piece-weight pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1" data-i18n="lengthCm"></label>
+                                <div class="relative"><input type="number" min="1" step="0.001" class="input-field piece-length pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1" data-i18n="widthCm"></label>
+                                <div class="relative"><input type="number" min="1" step="0.001" class="input-field piece-width pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1" data-i18n="heightCm"></label>
+                                <div class="relative"><input type="number" min="1" step="0.001" class="input-field piece-height pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            packagePiecesContainer.insertAdjacentHTML('beforeend', pieceHTML);
+            const newPiece = document.getElementById(`piece-wrapper-${pieceId}`);
+            newPiece.querySelectorAll('input[required]').forEach(updateInputValidationState);
+            updateContentLanguage();
+            updatePackageSummary();
+        }
+
+        function validateLastPackagePiece() {
+            const lastPiece = packagePiecesContainer.querySelector('.package-piece-item:last-child');
+            if (!lastPiece) return true;
+            let isLastPieceValid = true;
+            const requiredInputs = lastPiece.querySelectorAll('input[required]');
+            requiredInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isLastPieceValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+            return isLastPieceValid;
+        }
+        
+        document.getElementById('add-piece-button').addEventListener('click', () => {
+            if (validateLastPackagePiece()) {
+                formMessage.classList.add('hidden');
+                createPackagePiece();
+            } else {
+                formMessage.textContent = getTranslatedText('fillAllFieldsInPiece');
+                formMessage.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
+                formMessage.classList.remove('hidden');
+            }
+        });
+
+        packagePiecesContainer.addEventListener('click', e => {
+            if (e.target.closest('.delete-piece-btn')) {
+                e.target.closest('.package-piece-item').remove();
+                renumberPackageHeaders();
+                updatePackageSummary();
+            }
+        });
+
+        packagePiecesContainer.addEventListener('input', e => {
+            const target = e.target;
+            if (target.matches('.piece-quantity, .piece-weight')) {
+                updatePackageSummary();
+            }
+            if (target.matches('.piece-quantity')) {
+                target.value = target.value.replace(/[^0-9]/g, '');
+            } else if (target.matches('.piece-weight, .piece-length, .piece-width, .piece-height')) {
+                const value = target.value;
+                const decimalIndex = value.indexOf('.');
+                if (decimalIndex !== -1 && value.length - decimalIndex - 1 > 3) {
+                    target.value = value.substring(0, decimalIndex + 4);
+                }
+            }
+        });
+
+        const receiverPaysCheckbox = document.getElementById('receiver-pays-checkbox');
+        const dutiesAccountInput = document.getElementById('duties-account');
+        const dutiesAccountIndicator = dutiesAccountInput.nextElementSibling;
+
+        receiverPaysCheckbox.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            dutiesAccountInput.disabled = isChecked;
+            dutiesAccountInput.required = !isChecked;
+            dutiesAccountIndicator.classList.toggle('hidden', isChecked);
+
+            if (isChecked) {
+                dutiesAccountInput.value = '';
+                dutiesAccountInput.classList.remove('is-invalid');
+                incotermSelect.value = 'DDU';
+            } else {
+                incotermSelect.value = 'DDP';
+            }
+            updateInputValidationState(dutiesAccountInput);
+        });
+
+        const uploadDocsCheckbox = document.getElementById('upload-documents-checkbox');
+        const docUploaderInput = document.getElementById('doc-uploader');
+        const uploadedFileView = document.getElementById('uploaded-file-view');
+        const uploadedFileName = document.getElementById('uploaded-file-name');
+        const uploadedFileSize = document.getElementById('uploaded-file-size');
+        const deleteFileBtn = document.getElementById('delete-file-btn');
+
+        uploadDocsCheckbox.addEventListener('change', (e) => {
+            updateUploadSectionLogic();
+        });
+
+        docUploaderInput.addEventListener('change', () => {
+            const docUploaderContainer = document.getElementById('doc-uploader-container');
+            if (docUploaderInput.files.length > 0) {
+                const file = docUploaderInput.files[0];
+                const fileName = file.name;
+                const fileSize = (file.size / 1024).toFixed(2) + ' KB';
+                const englishFileNameRegex = /^[A-Za-z0-9\s._-]+$/;
+                
+                if (!englishFileNameRegex.test(fileName)) {
+                    formMessage.textContent = getTranslatedText('fileNameEnglishOnly');
+                    formMessage.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
+                    formMessage.classList.remove('hidden');
+                    docUploaderInput.value = '';
+                    return;
+                }
+                
+                uploadedFileName.textContent = fileName;
+                uploadedFileSize.textContent = fileSize;
+                docUploaderContainer.classList.add('hidden');
+                uploadedFileView.classList.remove('hidden');
+                formMessage.classList.add('hidden');
+            } else {
+                docUploaderContainer.classList.remove('hidden');
+                uploadedFileView.classList.add('hidden');
+            }
+        });
+
+        deleteFileBtn.addEventListener('click', () => {
+            docUploaderInput.value = '';
+            docUploaderInput.dispatchEvent(new Event('change'));
+        });
+        
+        const pickupYesBtn = document.getElementById('pickup-yes-btn');
+        const pickupNoBtn = document.getElementById('pickup-no-btn');
+        const pickupYesContainer = document.getElementById('pickup-yes-container');
+        const pickupNoContainer = document.getElementById('pickup-no-container');
+        const pickupDateInput = document.getElementById('pickup-date');
+        const editPickupAddressBtn = document.getElementById('edit-pickup-address-btn');
+        const savePickupAddressBtn = document.getElementById('save-pickup-address-btn');
+        const pickupAddressDisplayContainer = document.getElementById('pickup-address-display-container');
+        const pickupAddressEditContainer = document.getElementById('pickup-address-edit-container');
+        const pickupWeightInput = document.getElementById('pickup-weight');
+
+        pickupYesBtn.addEventListener('click', () => {
+            pickupYesBtn.classList.add('active');
+            pickupNoBtn.classList.remove('active');
+            pickupYesContainer.classList.remove('hidden');
+            pickupNoContainer.classList.add('hidden');
+            pickupWeightInput.required = true;
+            updateInputValidationState(pickupWeightInput);
+        });
+
+        pickupNoBtn.addEventListener('click', () => {
+            pickupNoBtn.classList.add('active');
+            pickupYesBtn.classList.remove('active');
+            pickupNoContainer.classList.remove('hidden');
+            pickupYesContainer.classList.add('hidden');
+            pickupWeightInput.required = false;
+            pickupWeightInput.classList.remove('is-invalid');
+            updateInputValidationState(pickupWeightInput);
+        });
+
+        editPickupAddressBtn.addEventListener('click', () => {
+            pickupAddressDisplayContainer.classList.add('hidden');
+            pickupAddressEditContainer.classList.remove('hidden');
+        });
+
+        savePickupAddressBtn.addEventListener('click', () => {
+            pickupAddressDisplayContainer.classList.remove('hidden');
+            pickupAddressEditContainer.classList.add('hidden');
+            const name = document.getElementById('pickup-name').value;
+            const company = document.getElementById('pickup-company').value;
+            const phone = document.getElementById('pickup-phone').value;
+            const address1 = document.getElementById('pickup-address1').value;
+            const address2 = document.getElementById('pickup-address2').value;
+            const address3 = document.getElementById('pickup-address3').value;
+            const city = document.getElementById('pickup-city').value;
+            const postal = document.getElementById('pickup-postalcode').value;
+            
+            const addressHTML = `
+                <p><strong>${name}</strong>, ${company}</p>
+                <p>${address1}</p>
+                ${address2 ? `<p>${address2}</p>` : ''}
+                ${address3 ? `<p>${address3}</p>` : ''}
+                <p>${city}, ${postal}</p>
+                <p>Tel: ${phone}</p>
+            `;
+            document.getElementById('pickup-address-display').innerHTML = addressHTML;
+        });
+
+        const timeToMinutes = (timeStr) => {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        };
+
+        const minutesToTime = (minutes) => {
+            const h = Math.floor(minutes / 60);
+            const m = Math.round(minutes % 60);
+            const displayHours = (h % 12) || 12;
+            const ampm = h < 12 || h === 24 ? 'am' : 'pm';
+            return `${displayHours}:${String(m).padStart(2, '0')} ${ampm}`;
+        };
+
+        function initializeTimeSlider() {
+            const sliderEl = document.getElementById('pickup-time-slider');
+            if (timeSlider) { timeSlider.destroy(); }
+            
+            const pips = {
+                mode: 'values',
+                values: [600, 660, 720, 780, 840, 900, 960, 1020, 1080],
+                density: 4,
+                format: { to: (value) => ([600, 720, 840, 960].includes(value) ? minutesToTime(value) : '') }
+            };
+            
+            timeSlider = noUiSlider.create(sliderEl, {
+                start: [timeToMinutes('12:15'), timeToMinutes('15:15')],
+                connect: true,
+                range: { 'min': timeToMinutes('09:30'), 'max': timeToMinutes('18:00') },
+                step: 15,
+                margin: 90,
+                tooltips: [ { to: minutesToTime }, { to: minutesToTime } ],
+                pips: pips,
+                behaviour: 'tap-drag'
+            });
+
+            timeSlider.on('update', function(values, handle) {
+                const todayStr = new Date().toISOString().slice(0, 10);
+                const isToday = pickupDateInput.value === todayStr;
+
+                if (!isToday) return;
+
+                const now = new Date();
+                const nowInMinutes = now.getHours() * 60 + now.getMinutes();
+                const minAllowedTime = Math.ceil(nowInMinutes / 15) * 15;
+                
+                const currentStartHandleValue = parseFloat(values[0]);
+
+                if (currentStartHandleValue < minAllowedTime) {
+                    timeSlider.set([minAllowedTime, null]);
+                }
+            });
+        }
+        
+        function updatePickupStepData() {
+            const getVal = (id) => document.getElementById(id)?.value || '';
+            const shipperName = getVal('shipper-name');
+            const shipperCompany = getVal('shipper-company');
+            const shipperAddress1 = getVal('shipper-address1');
+            const shipperAddress2 = getVal('shipper-address2');
+            const shipperAddress3 = getVal('shipper-address3');
+            const shipperCity = getVal('shipper-city');
+            const shipperPostal = getVal('shipper-postalcode');
+            const shipperPhone = getVal('shipper-phone');
+
+            document.getElementById('pickup-name').value = shipperName;
+            document.getElementById('pickup-company').value = shipperCompany;
+            document.getElementById('pickup-address1').value = shipperAddress1;
+            document.getElementById('pickup-address2').value = shipperAddress2;
+            document.getElementById('pickup-address3').value = shipperAddress3;
+            document.getElementById('pickup-city').value = shipperCity;
+            document.getElementById('pickup-postalcode').value = shipperPostal;
+            document.getElementById('pickup-phone').value = shipperPhone;
+            
+            const addressHTML = `
+                <p><strong>${shipperName}</strong>, ${shipperCompany}</p>
+                <p>${shipperAddress1}</p>
+                ${shipperAddress2 ? `<p>${shipperAddress2}</p>` : ''}
+                ${shipperAddress3 ? `<p>${shipperAddress3}</p>` : ''}
+                <p>${shipperCity}, ${shipperPostal}</p>
+                <p>Tel: ${shipperPhone}</p>
+            `;
+            document.getElementById('pickup-address-display').innerHTML = addressHTML;
+        }
+
+        function generateSummary() {
+            const container = document.getElementById('summary-details-content');
+            
+            const getVal = (id) => document.getElementById(id)?.value || 'N/A';
+            const getChecked = (id) => document.getElementById(id)?.checked || false;
+            
+            let lineItemsHTML = '';
+            document.querySelectorAll('.line-item').forEach((item, index) => {
+                lineItemsHTML += `
+                    <div class="border-t pt-2 mt-2">
+                        <p class="font-semibold">Item #${index + 1}</p>
+                        <p>${item.querySelector('.item-description').value} - Qty: ${item.querySelector('.item-quantity').value}, Weight: ${item.querySelector('.item-weight').value} KG, Value: ${item.querySelector('.item-value').value} ${item.querySelector('.item-currency').value}</p>
+                    </div>
+                `;
+            });
+
+            const shipperAddress = [getVal('shipper-address1'), getVal('shipper-address2'), getVal('shipper-address3')].filter(Boolean).join(', ');
+            const receiverAddress = [getVal('receiver-address1'), getVal('receiver-address2'), getVal('receiver-address3')].filter(Boolean).join(', ');
+
+            const isDocument = document.getElementById('ship-type-document').classList.contains('active');
+            const shipmentReferenceValue = isDocument ? getVal('shipment-reference-doc') : getVal('shipment-reference-pkg');
+
+
+            const summaryHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-4 border rounded-lg">
+                        <h4 class="text-lg font-bold mb-2" data-i18n="summaryShipper"></h4>
+                        <div class="space-y-1">
+                            <p><strong>${getVal('shipper-name')}</strong>, ${getVal('shipper-company')}</p>
+                            <p>${shipperAddress}</p>
+                            <p>${getVal('shipper-city')}, ${getVal('shipper-postalcode')}, ${getVal('shipper-country-input')}</p>
+                            <p><strong>Tel:</strong> ${getVal('shipper-phone')}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 border rounded-lg">
+                        <h4 class="text-lg font-bold mb-2" data-i18n="summaryReceiver"></h4>
+                        <div class="space-y-1">
+                            <p><strong>${getVal('receiver-name')}</strong>, ${getVal('receiver-company')}</p>
+                            <p>${receiverAddress}</p>
+                            <p>${getVal('receiver-city')}, ${getVal('receiver-postalcode')}, ${getVal('receiver-country-input')}</p>
+                            <p><strong>Tel:</strong> ${getVal('receiver-phone')}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4 border rounded-lg">
+                    <h4 class="text-lg font-bold mb-2" data-i18n="summaryShipmentInfo"></h4>
+                    <p><strong>${getTranslatedText('shipmentDate')}:</strong> ${getVal('ship-date')}</p>
+                    <p><strong>Type:</strong> ${isDocument ? getTranslatedText('document') : getTranslatedText('package')}</p>
+                    <p><strong>Reference:</strong> ${shipmentReferenceValue || 'N/A'}</p>
+                    ${isDocument ? `<p><strong>Description:</strong> ${getVal('document-description-input')}</p>` : ''}
+                    ${!isDocument ? `
+                        <p><strong>Insurance:</strong> ${getChecked('protect-shipment') ? getVal('insurance-value') + ' ' + document.getElementById('insurance-currency').textContent : 'No'}</p>
+                        <div class="mt-2">${lineItemsHTML}</div>
+                    ` : ''}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div class="p-4 border rounded-lg">
+                        <h4 class="text-lg font-bold mb-2" data-i18n="summaryPackageInfo"></h4>
+                        <p><strong>${getTranslatedText('totalPackages')}:</strong> ${document.getElementById('summary-total-packages').textContent}</p>
+                        <p><strong>${getTranslatedText('totalWeightKg')}:</strong> ${document.getElementById('summary-total-weight-kg').textContent}</p>
+                    </div>
+                    <div class="p-4 border rounded-lg">
+                        <h4 class="text-lg font-bold mb-2" data-i18n="summaryPaymentInfo"></h4>
+                        <p><strong>${getTranslatedText('shipperAccount')}:</strong> ${getVal('shipper-account')}</p>
+                        <p><strong>${getTranslatedText('billingAccount')}:</strong> ${getVal('billing-account') || 'N/A'}</p>
+                        <p><strong>${getTranslatedText('dutiesAccount')}:</strong> ${getChecked('receiver-pays-checkbox') ? getTranslatedText('receiverWillPay') : getVal('duties-account')}</p>
+                        ${!isDocument ? `<p><strong>${getTranslatedText('incoterm')}:</strong> ${getVal('incoterm')}</p>` : ''}
+                    </div>
+                </div>
+
+                ${document.getElementById('pickup-yes-btn').classList.contains('active') ? `
+                <div class="p-4 border rounded-lg">
+                    <h4 class="text-lg font-bold mb-2" data-i18n="summaryPickupInfo"></h4>
+                    <p><strong>${getTranslatedText('requestPickup')}:</strong> ${getTranslatedText('yes')}</p>
+                    <p><strong>${getTranslatedText('summaryPickupDate')}:</strong> ${new Date(getVal('pickup-date')+'T00:00:00').toLocaleDateString(currentLanguage === 'th' ? 'th-TH' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <p><strong>${getTranslatedText('summaryPickupTime')}:</strong> ${timeSlider ? timeSlider.get().map(minutesToTime).join(' - ') : 'N/A'}</p>
+                </div>` : ''}
+            `;
+
+            container.innerHTML = summaryHTML;
+            updateContentLanguage();
+        }
+
+        document.getElementById('edit-summary-btn').addEventListener('click', () => changeStep(1));
+
+        function showLeaveModal(url) {
+            navigationTargetUrl = url;
+            leaveModal.classList.remove('hidden');
+            updateContentLanguage();
+        }
+        function hideLeaveModal() {
+            navigationTargetUrl = null;
+            leaveModal.classList.add('hidden');
+        }
+        stayButton.addEventListener('click', hideLeaveModal);
+        leaveButton.addEventListener('click', () => {
+            if (navigationTargetUrl) {
+                hasUnsavedChanges = false;
+                window.location.href = navigationTargetUrl;
+            }
+        });
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.getAttribute('href').startsWith('#') || link.getAttribute('href') === 'javascript:void(0)' || link.target === '_blank') return;
+                if (hasUnsavedChanges) { e.preventDefault(); showLeaveModal(link.href); }
+            });
+        });
+        window.addEventListener('beforeunload', (e) => {
+            if (hasUnsavedChanges) { e.preventDefault(); e.returnValue = ''; return ''; }
+        });
+
+        document.getElementById('ship-now-form').addEventListener('input', (e) => {
+            hasUnsavedChanges = true;
+            const target = e.target;
+            const id = target.id;
+
+            // [FIX] Restrict account inputs to numbers only
+            if (id.includes('-account')) {
+                let value = target.value;
+                value = value.replace(/[^0-9]/g, '');
+                target.value = value;
+                updateInputValidationState(target);
+            } else if (id.includes('-city')) {
+                target.value = target.value.toUpperCase();
+            } else {
+                const asciiOnlyRegex = /[^\u0000-\u007F]/g;
+                const phoneRegex = /[^\d+-]/g;
+                const numberOnlyRegex = /[^\d]/g;
+
+                if (id.includes('name') || id.includes('company') || id.includes('address') || id.includes('postalcode') || id.includes('shipment-reference') || target.classList.contains('item-description') || id === 'invoice-number' || id === 'summarize-shipment') {
+                    target.value = target.value.replace(asciiOnlyRegex, '');
+                } else if (target.type === 'tel') {
+                    target.value = target.value.replace(phoneRegex, '');
+                } else if (id === 'insurance-value') {
+                    target.value = target.value.replace(numberOnlyRegex, '');
+                }
+            }
+            if (target.matches('input[required], select[required]')) {
+                 updateInputValidationState(target);
+            }
+        });
+        
+        nextButton.addEventListener('click', () => {
+            if (validateCurrentStep()) {
+                const isDocument = document.getElementById('ship-type-document').classList.contains('active');
+                
+                if (isDocument && currentStep === 4) {
+                    changeStep(6);
+                    return;
+                }
+
+                if (currentStep === 6) {
+                    document.getElementById('loading-modal').classList.remove('hidden');
+                    setTimeout(() => {
+                        try {
+                            changeStep(currentStep + 1);
+                        } finally {
+                            document.getElementById('loading-modal').classList.add('hidden');
+                        }
+                    }, 50); 
+                } else if (currentStep < totalSteps) {
+                    changeStep(currentStep + 1);
+                }
+            }
+        });
+        prevButton.addEventListener('click', () => {
+             const isDocument = document.getElementById('ship-type-document').classList.contains('active');
+             if (isDocument && currentStep === 6) {
+                 changeStep(4);
+                 return;
+             }
+            if (currentStep > 1) {
+                changeStep(currentStep - 1);
+            }
+        });
+
+        document.getElementById('confirm-shipment-button').addEventListener('click', async (event) => {
+            event.preventDefault();
+            const loadingModal = document.getElementById('loading-modal');
+            const formMsg = document.getElementById('form-message');
+            
+            loadingModal.classList.remove('hidden');
+            formMsg.textContent = getTranslatedText('creatingShipment');
+            formMsg.className = 'p-4 rounded-md text-center bg-blue-100 text-blue-700 break-words';
+            formMsg.classList.remove('hidden');
+
+            try {
+                const payload = await buildShipmentPayload();
+                if (!payload) {
+                    throw new Error("Failed to build shipment payload.");
+                }
+
+                const backendApiUrl = 'https://dbs-back-viruzjokes-projects.vercel.app/api/ship';
+                
+                const response = await fetch(backendApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const responseData = await response.json();
+
+                if (!response.ok) {
+                    const errorDetail = responseData.detail || JSON.stringify(responseData);
+                    throw new Error(`${responseData.title || 'API Error'}: ${errorDetail}`);
+                }
+                
+                sessionStorage.setItem('shipmentResponse', JSON.stringify(responseData));
+                sessionStorage.setItem('shipmentLanguage', currentLanguage);
+                
+                hasUnsavedChanges = false; 
+                window.location.href = 'confirmation.html';
+
+            } catch (error) {
+                console.error("Failed to create shipment:", error);
+                formMsg.innerHTML = `<span class="font-bold">${getTranslatedText('apiErrorTitle')}:</span><br>${error.message}`;
+                formMsg.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
+            } finally {
+                loadingModal.classList.add('hidden');
+            }
+        });
+        
+        function checkAndSetPickupDate() {
+            const shipDateInput = document.getElementById('ship-date');
+            const pickupDateInput = document.getElementById('pickup-date');
+            
+            let now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            let day = now.getDay();
+
+            const isAfterCutoff = hours > 16 || (hours === 16 && minutes > 30);
+
+            if (isAfterCutoff) {
+                now.setDate(now.getDate() + 1);
+                day = now.getDay();
+            }
+
+            if (day === 6) { 
+                now.setDate(now.getDate() + 2);
+            } else if (day === 0) {
+                now.setDate(now.getDate() + 1);
+            }
+
+            const nextValidDateStr = now.toISOString().slice(0, 10);
+            
+            shipDateInput.value = nextValidDateStr;
+            pickupDateInput.value = nextValidDateStr;
+            
+            shipDateInput.min = nextValidDateStr;
+            pickupDateInput.min = nextValidDateStr;
+        }
+
+        function setupDateSync() {
+            const shipDateInput = document.getElementById('ship-date');
+            const pickupDateInput = document.getElementById('pickup-date');
+
+            const syncDates = (source, destination) => {
+                destination.value = source.value;
+                if (timeSlider) {
+                    timeSlider.destroy();
+                    initializeTimeSlider();
+                }
+            };
+
+            shipDateInput.addEventListener('change', () => syncDates(shipDateInput, pickupDateInput));
+            pickupDateInput.addEventListener('change', () => syncDates(pickupDateInput, shipDateInput));
+        }
+
+        function initializeForm() {
+             const shipperCountryInput = document.getElementById('shipper-country-input');
+             const shipperCountryValue = document.getElementById('shipper-country-value');
+             const thailand = countryList.find(c => c.code === 'TH');
+             if (thailand) {
+                shipperCountryInput.value = thailand.name;
+                shipperCountryValue.value = thailand.code;
+                updateInputValidationState(shipperCountryInput);
+             }
+             
+             checkAndSetPickupDate();
+             updateInputValidationState(document.getElementById('ship-date'));
+
+             const receiverPaysCheckbox = document.getElementById('receiver-pays-checkbox');
+             if (receiverPaysCheckbox) {
+                receiverPaysCheckbox.checked = true;
+                receiverPaysCheckbox.dispatchEvent(new Event('change')); 
+             }
+             
+             document.getElementById('use-my-own-invoice-btn').click();
+        }
+
+        // --- Initial Setup ---
+        setupTheme();
+        setupLanguageSwitch();
+        setupCountryComboBox('shipper-country-input', 'shipper-country-value', 'shipper-country-dropdown');
+        setupCountryComboBox('receiver-country-input', 'receiver-country-value', 'receiver-country-dropdown');
+        setupDocumentCombobox();
+        populateStaticDropdowns();
+        initializeForm();
+        initializeTimeSlider();
+        setupDateSync();
+        
+        createLineItem();
+        const firstItem = lineItemsContainer.querySelector('.line-item');
+        if (firstItem) {
+            firstItem.classList.remove('is-collapsed');
+        }
+        
+        createPackagePiece();
+        updateSummary();
+        updateContentLanguage();
+        changeStep(1); 
     });
     </script>
 </body>
