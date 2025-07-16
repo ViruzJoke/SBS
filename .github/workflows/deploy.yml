@@ -1,0 +1,60 @@
+# ชื่อของ Workflow ที่จะแสดงในแท็บ Actions
+name: Deploy DBS Project to GitHub Pages
+
+# กำหนดว่าจะให้ Workflow นี้ทำงานเมื่อไหร่
+on:
+  # ทำงานทุกครั้งที่มีการ push ไปยัง branch 'main' (หรือ 'master' หากคุณใช้ชื่อนั้น)
+  push:
+    branches: [ "main" ]
+  # อนุญาตให้รัน Workflow นี้เองได้จากหน้า Actions
+  workflow_dispatch:
+
+# กำหนดสิทธิ์ที่จำเป็นสำหรับ GITHUB_TOKEN เพื่อให้ Actions สามารถ deploy ไปยัง GitHub Pages ได้
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# กำหนดการตั้งค่าเรื่อง Concurrency เพื่อให้แน่ใจว่ามีการ deploy ทีละครั้งเท่านั้น
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+# รายการของ "งาน" ที่จะให้ทำ
+jobs:
+  # ชื่องาน (ตั้งเองได้)
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }} # ดึง URL ของเว็บที่ deploy เสร็จแล้วมาแสดง
+    
+    # เลือกระบบปฏิบัติการของเครื่องที่จะใช้รันงาน
+    # ใช้ ubuntu-22.04 เพื่อเลี่ยงปัญหาคิวของ ubuntu-latest
+    runs-on: ubuntu-22.04
+
+    # ขั้นตอนที่จะให้ทำ (เรียงจากบนลงล่าง)
+    steps:
+      # 1. เช็คเอาท์โค้ดจาก repository ของเรามาไว้ในเครื่อง
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. ตั้งค่า GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 3. สร้าง Artifact (ไฟล์เว็บ) จากโค้ดของเรา
+      #    ในกรณีของเว็บ HTML ธรรมดา คือการเอาไฟล์ทั้งหมดไปรวมไว้ในโฟลเดอร์ชื่อ _site
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      # 4. อัปโหลด Artifact ที่สร้างขึ้นเพื่อเตรียม deploy
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+      # 5. Deploy ไปยัง GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
