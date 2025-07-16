@@ -1,5 +1,5 @@
 # ชื่อของ Workflow
-name: Deploy DBS Project to GitHub Pages (Simple)
+name: Deploy DBS Project to GitHub Pages (Fixed)
 
 on:
   push:
@@ -25,20 +25,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      # ---- ส่วนที่เปลี่ยนแปลง ----
-      # ไม่ใช้ Jekyll แต่สร้างโฟลเดอร์สำหรับ deploy โดยตรง
       - name: Setup Pages
-        id: pages
         uses: actions/configure-pages@v5
       
-      - name: Create Site Folder
-        run: mkdir -p ./_site && cp -r ./* ./_site
+      # ---- ส่วนที่แก้ไข ----
+      - name: Build and Sync files
+        # ใช้ rsync เพื่อ copy ไฟล์ทั้งหมด ยกเว้นตัว _site เองและไฟล์ของ git
+        run: |
+          rsync -av --progress --exclude "_site" --exclude ".git*" --exclude ".github" . ./_site
+      # ---- จบส่วนที่แก้ไข ----
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './_site'
-      # ---- จบส่วนที่เปลี่ยนแปลง ----
 
       - name: Deploy to GitHub Pages
         id: deployment
