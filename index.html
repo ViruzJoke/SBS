@@ -13,18 +13,6 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* [FIX] Ensure the body takes full height for centering */
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-        main {
-            flex-grow: 1; /* Allows main to fill available space */
-        }
         /* Dark mode styles */
         .dark-mode {
             background-color: #111827;
@@ -53,7 +41,8 @@
         }
     </style>
 </head>
-<body class="bg-yellow-50">
+<!-- [FIX] Using Tailwind classes to create a full-height flex column layout -->
+<body class="bg-yellow-50 flex flex-col min-h-screen">
     <!-- Header section -->
     <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10">
          <a href="#" class="flex items-center"><span class="text-4xl font-bold text-red-600">DHL</span><span class="ml-2 text-xl font-semibold text-gray-800 hidden sm:block">Backup Solution</span></a>
@@ -63,8 +52,8 @@
         </button>
     </header>
 
-    <!-- [FIX] Main content area with centering classes -->
-    <main class="flex items-center justify-center p-4">
+    <!-- [FIX] Added flex-grow to make this section fill all available vertical space -->
+    <main class="flex-grow flex items-center justify-center p-4">
         <section id="maintenance-page-content" class="bg-white p-8 rounded-lg shadow-xl text-center max-w-lg w-full">
             <!-- Icon -->
             <img src="Gear.jpg"
