@@ -3,83 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL Backup Solution - ปิดปรับปรุง</title>
+    <title>DHL Backup Solution - กลับมาให้บริการแล้ว</title>
     <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
     <style>
         /* Custom font for better readability */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Ensure dark mode styles are basic if theme-toggle is removed */
+        /* [FIX] Ensure the body takes full height for centering */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex-grow: 1; /* Allows main to fill available space */
+        }
+        /* Dark mode styles */
         .dark-mode {
-            background-color: #1a202c; /* Dark background */
-            color: #e2e8f0; /* Light text */
+            background-color: #111827;
+            color: #d1d5db;
+        }
+        .dark-mode .bg-yellow-50 {
+             background-color: #111827;
         }
         .dark-mode .bg-white {
-            background-color: #2d3748; /* Darker card background */
-            color: #e2e8f0;
+            background-color: #1f2937;
         }
         .dark-mode .text-gray-800 {
             color: #e2e8f0;
         }
+        .dark-mode .text-gray-700 {
+            color: #d1d5db;
+        }
         .dark-mode .text-gray-600 {
-            color: #cbd5e0;
-        }
-        .dark-mode .text-gray-500 {
-            color: #a0aec0;
-        }
-        /* Specific dark mode adjustments for DHL theme elements */
-        .dark-mode .bg-yellow-50 {
-            background-color: #3b3c43; /* Darker yellow for dark mode body */
-        }
-        .dark-mode .text-red-500 {
-            color: #ef4444; /* Ensure red icon is visible */
+            color: #9ca3af;
         }
         .dark-mode .text-red-700 {
-            color: #ef4444; /* Ensure red text is visible */
+            color: #f87171;
+        }
+        .dark-mode .shadow-md {
+             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -2px rgba(0,0,0,0.2);
         }
     </style>
 </head>
-<body class="bg-yellow-50 flex flex-col min-h-screen">
-    <!-- Header section, minimal changes from original -->
-    <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10 rounded-b-xl">
+<body class="bg-yellow-50">
+    <!-- Header section -->
+    <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10">
          <a href="#" class="flex items-center"><span class="text-4xl font-bold text-red-600">DHL</span><span class="ml-2 text-xl font-semibold text-gray-800 hidden sm:block">Backup Solution</span></a>
-        <!-- Utility navigation (language/theme) can be removed or simplified as it's a temporary maintenance page -->
-        <nav id="desktop-utilities-nav" class="flex items-center space-x-4">
-            <!-- Language toggle can be removed if not needed for maintenance -->
-            <!-- <div class="relative">
-                <button id="language-toggle-button" class="utility-button px-4 py-2 flex items-center gap-2"><span id="current-language-display">TH</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
-                <div id="language-dropdown" class="language-dropdown absolute right-0 mt-2 w-28 bg-white rounded-md shadow-lg hidden z-20">
-                    <a href="#" class="block px-4 py-2" data-lang="th">ภาษาไทย</a><a href="#" class="block px-4 py-2" data-lang="en">English</a>
-                </div>
-            </div> -->
-            <!-- Theme toggle can be simplified or removed -->
-            <button id="theme-toggle" class="utility-button">
-                <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-            </button>
-        </nav>
-        <button id="mobile-menu-button" class="md:hidden text-gray-700 p-2 rounded-md hidden"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+        <button id="theme-toggle" class="utility-button">
+            <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
     </header>
 
-    <main class="container py-8 flex-grow flex items-center justify-center">
-        <section id="maintenance-page-content" class="bg-white p-8 rounded-lg shadow-xl text-center max-w-lg w-full mx-auto">
-            <!-- Maintenance icon (updated to use the uploaded Gear.jpg image from the root of the repository) -->
+    <!-- [FIX] Main content area with centering classes -->
+    <main class="flex items-center justify-center p-4">
+        <section id="maintenance-page-content" class="bg-white p-8 rounded-lg shadow-xl text-center max-w-lg w-full">
+            <!-- Icon -->
             <img src="Gear.jpg"
-                 onerror="this.onerror=null;this.src='https://placehold.co/96x96/FF0000/FFFFFF?text=Gear';"
-                 alt="Maintenance Gears"
+                 onerror="this.onerror=null;this.src='https://placehold.co/96x96/28a745/FFFFFF?text=OK';"
+                 alt="Service Restored"
                  class="mx-auto h-24 w-24 mb-6">
 
-            <h1 class="text-4xl font-bold text-red-700 mb-4">เว็บไซต์นี้ยังไม่เปิดให้บริการ</h1>
+            <h1 class="text-4xl font-bold text-red-700 mb-4">กลับมาให้บริการแล้ว</h1>
             <p class="text-lg text-gray-700 mb-6">ขณะนี้เว็บไซต์ MyDHL+ สามารถให้บริการได้ตามปกติ</p>
-            <p class="text-md text-gray-600 mb-4">ระบบจะเปลี่ยนเส้นทางไปยังหน้าหลักของ MyDHL+ ใน <span id="countdown">10</span> วินาที</p>
+            <p class="text-md text-gray-600 mb-4">ระบบจะเปลี่ยนเส้นทางไปยังหน้าหลักของ MyDHL+ ใน <span id="countdown" class="font-bold">10</span> วินาที</p>
             <p class="text-md text-gray-600">หากไม่ถูกเปลี่ยนเส้นทางโดยอัตโนมัติ กรุณาคลิกที่นี่: <a href="https://mydhl.express.dhl/th/en/home.html#/getQuoteTab" class="text-blue-600 hover:underline">MyDHL+</a></p>
         </section>
     </main>
 
-    <!-- Footer section, minimal changes from original -->
-    <footer class="bg-gray-800 text-white py-8 mt-8">
+    <!-- Footer section -->
+    <footer class="bg-gray-800 text-white py-6">
         <div class="text-center text-sm text-gray-400">&copy; <span id="current-year"></span> DHL Express. สงวนลิขสิทธิ์.</div>
     </footer>
 
@@ -88,7 +89,7 @@
             // Setup current year in footer
             document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            // Simple theme toggle for this page
+            // Theme toggle logic
             const themeToggle = document.getElementById('theme-toggle');
             const lightIcon = document.getElementById('theme-icon-light');
             const darkIcon = document.getElementById('theme-icon-dark');
@@ -96,23 +97,19 @@
             const enableDarkMode = () => {
                 document.body.classList.add('dark-mode');
                 localStorage.setItem('theme', 'dark');
-                lightIcon.classList.remove('hidden');
-                darkIcon.classList.add('hidden');
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
             };
 
             const disableDarkMode = () => {
                 document.body.classList.remove('dark-mode');
                 localStorage.setItem('theme', 'light');
-                lightIcon.classList.add('hidden');
-                darkIcon.classList.remove('hidden');
+                lightIcon.classList.remove('hidden');
+                darkIcon.classList.add('hidden');
             };
 
             themeToggle.addEventListener('click', () => {
-                if (document.body.classList.contains('dark-mode')) {
-                    disableDarkMode();
-                } else {
-                    enableDarkMode();
-                }
+                document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode();
             });
 
             // Apply initial theme based on localStorage
@@ -134,7 +131,7 @@
                     clearInterval(interval);
                     window.location.href = redirectUrl;
                 }
-            }, 1000); // Update every 1 second
+            }, 1000);
         });
     </script>
 </body>
