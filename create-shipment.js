@@ -2,7 +2,7 @@
  * =================================================================
  * DHL Backup Solution - Create Shipment Payload Builder
  * Author: Joker & Gemini
- * Version: 17.3.0 (Paperless Trade Logic Update)
+ * Version: 18.0.0 (Added Payer Account Logic)
  * Description: This script collects all data from the ship.html form
  * and builds the correct root JSON payload for the DHL API.
  * =================================================================
@@ -50,12 +50,25 @@ async function buildShipmentPayload() {
 
     payload.productCode = isDocument ? 'D' : 'P';
 
+    // [MODIFIED] v3: Added Billing Account (payer) logic
     payload.accounts = [];
+    
+    // 1. Shipper Account
     payload.accounts.push({
         typeCode: "shipper",
         number: getVal('shipper-account')
     });
 
+    // 2. Billing Account (as Payer)
+    const billingAccount = getVal('billing-account');
+    if (billingAccount) {
+        payload.accounts.push({
+            typeCode: "payer",
+            number: billingAccount
+        });
+    }
+
+    // 3. Duties & Taxes Account
     if (isPackage && !receiverPaysTaxes) {
         const dutiesAccount = getVal('duties-account');
         if (dutiesAccount) {
@@ -201,15 +214,12 @@ async function buildShipmentPayload() {
         }];
     }
 
-    // [MODIFIED] Separated logic for Paperless Trade and Document Upload
     const docUploader = document.getElementById('doc-uploader');
 
-    // Add Paperless Trade (WY) service if user opts in, regardless of actual file upload.
     if (isDocUploadRequested) {
         valueAddedServices.push({ serviceCode: "WY" });
     }
 
-    // Add document image content only if a file is actually uploaded.
     if (isDocUploadRequested && docUploader.files.length > 0) {
         const file = docUploader.files[0];
         const fileExtension = file.name.split('.').pop().toUpperCase();
