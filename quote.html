@@ -130,7 +130,16 @@
                     <h2 class="text-xl font-semibold" data-i18n="packageDetails"></h2>
                     <div><label for="quote-ship-date" class="block text-sm font-medium mb-1" data-i18n="shipmentDate"></label><input type="date" id="quote-ship-date" class="input-field" required></div>
                     <div class="flex items-center mt-2"><input type="checkbox" id="quote-is-parcel" class="form-checkbox h-5 w-5 text-red-600 rounded-md"><label for="quote-is-parcel" class="ml-2 block text-sm font-medium" data-i18n="isParcel"></label></div>
-                    <div id="quote-declared-value-container" class="hidden"><label for="quote-declared-value" class="block text-sm font-medium mb-1" data-i18n="declaredValue"></label><input type="number" id="quote-declared-value" min="0" step="0.01" class="input-field" data-i18n-placeholder="enterDeclaredValue"></div>
+                    
+                    <!-- [MODIFIED] v4: Container for Declared Value and Currency -->
+                    <div id="quote-declared-value-container" class="hidden">
+                        <label class="block text-sm font-medium mb-1" data-i18n="declaredValue"></label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="quote-declared-value" min="0" step="0.01" class="input-field" data-i18n-placeholder="enterDeclaredValue">
+                            <select id="quote-declared-currency" class="input-field w-32"></select>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div><label class="block text-sm" data-i18n="weightKg"></label><input type="number" id="quote-weight" min="0.1" step="0.1" class="input-field" required data-i18n-placeholder="weightPlaceholder"></div>
                         <div><label class="block text-sm" data-i18n="lengthCm"></label><input type="number" id="quote-length" min="0.1" step="0.1" class="input-field" required data-i18n-placeholder="lengthPlaceholder"></div>
@@ -230,10 +239,18 @@
                 });
             }
 
+            // [MODIFIED] v4: Function to populate currency dropdown
+            function populateCurrencyDropdown() {
+                const currencyDropdown = document.getElementById('quote-declared-currency');
+                const currencies = ['THB', 'USD', 'EUR', 'GBP', 'JPY', 'CNY'];
+                currencyDropdown.innerHTML = currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            }
+
             function pageSetup() { 
                 document.title = `DHL Backup Solution - ${getTranslatedText('calculateQuote')}`; 
                 setupCountryComboBox('origin-country-input', 'origin-country-value', 'origin-country-dropdown');
                 setupCountryComboBox('destination-country-input', 'destination-country-value', 'destination-country-dropdown');
+                populateCurrencyDropdown();
                 
                 const shipDateInput = document.getElementById('quote-ship-date');
                 const today = new Date().toISOString().slice(0, 10);
@@ -381,6 +398,11 @@
                 const target = e.target;
                 const id = target.id;
                 
+                // [MODIFIED] v4: Convert city name to uppercase
+                if (id.includes('-city')) {
+                    target.value = target.value.toUpperCase();
+                }
+
                 // Input Sanitization
                 const asciiOnlyRegex = /[^\u0000-\u007F]/g;
                 
@@ -408,6 +430,7 @@
                 getQuoteBtn.disabled = true;
                 quoteResultsSection.classList.add('hidden');
                 
+                // [MODIFIED] v4: Collect declared currency
                 const formData = {
                     originCountry: document.getElementById('origin-country-value').value,
                     originCity: document.getElementById('quote-origin-city').value,
@@ -417,6 +440,8 @@
                     destinationPostalCode: document.getElementById('quote-destination-postalcode').value,
                     shipDate: document.getElementById('quote-ship-date').value,
                     isParcel: document.getElementById('quote-is-parcel').checked,
+                    declaredValue: document.getElementById('quote-declared-value').value,
+                    declaredCurrency: document.getElementById('quote-declared-currency').value,
                     packages: [{
                         length: document.getElementById('quote-length').value || "1",
                         width: document.getElementById('quote-width').value || "1",
