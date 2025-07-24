@@ -2,7 +2,7 @@
  * =================================================================
  * DHL Backup Solution - Create Shipment Payload Builder
  * Author: Joker & Gemini
- * Version: 18.0.0 (Added Payer Account Logic)
+ * Version: 18.1.0 (Fixed Payer Account Logic)
  * Description: This script collects all data from the ship.html form
  * and builds the correct root JSON payload for the DHL API.
  * =================================================================
@@ -27,19 +27,20 @@ function fileToBase64(file) {
 
 /**
  * Gathers all data from the form and builds the complete JSON payload.
- * @returns {Promise<Object>} A promise that resolves with the shipment payload object.
+ * @returns {Promise<Object|null>} A promise that resolves with the shipment payload object, or null on failure.
  */
 async function buildShipmentPayload() {
-    // Helper function to get value from an element by ID
+    // Helper functions to get value from an element by ID
     const getVal = (id) => document.getElementById(id)?.value || '';
+    const getChecked = (id) => document.getElementById(id)?.checked || false;
     
     const isDocument = document.getElementById('ship-type-document').classList.contains('active');
     const isPackage = document.getElementById('ship-type-package').classList.contains('active');
     const isPickupRequested = document.getElementById('pickup-yes-btn').classList.contains('active');
     const createInvoiceRequested = document.getElementById('create-invoice-btn').classList.contains('active');
-    const receiverPaysTaxes = document.getElementById('receiver-pays-checkbox').checked;
-    const isInsuranceRequested = document.getElementById('protect-shipment').checked;
-    const isDocUploadRequested = document.getElementById('upload-documents-checkbox').checked;
+    const receiverPaysTaxes = getChecked('receiver-pays-checkbox');
+    const isInsuranceRequested = getChecked('protect-shipment');
+    const isDocUploadRequested = getChecked('upload-documents-checkbox');
 
 
     let payload = {};
@@ -50,23 +51,25 @@ async function buildShipmentPayload() {
 
     payload.productCode = isDocument ? 'D' : 'P';
 
-    // [MODIFIED] v3: Added Billing Account (payer) logic
+    // [FIXED] Payer Account Logic
     payload.accounts = [];
-    
-    // 1. Shipper Account
+    const shipperAccount = getVal('shipper-account');
+    const useShipperForBilling = getChecked('use-shipper-for-billing');
+    const billingAccount = getVal('billing-account');
+
+    // 1. Shipper Account (always required)
     payload.accounts.push({
         typeCode: "shipper",
-        number: getVal('shipper-account')
+        number: shipperAccount
     });
 
-    // 2. Billing Account (as Payer)
-    const billingAccount = getVal('billing-account');
-    if (billingAccount) {
-        payload.accounts.push({
-            typeCode: "payer",
-            number: billingAccount
-        });
-    }
+    // 2. Payer Account (for transportation charges)
+    // If the checkbox is checked, the shipper pays. Otherwise, the separate billing account pays.
+    // This ensures a "payer" is always included in the payload.
+    payload.accounts.push({
+        typeCode: "payer",
+        number: useShipperForBilling ? shipperAccount : billingAccount
+    });
 
     // 3. Duties & Taxes Account
     if (isPackage && !receiverPaysTaxes) {
@@ -233,7 +236,11 @@ async function buildShipmentPayload() {
             }];
         } catch (error) {
             console.error("Error encoding file to Base64:", error);
-            alert("Could not process the uploaded file. Please try again.");
+            // Using a more user-friendly way to show error instead of alert
+            const formMessage = document.getElementById('form-message');
+            formMessage.textContent = "Could not process the uploaded file. Please try again.";
+            formMessage.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
+            formMessage.classList.remove('hidden');
             return null;
         }
     }
@@ -326,6 +333,6 @@ async function buildShipmentPayload() {
         payload.valueAddedServices = valueAddedServices;
     }
 
-    console.log("DEBUG: Final Payload:", payload);
+    console.log("DEBUG: Final Payload:", JSON.stringify(payload, null, 2));
     return payload;
 }
