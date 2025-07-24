@@ -140,9 +140,9 @@
                                 <button class="accordion-header w-full text-left" aria-expanded="false">
                                     <div class="flex flex-col w-full">
                                         <div class="flex justify-between items-center w-full">
-                                            <div class="flex-grow flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                                            <div class="flex-grow flex flex-wrap items-baseline gap-x-2 gap-y-1">
                                                 <h4 class="font-bold text-lg">${trackingNumber}</h4>
-                                                <p class="accordion-header-info font-semibold">${latestEventDescription}</p>
+                                                <p class="font-semibold">- ${latestEventDescription}</p>
                                             </div>
                                             <svg class="accordion-arrow w-6 h-6 flex-shrink-0 transition-transform duration-300 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                         </div>
@@ -228,33 +228,25 @@
             
             function cleanTrackingNumbers(input) { return input.replace(/[^0-9,\n]/g, '').replace(/[\n\s]+/g, ',').split(',').map(s => s.trim()).filter(s => s.length === 10).filter((item, index, self) => self.indexOf(item) === index).slice(0, 10).join(','); }
             
-            /**
-             * [FIXED] More robust error parsing function.
-             * It first finds any 10-digit number, then checks the context of the line
-             * to determine if it's a "found" or "not found" case.
-             */
             function parseTrackingError(errorData) {
                 const validNumbers = [];
                 const invalidDetails = [];
-                const numberRegex = /(\d{10})/; // Regex to find any 10-digit number
+                const numberRegex = /(\d{10})/; 
 
                 if (errorData.additionalDetails && Array.isArray(errorData.additionalDetails)) {
                     errorData.additionalDetails.forEach(detail => {
                         const match = detail.match(numberRegex);
                         if (match && match[1]) {
                             const trackingNumber = match[1];
-                            // Check if the line indicates "not found"
                             if (detail.toLowerCase().includes('no shipments found')) {
                                 invalidDetails.push(`No Shipments Found for ${trackingNumber}`);
                             } else {
-                                // Assume any other line with a 10-digit number is a valid one to retry
                                 validNumbers.push(trackingNumber);
                             }
                         }
                     });
                 }
 
-                // If after parsing, we have no specific details, use the main error message.
                 if (validNumbers.length === 0 && invalidDetails.length === 0 && errorData.detail) {
                     invalidDetails.push(errorData.detail);
                 }
