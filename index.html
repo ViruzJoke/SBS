@@ -217,26 +217,33 @@
             
             function cleanTrackingNumbers(input) { return input.replace(/[^0-9,\n]/g, '').replace(/[\n\s]+/g, ',').split(',').map(s => s.trim()).filter(s => s.length === 10).filter((item, index, self) => self.indexOf(item) === index).slice(0, 10).join(','); }
             
+            /**
+             * [FIXED] More robust error parsing function.
+             * It first finds any 10-digit number, then checks the context of the line
+             * to determine if it's a "found" or "not found" case.
+             */
             function parseTrackingError(errorData) {
                 const validNumbers = [];
                 const invalidDetails = [];
-                // Use case-insensitive regex
-                const foundRegex = /shipments found for shipmenttrackingnumber (\d{10})/i;
-                const notFoundRegex = /no shipments found for shipmenttrackingnumber (\d{10})/i;
+                const numberRegex = /(\d{10})/; // Regex to find any 10-digit number
 
                 if (errorData.additionalDetails && Array.isArray(errorData.additionalDetails)) {
                     errorData.additionalDetails.forEach(detail => {
-                        const foundMatch = detail.match(foundRegex);
-                        const notFoundMatch = detail.match(notFoundRegex);
-
-                        if (foundMatch && foundMatch[1]) {
-                            validNumbers.push(foundMatch[1]);
-                        } else if (notFoundMatch) {
-                            invalidDetails.push(`No Shipments Found for ${notFoundMatch[1]}`);
+                        const match = detail.match(numberRegex);
+                        if (match && match[1]) {
+                            const trackingNumber = match[1];
+                            // Check if the line indicates "not found"
+                            if (detail.toLowerCase().includes('no shipments found')) {
+                                invalidDetails.push(`No Shipments Found for ${trackingNumber}`);
+                            } else {
+                                // Assume any other line with a 10-digit number is a valid one to retry
+                                validNumbers.push(trackingNumber);
+                            }
                         }
                     });
                 }
-                
+
+                // If after parsing, we have no specific details, use the main error message.
                 if (validNumbers.length === 0 && invalidDetails.length === 0 && errorData.detail) {
                     invalidDetails.push(errorData.detail);
                 }
