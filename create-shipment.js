@@ -2,7 +2,7 @@
  * =================================================================
  * DHL Backup Solution - Create Shipment Payload Builder
  * Author: Joker & Gemini
- * Version: 18.1.0 (Dynamic Payer Account Logic)
+ * Version: 18.0.0 (Added Payer Account Logic)
  * Description: This script collects all data from the ship.html form
  * and builds the correct root JSON payload for the DHL API.
  * =================================================================
@@ -32,15 +32,14 @@ function fileToBase64(file) {
 async function buildShipmentPayload() {
     // Helper function to get value from an element by ID
     const getVal = (id) => document.getElementById(id)?.value || '';
-    const getChecked = (id) => document.getElementById(id)?.checked || false;
     
-    const isDocument = getChecked('ship-type-document');
-    const isPackage = getChecked('ship-type-package');
-    const isPickupRequested = getChecked('pickup-yes-btn');
-    const createInvoiceRequested = getChecked('create-invoice-btn');
-    const receiverPaysTaxes = getChecked('receiver-pays-checkbox');
-    const isInsuranceRequested = getChecked('protect-shipment');
-    const isDocUploadRequested = getChecked('upload-documents-checkbox');
+    const isDocument = document.getElementById('ship-type-document').classList.contains('active');
+    const isPackage = document.getElementById('ship-type-package').classList.contains('active');
+    const isPickupRequested = document.getElementById('pickup-yes-btn').classList.contains('active');
+    const createInvoiceRequested = document.getElementById('create-invoice-btn').classList.contains('active');
+    const receiverPaysTaxes = document.getElementById('receiver-pays-checkbox').checked;
+    const isInsuranceRequested = document.getElementById('protect-shipment').checked;
+    const isDocUploadRequested = document.getElementById('upload-documents-checkbox').checked;
 
 
     let payload = {};
@@ -51,32 +50,25 @@ async function buildShipmentPayload() {
 
     payload.productCode = isDocument ? 'D' : 'P';
 
-    // [MODIFIED] v5: Updated Billing Account (payer) logic with checkbox
+    // [MODIFIED] v3: Added Billing Account (payer) logic
     payload.accounts = [];
     
-    // 1. Shipper Account (always present)
+    // 1. Shipper Account
     payload.accounts.push({
         typeCode: "shipper",
         number: getVal('shipper-account')
     });
 
-    // 2. Billing Account (as Payer) - conditional based on checkbox
-    const useShipperForBilling = getChecked('use-shipper-for-billing');
-
-    if (!useShipperForBilling) {
-        // If the checkbox is NOT checked, it means a separate billing account is provided.
-        const billingAccount = getVal('billing-account');
-        if (billingAccount) { // Only add if a value is actually entered
-            payload.accounts.push({
-                typeCode: "payer",
-                number: billingAccount
-            });
-        }
+    // 2. Billing Account (as Payer)
+    const billingAccount = getVal('billing-account');
+    if (billingAccount) {
+        payload.accounts.push({
+            typeCode: "payer",
+            number: billingAccount
+        });
     }
-    // If the checkbox IS checked, we don't add a 'payer' node.
-    // The system will default to using the 'shipper' account for payment.
 
-    // 3. Duties & Taxes Account (logic remains the same)
+    // 3. Duties & Taxes Account
     if (isPackage && !receiverPaysTaxes) {
         const dutiesAccount = getVal('duties-account');
         if (dutiesAccount) {
