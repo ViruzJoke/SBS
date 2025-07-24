@@ -131,7 +131,6 @@
                     <div><label for="quote-ship-date" class="block text-sm font-medium mb-1" data-i18n="shipmentDate"></label><input type="date" id="quote-ship-date" class="input-field" required></div>
                     <div class="flex items-center mt-2"><input type="checkbox" id="quote-is-parcel" class="form-checkbox h-5 w-5 text-red-600 rounded-md"><label for="quote-is-parcel" class="ml-2 block text-sm font-medium" data-i18n="isParcel"></label></div>
                     
-                    <!-- [MODIFIED] v4: Container for Declared Value and Currency -->
                     <div id="quote-declared-value-container" class="hidden">
                         <label class="block text-sm font-medium mb-1" data-i18n="declaredValue"></label>
                         <div class="flex items-center gap-2">
@@ -156,7 +155,6 @@
              
         </section>
 
-        <!-- Modal for leave confirmation -->
         <div id="leave-confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-4" data-i18n="leaveSiteTitle"></h2>
@@ -239,7 +237,6 @@
                 });
             }
 
-            // [MODIFIED] v4: Function to populate currency dropdown
             function populateCurrencyDropdown() {
                 const currencyDropdown = document.getElementById('quote-declared-currency');
                 const currencies = ['THB', 'USD', 'EUR', 'GBP', 'JPY', 'CNY'];
@@ -398,12 +395,10 @@
                 const target = e.target;
                 const id = target.id;
                 
-                // [MODIFIED] v4: Convert city name to uppercase
                 if (id.includes('-city')) {
                     target.value = target.value.toUpperCase();
                 }
 
-                // Input Sanitization
                 const asciiOnlyRegex = /[^\u0000-\u007F]/g;
                 
                 if (id.includes('-city') || id.includes('-postalcode')) {
@@ -430,7 +425,6 @@
                 getQuoteBtn.disabled = true;
                 quoteResultsSection.classList.add('hidden');
                 
-                // [MODIFIED] v4: Collect declared currency
                 const formData = {
                     originCountry: document.getElementById('origin-country-value').value,
                     originCity: document.getElementById('quote-origin-city').value,
@@ -472,6 +466,10 @@
                     lastQuoteData = data;
                     formMessage.classList.add('hidden'); 
                     quoteResultsSection.classList.remove('hidden');
+                    
+                    // [FIXED] Scroll to results after they are ready to be displayed
+                    quoteResultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
                     displayQuoteResults(data);
                     hasUnsavedChanges = false;
 
@@ -494,7 +492,6 @@
 
             document.getElementById('quote-clear-button').addEventListener('click', resetForm);
             
-             // --- Unload Confirmation Logic ---
             function showLeaveModal(url) {
                 navigationTargetUrl = url;
                 leaveModal.classList.remove('hidden');
