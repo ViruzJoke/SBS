@@ -129,11 +129,11 @@
                                 <button class="accordion-header w-full text-left" aria-expanded="false">
                                     <div class="flex flex-col w-full">
                                         <div class="flex justify-between items-center w-full">
-                                            <div>
+                                            <div class="flex-grow flex flex-wrap items-baseline gap-x-4 gap-y-1">
                                                 <h4 class="font-bold text-lg">${trackingNumber}</h4>
-                                                <p class="accordion-header-info text-green-600 dark:text-green-400 font-semibold">${status}</p>
+                                                <p class="accordion-header-info text-gray-600 dark:text-gray-300 font-semibold">${status}</p>
                                             </div>
-                                            <svg class="accordion-arrow w-6 h-6 flex-shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            <svg class="accordion-arrow w-6 h-6 flex-shrink-0 transition-transform duration-300 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                         </div>
                                         <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-sm mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
                                             <div><p class="font-semibold">${getTranslatedText('origin')}</p><p class="truncate">${shipperLocation}</p></div>
