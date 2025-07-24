@@ -14,6 +14,7 @@
             border: 1px solid #fecaca; /* red-200 */
             border-radius: 0.5rem;
             padding: 1rem;
+            margin-bottom: 1rem; /* Add margin to separate from results */
         }
         .dark-mode .tracking-error-box {
             background-color: #451a1a;
@@ -83,78 +84,75 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const translations = { 'th': { 'homepage': 'หน้าหลัก', 'trackYourPackageTitle': 'ติดตามพัสดุของคุณ', 'enterTrackingNumber': 'ป้อนหมายเลขติดตามพัสดุได้สูงสุด 10 หมายเลข โดยคั่นด้วยเครื่องหมายจุลภาค (,) หรือขึ้นบรรทัดใหม่', 'trackButton': 'ติดตาม', 'gettingStartedTitle': 'เริ่มต้นใช้งาน', 'calculateQuote': 'คำนวณค่าขนส่ง', 'createShipment': 'สร้างใบนำส่ง', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'enterTrackingNumberPlaceholder': 'กรอกหมายเลขติดตามพัสดุ', 'emergencyOnlyTitle': 'เฉพาะกรณีฉุกเฉิน', 'emergencySystemMessage': 'ระบบนี้จะถูกเปิดใช้งานในกรณีที่ระบบ MyDHL+ ไม่สามารถใช้งานได้เท่านั้น หากระบบ MyDHL+ สามารถกลับมาใช้งานได้ปกติแล้ว ระบบนี้จะถูกระงับใช้ภายใน 30 นาที ขอบคุณที่ใช้บริการ DHL Express', 'trackingDetailsTitle': 'รายละเอียดการจัดส่ง', 'multiTrackingResultTitle': 'ผลการติดตามพัสดุ', 'trackingNumberDisplay': 'หมายเลขติดตามพัสดุ:', 'status': 'สถานะ:', 'origin': 'ต้นทาง:', 'destination': 'ปลายทาง:', 'pieces': 'จำนวนกล่อง:', 'totalWeight': 'น้ำหนักรวม:', 'eventHistory': 'อัพเดทการจัดส่งทั้งหมด', 'eventAt': 'ที่', 'eventOn': 'เมื่อ', 'noEventsFound': 'ไม่พบประวัติเหตุการณ์', 'backToMain': 'กลับหน้าหลัก', 'trackingSimulated': 'กำลังติดตาม...', 'trackingError': 'เกิดข้อผิดพลาด:', 'serverError': 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'trackingResultUnexpected': 'ไม่พบข้อมูลการจัดส่ง', 'noValidNumbers': 'กรุณากรอกหมายเลขติดตามพัสดุ 10 หลักที่ถูกต้อง' }, 'en': { 'homepage': 'Home', 'trackYourPackageTitle': 'Track Your Shipment', 'enterTrackingNumber': 'Enter up to 10 tracking numbers, separated by a comma (,) or a new line.', 'trackButton': 'Track', 'gettingStartedTitle': 'Get Started', 'calculateQuote': 'Calculate Quote', 'createShipment': 'Create Shipment', 'allRightsReserved': 'All rights reserved.', 'enterTrackingNumberPlaceholder': 'Enter tracking number(s)', 'emergencyOnlyTitle': 'For Emergency Only', 'emergencySystemMessage': 'This system will be activated only if the MyDHL+ system is unavailable. If MyDHL+ system becomes operational again, this system will be temporarily suspended within 30 minutes. Thank you for using DHL Express.', 'trackingDetailsTitle': 'Shipment Details', 'multiTrackingResultTitle': 'Shipment Tracking Results', 'trackingNumberDisplay': 'Tracking Number:', 'status': 'Status:', 'origin': 'Origin:', 'destination': 'Destination:', 'pieces': 'Piece(s):', 'totalWeight': 'Total Weight:', 'eventHistory': 'All Shipment Updates', 'eventAt': 'at', 'eventOn': 'on', 'noEventsFound': 'No event history found', 'backToMain': 'Back to Main', 'trackingSimulated': 'Tracking...', 'trackingError': 'An error occurred:', 'serverError': 'Could not connect to the server', 'trackingResultUnexpected': 'Shipment information not found', 'noValidNumbers': 'Please enter valid 10-digit tracking numbers.' } };
+            const translations = { 'th': { 'homepage': 'หน้าหลัก', 'trackYourPackageTitle': 'ติดตามพัสดุของคุณ', 'enterTrackingNumber': 'ป้อนหมายเลขติดตามพัสดุได้สูงสุด 10 หมายเลข โดยคั่นด้วยเครื่องหมายจุลภาค (,) หรือขึ้นบรรทัดใหม่', 'trackButton': 'ติดตาม', 'gettingStartedTitle': 'เริ่มต้นใช้งาน', 'calculateQuote': 'คำนวณค่าขนส่ง', 'createShipment': 'สร้างใบนำส่ง', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'enterTrackingNumberPlaceholder': 'กรอกหมายเลขติดตามพัสดุ', 'emergencyOnlyTitle': 'เฉพาะกรณีฉุกเฉิน', 'emergencySystemMessage': 'ระบบนี้จะถูกเปิดใช้งานในกรณีที่ระบบ MyDHL+ ไม่สามารถใช้งานได้เท่านั้น หากระบบ MyDHL+ สามารถกลับมาใช้งานได้ปกติแล้ว ระบบนี้จะถูกระงับใช้ภายใน 30 นาที ขอบคุณที่ใช้บริการ DHL Express', 'trackingDetailsTitle': 'รายละเอียดการจัดส่ง', 'multiTrackingResultTitle': 'ผลการติดตามพัสดุ', 'trackingNumberDisplay': 'หมายเลขติดตามพัสดุ:', 'status': 'สถานะ:', 'origin': 'ต้นทาง:', 'destination': 'ปลายทาง:', 'pieces': 'จำนวนกล่อง:', 'totalWeight': 'น้ำหนักรวม:', 'eventHistory': 'อัพเดทการจัดส่งทั้งหมด', 'eventAt': 'ที่', 'eventOn': 'เมื่อ', 'noEventsFound': 'ไม่พบประวัติเหตุการณ์', 'backToMain': 'กลับหน้าหลัก', 'trackingSimulated': 'กำลังติดตาม...', 'trackingError': 'ไม่สามารถติดตามหมายเลขต่อไปนี้ได้:', 'serverError': 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'trackingResultUnexpected': 'ไม่พบข้อมูลการจัดส่ง', 'noValidNumbers': 'กรุณากรอกหมายเลขติดตามพัสดุ 10 หลักที่ถูกต้อง' }, 'en': { 'homepage': 'Home', 'trackYourPackageTitle': 'Track Your Shipment', 'enterTrackingNumber': 'Enter up to 10 tracking numbers, separated by a comma (,) or a new line.', 'trackButton': 'Track', 'gettingStartedTitle': 'Get Started', 'calculateQuote': 'Calculate Quote', 'createShipment': 'Create Shipment', 'allRightsReserved': 'All rights reserved.', 'enterTrackingNumberPlaceholder': 'Enter tracking number(s)', 'emergencyOnlyTitle': 'For Emergency Only', 'emergencySystemMessage': 'This system will be activated only if the MyDHL+ system is unavailable. If MyDHL+ system becomes operational again, this system will be temporarily suspended within 30 minutes. Thank you for using DHL Express.', 'trackingDetailsTitle': 'Shipment Details', 'multiTrackingResultTitle': 'Shipment Tracking Results', 'trackingNumberDisplay': 'Tracking Number:', 'status': 'Status:', 'origin': 'Origin:', 'destination': 'Destination:', 'pieces': 'Piece(s):', 'totalWeight': 'Total Weight:', 'eventHistory': 'All Shipment Updates', 'eventAt': 'at', 'eventOn': 'on', 'noEventsFound': 'No event history found', 'backToMain': 'Back to Main', 'trackingSimulated': 'Tracking...', 'trackingError': 'Could not track the following numbers:', 'serverError': 'Could not connect to the server', 'trackingResultUnexpected': 'Shipment information not found', 'noValidNumbers': 'Please enter valid 10-digit tracking numbers.' } };
             let currentLanguage = localStorage.getItem('language') || 'th';
             let lastResultsData = null; 
             function getTranslatedText(key, replacements = {}) { let text = translations[currentLanguage]?.[key] || key; for (const p in replacements) { text = text.replace(`{${p}}`, replacements[p]); } return text; }
             function updateContentLanguage() { document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = getTranslatedText(el.getAttribute('data-i18n')); }); document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = getTranslatedText(el.getAttribute('data-i18n-placeholder')); }); document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase(); document.title = `DHL Backup Solution - ${getTranslatedText('homepage')}`; }
-            function setupTheme() { const themeToggle = document.getElementById('theme-toggle'); const lightIcon = document.getElementById('theme-icon-light'); const darkIcon = document.getElementById('theme-icon-dark'); const enableDarkMode = () => { document.body.classList.add('dark-mode'); localStorage.setItem('theme', 'dark'); lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden'); }; const disableDarkMode = () => { document.body.classList.remove('dark-mode'); localStorage.setItem('theme', 'light'); lightIcon.classList.add('hidden'); darkIcon.classList.remove('hidden'); }; themeToggle.addEventListener('click', () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode()); if (localStorage.getItem('theme') === 'dark') { enableDarkMode(); } else { disableDarkMode(); } }
-            function setupLanguageSwitch() { document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden')); document.querySelectorAll('[data-lang]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); currentLanguage = e.target.dataset.lang; localStorage.setItem('language', currentLanguage); updateContentLanguage(); if (!trackingDisplayPage.classList.contains('hidden-page') && lastResultsData) { displayMultiTrackingResults(lastResultsData); } document.getElementById('language-dropdown').classList.add('hidden'); }); }); }
+            function setupTheme() { const themeToggle = document.getElementById('theme-toggle'); const lightIcon = document.getElementById('theme-icon-light'); const darkIcon = document.getElementById('theme-icon-dark'); const enableDarkMode = () => { document.body.classList.add('dark-mode'); localStorage.setItem('theme', 'dark'); lightIcon.classList.add('hidden'); darkIcon.classList.add('hidden'); }; const disableDarkMode = () => { document.body.classList.remove('dark-mode'); localStorage.setItem('theme', 'light'); lightIcon.classList.add('hidden'); darkIcon.classList.remove('hidden'); }; themeToggle.addEventListener('click', () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode()); if (localStorage.getItem('theme') === 'dark') { enableDarkMode(); } else { disableDarkMode(); } }
+            function setupLanguageSwitch() { document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden')); document.querySelectorAll('[data-lang]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); currentLanguage = e.target.dataset.lang; localStorage.setItem('language', currentLanguage); updateContentLanguage(); if (!trackingDisplayPage.classList.contains('hidden-page') && lastResultsData) { displayCombinedResults(lastResultsData.successData, lastResultsData.errorDetails); } document.getElementById('language-dropdown').classList.add('hidden'); }); }); }
             
             const corporatePage = document.getElementById('corporate-page');
             const trackingDisplayPage = document.getElementById('tracking-display-page');
 
-            function displayMultiTrackingResults(data, isError = false, errorData = {}) {
-                lastResultsData = data; 
+            function displayCombinedResults(successData, errorDetails) {
+                lastResultsData = { successData, errorDetails }; // Store for language change
                 const contentDiv = document.getElementById('tracking-content');
-                
-                if (isError) {
-                    const errorTitle = errorData.title || 'Error';
-                    const errorDetail = errorData.detail || 'An unknown error occurred.';
-                    const additionalDetails = errorData.additionalDetails || [];
-                    
-                    let additionalDetailsHtml = '';
-                    if (Array.isArray(additionalDetails) && additionalDetails.length > 0) {
-                        additionalDetailsHtml = additionalDetails.map(detail => `<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${detail}</p>`).join('');
-                    }
+                let html = '';
 
-                    contentDiv.innerHTML = `
+                // 1. Render Errors at the top
+                if (errorDetails && errorDetails.length > 0) {
+                    const errorList = errorDetails.map(detail => `<p class="text-sm font-mono">${detail}</p>`).join('');
+                    html += `
                         <div class="tracking-error-box">
-                            <h4 class="font-bold text-lg text-red-700 dark:text-red-400">${errorTitle}</h4>
-                            <p class="text-red-600 dark:text-red-300 font-semibold mt-1">${errorDetail}</p>
-                            <div class="mt-2">${additionalDetailsHtml}</div>
-                        </div>`;
-                    return;
+                            <h4 class="font-bold text-lg text-red-700 dark:text-red-400">${getTranslatedText('trackingError')}</h4>
+                            <div class="mt-2 space-y-1">${errorList}</div>
+                        </div>
+                    `;
                 }
 
-                const shipments = data.shipments || [];
-                if (shipments.length === 0) {
-                    contentDiv.innerHTML = `<p class="text-center p-4">${getTranslatedText('trackingResultUnexpected')}</p>`;
-                    return;
-                }
-
-                contentDiv.innerHTML = shipments.map(shipment => {
-                    const trackingNumber = shipment?.shipmentTrackingNumber || 'N/A';
-                    const status = shipment?.status || getTranslatedText('trackingResultUnexpected');
-                    const shipperLocation = shipment?.shipperDetails?.serviceArea?.[0]?.description || 'N/A';
-                    const receiverLocation = shipment?.receiverDetails?.serviceArea?.[0]?.description || 'N/A';
-                    const pieceCount = shipment?.numberOfPieces ?? 0;
-                    const weightValue = shipment?.totalWeight;
-                    const weightUnit = shipment?.unitOfMeasurements?.toLowerCase() === 'metric' ? 'KG' : 'LBS';
-                    const totalWeight = weightValue ? `${weightValue} ${weightUnit}` : 'N/A';
-                    
-                    return `
-                        <div class="accordion-item">
-                            <button class="accordion-header w-full text-left" aria-expanded="false">
-                                <div class="flex flex-col w-full">
-                                    <div class="flex justify-between items-center w-full">
-                                        <div>
-                                            <h4 class="font-bold text-lg">${trackingNumber}</h4>
-                                            <p class="accordion-header-info text-green-600 dark:text-green-400 font-semibold">${status}</p>
+                // 2. Render Successful Shipments
+                const shipments = successData?.shipments || [];
+                if (shipments.length > 0) {
+                    html += shipments.map(shipment => {
+                        const trackingNumber = shipment?.shipmentTrackingNumber || 'N/A';
+                        const status = shipment?.status || getTranslatedText('trackingResultUnexpected');
+                        const shipperLocation = shipment?.shipperDetails?.serviceArea?.[0]?.description || 'N/A';
+                        const receiverLocation = shipment?.receiverDetails?.serviceArea?.[0]?.description || 'N/A';
+                        const pieceCount = shipment?.numberOfPieces ?? 0;
+                        const weightValue = shipment?.totalWeight;
+                        const weightUnit = shipment?.unitOfMeasurements?.toLowerCase() === 'metric' ? 'KG' : 'LBS';
+                        const totalWeight = weightValue ? `${weightValue} ${weightUnit}` : 'N/A';
+                        
+                        return `
+                            <div class="accordion-item">
+                                <button class="accordion-header w-full text-left" aria-expanded="false">
+                                    <div class="flex flex-col w-full">
+                                        <div class="flex justify-between items-center w-full">
+                                            <div>
+                                                <h4 class="font-bold text-lg">${trackingNumber}</h4>
+                                                <p class="accordion-header-info text-green-600 dark:text-green-400 font-semibold">${status}</p>
+                                            </div>
+                                            <svg class="accordion-arrow w-6 h-6 flex-shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                         </div>
-                                        <svg class="accordion-arrow w-6 h-6 flex-shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-sm mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                                            <div><p class="font-semibold">${getTranslatedText('origin')}</p><p class="truncate">${shipperLocation}</p></div>
+                                            <div><p class="font-semibold">${getTranslatedText('destination')}</p><p class="truncate">${receiverLocation}</p></div>
+                                            <div><p class="font-semibold">${getTranslatedText('pieces')}</p><p>${pieceCount}</p></div>
+                                            <div><p class="font-semibold">${getTranslatedText('totalWeight')}</p><p>${totalWeight}</p></div>
+                                        </div>
                                     </div>
-                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-sm mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
-                                        <div><p class="font-semibold">${getTranslatedText('origin')}</p><p class="truncate">${shipperLocation}</p></div>
-                                        <div><p class="font-semibold">${getTranslatedText('destination')}</p><p class="truncate">${receiverLocation}</p></div>
-                                        <div><p class="font-semibold">${getTranslatedText('pieces')}</p><p>${pieceCount}</p></div>
-                                        <div><p class="font-semibold">${getTranslatedText('totalWeight')}</p><p>${totalWeight}</p></div>
-                                    </div>
-                                </div>
-                            </button>
-                            <div class="accordion-body"><div class="accordion-body-content">${generateShipmentTimelineHTML(shipment)}</div></div>
-                        </div>`;
-                }).join('');
+                                </button>
+                                <div class="accordion-body"><div class="accordion-body-content">${generateShipmentTimelineHTML(shipment)}</div></div>
+                            </div>`;
+                    }).join('');
+                }
+
+                if (html === '') {
+                    html = `<p class="text-center p-4">${getTranslatedText('trackingResultUnexpected')}</p>`;
+                }
+
+                contentDiv.innerHTML = html;
 
                 contentDiv.querySelectorAll('.accordion-header').forEach(button => {
                     button.addEventListener('click', () => {
@@ -219,6 +217,32 @@
             
             function cleanTrackingNumbers(input) { return input.replace(/[^0-9,\n]/g, '').replace(/[\n\s]+/g, ',').split(',').map(s => s.trim()).filter(s => s.length === 10).filter((item, index, self) => self.indexOf(item) === index).slice(0, 10).join(','); }
             
+            function parseTrackingError(errorData) {
+                const validNumbers = [];
+                const invalidDetails = [];
+                const foundRegex = /Shipments Found for shipmentTrackingNumber (\d{10})/;
+                const notFoundRegex = /No Shipments Found for shipmentTrackingNumber (\d{10})/;
+
+                if (errorData.additionalDetails && Array.isArray(errorData.additionalDetails)) {
+                    errorData.additionalDetails.forEach(detail => {
+                        const foundMatch = detail.match(foundRegex);
+                        const notFoundMatch = detail.match(notFoundRegex);
+
+                        if (foundMatch && foundMatch[1]) {
+                            validNumbers.push(foundMatch[1]);
+                        } else if (notFoundMatch) {
+                            invalidDetails.push(`No Shipments Found for ${notFoundMatch[1]}`);
+                        }
+                    });
+                }
+                
+                if (validNumbers.length === 0 && invalidDetails.length === 0 && errorData.detail) {
+                    invalidDetails.push(errorData.detail);
+                }
+
+                return { validNumbers, invalidDetails };
+            }
+
             document.getElementById('track-button').addEventListener('click', async () => {
                 const trackButton = document.getElementById('track-button');
                 const trackingInput = document.getElementById('tracking-number-input').value;
@@ -249,16 +273,31 @@
                     const data = await response.json();
 
                     if (response.ok) {
-                        displayMultiTrackingResults(data);
+                        displayCombinedResults(data, []);
                     } else {
-                        displayMultiTrackingResults(null, true, data);
+                        const { validNumbers, invalidDetails } = parseTrackingError(data);
+
+                        if (validNumbers.length > 0) {
+                            const validNumbersString = validNumbers.join(',');
+                            const newApiUrl = `${proxyUrl}${encodeURIComponent(`https://dbs-back-viruzjokes-projects.vercel.app/api/track?trackingNumber=${validNumbersString}`)}`;
+                            const newResponse = await fetch(newApiUrl);
+                            const newData = await newResponse.json();
+
+                            if (newResponse.ok) {
+                                displayCombinedResults(newData, invalidDetails);
+                            } else {
+                                displayCombinedResults(null, [data.detail, ...invalidDetails]);
+                            }
+                        } else {
+                            displayCombinedResults(null, invalidDetails.length > 0 ? invalidDetails : [data.detail]);
+                        }
                     }
                     showTrackingPage();
 
                 } catch (error) {
-                    // This block catches network errors or JSON parsing errors
                     console.error("Fetch Error:", error);
-                    trackingResultDiv.textContent = `${getTranslatedText('trackingError')} ${error.message}`;
+                    displayCombinedResults(null, [getTranslatedText('serverError')]);
+                    showTrackingPage();
                 } finally {
                     trackButton.disabled = false;
                 }
