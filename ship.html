@@ -1823,19 +1823,17 @@
             let now = new Date();
             const hours = now.getHours();
             const minutes = now.getMinutes();
-            let day = now.getDay();
 
+            // Check if current time is after the cutoff (4:30 PM)
             const isAfterCutoff = hours > 16 || (hours === 16 && minutes > 30);
 
             if (isAfterCutoff) {
-                now.setDate(now.getDate() + 1);
-                day = now.getDay();
+                now.setDate(now.getDate() + 1); // Move to the next day
             }
 
-            if (day === 6) { 
-                now.setDate(now.getDate() + 2);
-            } else if (day === 0) {
-                now.setDate(now.getDate() + 1);
+            // Check if the calculated day is a Sunday (getDay() returns 0 for Sunday)
+            if (now.getDay() === 0) { 
+                now.setDate(now.getDate() + 1); // If it's Sunday, skip to Monday
             }
 
             const nextValidDateStr = now.toISOString().slice(0, 10);
