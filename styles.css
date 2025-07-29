@@ -3,6 +3,27 @@
   แก้ไข Progress Bar ให้แม่นยำและข้อความไม่ตกบรรทัด
 */
 
+/* Faded Background Style */
+.with-faded-bg {
+    position: relative;
+    /* overflow: hidden; <-- THIS WAS THE PROBLEM, REMOVED IT */
+}
+
+.with-faded-bg::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background-image: url('DBS_Background.jpg'); /* <-- แก้ชื่อไฟล์รูปภาพตรงนี้ */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.1; /* <-- ปรับความจางตรงนี้ */
+}
+
 /* --- Base and Layout --- */
 body {
     font-family: 'Inter', sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
