@@ -577,7 +577,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const translations = {
-            'th': { 'leaveSiteTitle': 'ออกจากหน้านี้?', 'leaveSiteBody': 'การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก', 'stayButton': 'อยู่ต่อ', 'leaveButton': 'ออก', 'createShipment':'สร้างใบนำส่ง','addressStep':'ที่อยู่','shipmentDetailsStep':'ชิปเมนต์','packageStep':'แพ็คเกจ','paymentStep':'การชำระเงิน','docsStep':'เอกสาร','pickupStep':'การนัดรับสินค้า','summaryStep':'สรุป','shipperInfo':'ข้อมูลผู้ส่ง','receiverInfo':'ข้อมูลผู้รับ','shipperName':'ชื่อผู้ส่ง','shipperCompany':'บริษัทผู้ส่ง','shipperPhone':'เบอร์โทรผู้ส่ง','shipperAddress1':'ที่อยู่ 1','shipperAddress2':'ที่อยู่ 2','shipperAddress3':'ที่อยู่ 3','shipperCountry':'ประเทศ','shipperPostalCode':'รหัสไปรษณีย์','shipperCity':'เมือง','receiverName':'ชื่อผู้รับ','receiverCompany':'บริษัทผู้รับ','receiverPhone':'เบอร์โทรผู้รับ','receiverAddress1':'ที่อยู่ 1','receiverAddress2':'ที่อยู่ 2','receiverAddress3':'ที่อยู่ 3','receiverCountry':'ประเทศ','receiverPostalCode':'รหัสไปรษณีย์','receiverCity':'เมือง','document':'เอกสาร','package':'พัสดุ','addLineItem':'เพิ่มรายการสินค้า','shipmentRef':'เลขที่อ้างอิง (optional)','protectShipment':'เพิ่มความคุ้มครองการจัดส่ง (ประกัน)','packageDetails':'รายละเอียดแพ็คเกจ','addPiece':'เพิ่มกล่อง','shipperAccount':'บัญชีผู้ส่ง','billingAccount':'บัญชีสำหรับวางบิล', 'dutiesAccount':'บัญชีผู้ชำระภาษี','incoterm':'Incoterm','shipmentDate':'วันที่ส่ง','docUpload':'อัปโหลดเอกสาร','docUploadDesc':'อัปโหลดเอกสารเพิ่มเติม (ไม่เกิน 5MB)','summary':'สรุปข้อมูล','previous':'ย้อนกลับ','next':'ถัดไป','createShipmentBtn':'สร้างใบนำส่ง','allRightsReserved':'สงวนลิขสิทธิ์.','fillAllFields':'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน','typeOrSelectCountry': 'พิมพ์หรือเลือกประเทศ', 'backToMain': 'กลับหน้าหลัก', 'shipperEmail': 'อีเมลผู้ส่ง', 'receiverEmail': 'อีเมลผู้รับ', 'shipperVat': 'เลขประจำตัวผู้เสียภาษีผู้ส่ง', 'receiverVat': 'เลขประจำตัวผู้เสียภาษีผู้รับ', 'whatIsTheItem': 'สินค้าคืออะไร?', 'commodityCode': 'รหัสพิกัดศุลกากร', 'quantity': 'จำนวน', 'units': 'หน่วย', 'valuePerItem': 'มูลค่า (ต่อชิ้น)', 'weight': 'น้ำหนัก (KG)', 'whereWasItMade': 'ผลิตที่ประเทศ', 'totalUnits': 'จำนวนรวม:', 'totalWeight': 'น้ำหนักรวม:', 'totalValue': 'มูลค่ารวม:', 'insuredValue': 'มูลค่าประกัน', 'describeDocuments': 'ระบุประเภทเอกสารในชิปเมนต์ของคุณ', 'fillAllFieldsInItem': 'กรุณากรอกข้อมูลในรายการก่อนหน้าให้ครบถ้วน', 'customsInvoiceDetails': 'รายละเอียดใบกำกับสินค้า', 'createInvoice': 'สร้าง Invoice', 'useMyOwnInvoice': 'ใช้ Invoice ของฉัน', 'invoiceNumber': 'หมายเลข Invoice', 'itemDescription': 'รายละเอียดสินค้า', 'totalItemValue': 'มูลค่ารวม', 'summarizeShipment': 'สรุปรายการสินค้าในชิปเมนต์', 'shipmentDescription': '(shipment description)', 'totalPackages': 'จำนวนแพ็คเกจรวม:', 'totalWeightKg': 'น้ำหนักรวม:', 'lengthCm': 'ยาว (ซม.)', 'widthCm': 'กว้าง (ซม.)', 'heightCm': 'สูง (ซม.)', 'weightKg': 'น้ำหนัก (Kg)', 'dimensionsCm': 'ขนาด (ซม.)', 'fillAllFieldsInPiece': 'กรุณากรอกข้อมูลในแพ็คเกจก่อนหน้าให้ครบถ้วน', 'receiverWillPay': 'ผู้รับชำระภาษี', 'uploadCustomsDocs': 'อัปโหลดเอกสารศุลกากรของคุณ', 'uploadDocsDesc1': 'คุณสามารถอัปโหลดและส่งใบกำกับสินค้าหรือเอกสารทางศุลกากรอื่นๆ ในรูปแบบไฟล์ภาพและส่งมาให้เราทางอิเล็กทรอนิกส์ได้', 'uploadDocsDesc2': 'หากคุณไม่ได้อัปโหลดรูปภาพเอกสาร โปรดอย่าลืมพิมพ์และจัดเตรียมเอกสารของคุณมาพร้อมกับชิปเมนต์', 'uploadDocsQuestion': 'คุณต้องการอัปโหลดไฟล์ภาพหรือไม่?', 'yes': 'ใช่', 'browseForFile': 'เลือกไฟล์', 'orDropHere': ' หรือลากมาวางที่นี่', 'fileTypesAllowed': 'ประเภทไฟล์ที่อนุญาต: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, หรือ PDF', 'maxFileSize': 'ขนาดไฟล์สูงสุด: 5 MB', 'fileNameEnglishOnly': 'ชื่อไฟล์ต้องเป็นภาษาอังกฤษเท่านั้น', 'pickupYes': 'ใช่ – นัดรับสินค้า', 'pickupNo': 'ไม่ – ไม่ต้องการนัดรับ', 'pickupDropOffLink': 'ฉันสามารถนำส่งพัสดุได้ที่ไหน?', 'pickupSendingOn': 'ฉันจะส่งของในวันที่', 'pickupWindow': 'ช่วงเวลานัดรับ – เวลาที่พนักงานอาจมาถึงและพัสดุพร้อม', 'pickupWindowHint': 'กรุณาเผื่อช่วงเวลาอย่างน้อย 90 นาที', 'pickupLocation': 'พนักงานควรไปรับพัสดุที่ไหน?', 'pickupTotalWeight': 'น้ำหนักรวมของพัสดุ', 'pickupInstructions': 'คำแนะนำสำหรับพนักงาน (ถ้ามี)', 'pickupAddress': 'ที่อยู่สำหรับนัดรับ', 'editAddress': 'แก้ไข', 'saveAddress': 'บันทึก', 'editShipment': 'แก้ไขชิปเมนต์', 'summaryShipper': 'ผู้ส่ง', 'summaryReceiver': 'ผู้รับ', 'summaryShipmentInfo': 'ข้อมูลชิปเมนต์', 'summaryPackageInfo': 'ข้อมูลแพ็คเกจ', 'summaryPaymentInfo': 'ข้อมูลการชำระเงิน', 'summaryDocumentInfo': 'ข้อมูลเอกสาร', 'summaryPickupInfo': 'ข้อมูลการนัดรับสินค้า', 'requestPickup': 'ต้องการนัดรับสินค้า', 'summaryPickupDate': 'วันที่นัดรับ', 'summaryPickupTime': 'เวลานัดรับ', 'phoneMinLength': 'เบอร์โทรศัพท์ต้องมีอย่างน้อย 4 ตัวอักษร', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account Number ต้องมี 9 ตัวอักษร', 'uploadLabelOwnInvoice': 'อัปโหลดรูปภาพใบกำกับสินค้าของคุณ', 'uploadLabelCreateInvoice': "DHL จะสร้างใบกำกับสินค้าอิเล็กทรอนิกส์จากรายละเอียดที่คุณให้ไว้สำหรับชิปเมนต์นี้", 'creatingShipment': 'กำลังสร้างใบนำส่ง...', 'apiErrorTitle': 'เกิดข้อผิดพลาด', 'multipleErrorsFound': 'พบปัญหาหลายรายการ', 'useShipperForBilling': 'ใช้บัญชีนี้สำหรับชำระค่าขนส่ง', 'selectPrintSize': 'กรุณาเลือกขนาดในการปริ้น', 'printA4': 'ขนาด A4', 'printLabel': 'ขนาด Label', 'selectPrintSizeError': 'กรุณาเลือกขนาดในการปริ้นก่อนสร้างใบนำส่ง'
+            'th': { 'leaveSiteTitle': 'ออกจากหน้านี้?', 'leaveSiteBody': 'การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก', 'stayButton': 'อยู่ต่อ', 'leaveButton': 'ออก', 'createShipment':'สร้างใบนำส่ง','addressStep':'ที่อยู่','shipmentDetailsStep':'ชิปเมนต์','packageStep':'แพ็คเกจ','paymentStep':'การชำระเงิน','docsStep':'เอกสาร','pickupStep':'การนัดรับสินค้า','summaryStep':'สรุป','shipperInfo':'ข้อมูลผู้ส่ง','receiverInfo':'ข้อมูลผู้รับ','shipperName':'ชื่อผู้ส่ง','shipperCompany':'บริษัทผู้ส่ง','shipperPhone':'เบอร์โทรผู้ส่ง','shipperAddress1':'ที่อยู่ 1','shipperAddress2':'ที่อยู่ 2','shipperAddress3':'ที่อยู่ 3','shipperCountry':'ประเทศ','shipperPostalCode':'รหัสไปรษณีย์','shipperCity':'เมือง','receiverName':'ชื่อผู้รับ','receiverCompany':'บริษัทผู้รับ','receiverPhone':'เบอร์โทรผู้รับ','receiverAddress1':'ที่อยู่ 1','receiverAddress2':'ที่อยู่ 2','receiverAddress3':'ที่อยู่ 3','receiverCountry':'ประเทศ','receiverPostalCode':'รหัสไปรษณีย์','receiverCity':'เมือง','document':'เอกสาร','package':'พัสดุ','addLineItem':'เพิ่มรายการสินค้า','shipmentRef':'เลขที่อ้างอิง (optional)','protectShipment':'เพิ่มความคุ้มครองการจัดส่ง (ประกัน)','packageDetails':'รายละเอียดแพ็คเกจ','addPiece':'เพิ่มกล่อง','shipperAccount':'บัญชีผู้ส่ง','billingAccount':'บัญชีสำหรับวางบิล', 'dutiesAccount':'บัญชีผู้ชำระภาษี','incoterm':'Incoterm','shipmentDate':'วันที่ส่ง','docUpload':'อัปโหลดเอกสาร','docUploadDesc':'อัปโหลดเอกสารเพิ่มเติม (ไม่เกิน 5MB)','summary':'สรุปข้อมูล','previous':'ย้อนกลับ','next':'ถัดไป','createShipmentBtn':'สร้างใบนำส่ง','allRightsReserved':'สงวนลิขสิทธิ์.','fillAllFields':'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน','typeOrSelectCountry': 'พิมพ์หรือเลือกประเทศ', 'backToMain': 'กลับหน้าหลัก', 'shipperEmail': 'อีเมลผู้ส่ง', 'receiverEmail': 'อีเมลผู้รับ', 'shipperVat': 'เลขประจำตัวผู้เสียภาษีผู้ส่ง', 'receiverVat': 'เลขประจำตัวผู้เสียภาษีผู้รับ', 'whatIsTheItem': 'สินค้าคืออะไร?', 'commodityCode': 'รหัสพิกัดศุลกากร', 'quantity': 'จำนวน', 'units': 'หน่วย', 'valuePerItem': 'มูลค่า (ต่อชิ้น)', 'weight': 'น้ำหนัก (KG)', 'whereWasItMade': 'ผลิตที่ประเทศ', 'totalUnits': 'จำนวนรวม:', 'totalWeight': 'น้ำหนักรวม:', 'totalValue': 'มูลค่ารวม:', 'insuredValue': 'มูลค่าประกัน', 'describeDocuments': 'ระบุประเภทเอกสารในชิปเมนต์ของคุณ', 'fillAllFieldsInItem': 'กรุณากรอกข้อมูลในรายการก่อนหน้าให้ครบถ้วน', 'customsInvoiceDetails': 'รายละเอียดใบกำกับสินค้า', 'createInvoice': 'สร้าง Invoice', 'useMyOwnInvoice': 'ใช้ Invoice ของฉัน', 'invoiceNumber': 'หมายเลข Invoice', 'itemDescription': 'รายละเอียดสินค้า', 'totalItemValue': 'มูลค่ารวม', 'summarizeShipment': 'สรุปรายการสินค้าในชิปเมนต์', 'shipmentDescription': '(shipment description)', 'totalPackages': 'จำนวนแพ็คเกจรวม:', 'totalWeightKg': 'น้ำหนักรวม:', 'lengthCm': 'ยาว (ซม.)', 'widthCm': 'กว้าง (ซม.)', 'heightCm': 'สูง (ซม.)', 'weightKg': 'น้ำหนัก (Kg)', 'dimensionsCm': 'ขนาด (ซม.)', 'fillAllFieldsInPiece': 'กรุณากรอกข้อมูลในแพ็คเกจก่อนหน้าให้ครบถ้วน', 'receiverWillPay': 'ผู้รับชำระภาษี', 'uploadCustomsDocs': 'อัปโหลดเอกสารศุลกากรของคุณ', 'uploadDocsDesc1': 'คุณสามารถอัปโหลดและส่งใบกำกับสินค้าหรือเอกสารทางศุลกากรอื่นๆ ในรูปแบบไฟล์ภาพและส่งมาให้เราทางอิเล็กทรอนิกส์ได้', 'uploadDocsDesc2': 'หากคุณไม่ได้อัปโหลดรูปภาพเอกสาร โปรดอย่าลืมพิมพ์และจัดเตรียมเอกสารของคุณมาพร้อมกับชิปเมนต์', 'uploadDocsQuestion': 'คุณต้องการอัปโหลดไฟล์ภาพหรือไม่?', 'yes': 'ใช่', 'browseForFile': 'เลือกไฟล์', 'orDropHere': ' หรือลากมาวางที่นี่', 'fileTypesAllowed': 'ประเภทไฟล์ที่อนุญาต: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, หรือ PDF', 'maxFileSize': 'ขนาดไฟล์สูงสุด: 5 MB', 'fileNameEnglishOnly': 'ชื่อไฟล์ต้องเป็นภาษาอังกฤษเท่านั้น', 'pickupYes': 'ใช่ – นัดรับสินค้า', 'pickupNo': 'ไม่ – ไม่ต้องการนัดรับ', 'pickupDropOffLink': 'ฉันสามารถนำส่งพัสดุได้ที่ไหน?', 'pickupSendingOn': 'ฉันจะส่งของในวันที่', 'pickupWindow': 'ช่วงเวลานัดรับ – เวลาที่พนักงานอาจมาถึงและพัสดุพร้อม', 'pickupWindowHint': 'กรุณาเผื่อช่วงเวลาอย่างน้อย 90 นาที', 'pickupLocation': 'พนักงานควรไปรับพัสดุที่ไหน?', 'pickupTotalWeight': 'น้ำหนักรวมของพัสดุ', 'pickupInstructions': 'คำแนะนำสำหรับพนักงาน (ถ้ามี)', 'pickupAddress': 'ที่อยู่สำหรับนัดรับ', 'editAddress': 'แก้ไข', 'saveAddress': 'บันทึก', 'editShipment': 'แก้ไขชิปเมนต์', 'summaryShipper': 'ผู้ส่ง', 'summaryReceiver': 'ผู้รับ', 'summaryShipmentInfo': 'ข้อมูลชิปเมนต์', 'summaryPackageInfo': 'ข้อมูลแพ็คเกจ', 'summaryPaymentInfo': 'ข้อมูลการชำระเงิน', 'summaryDocumentInfo': 'ข้อมูลเอกสาร', 'summaryPickupInfo': 'ข้อมูลการนัดรับสินค้า', 'requestPickup': 'ต้องการนัดรับสินค้า', 'summaryPickupDate': 'วันที่นัดรับ', 'summaryPickupTime': 'เวลานัดรับ', 'phoneMinLength': 'เบอร์โทรศัพท์ต้องมีอย่างน้อย 4 ตัวอักษร', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account Number ต้องมี 9 ตัวอักษร', 'uploadLabelOwnInvoice': 'อัปโหลดรูปภาพใบกำกับสินค้าของคุณ', 'uploadLabelCreateInvoice': "DHL จะสร้างใบกำกับสินค้าอิเล็กทรอนิกส์จากรายละเอียดที่คุณให้ไว้สำหรับชิปเมนต์นี้", 'creatingShipment': 'กำลังสร้างใบนำส่ง...', 'apiErrorTitle': 'เกิดข้อผิดพลาด', 'multipleProblemsFound': 'พบปัญหาหลายรายการ', 'useShipperForBilling': 'ใช้บัญชีนี้สำหรับชำระค่าขนส่ง', 'selectPrintSize': 'กรุณาเลือกขนาดในการปริ้น', 'printA4': 'ขนาด A4', 'printLabel': 'ขนาด Label', 'selectPrintSizeError': 'กรุณาเลือกขนาดในการปริ้นก่อนสร้างใบนำส่ง'
             },
             'en': { 'leaveSiteTitle': 'Leave Site?', 'leaveSiteBody': 'Changes you made may not be saved.', 'stayButton': 'Stay', 'leaveButton': 'Leave', 'createShipment':'Create Shipment','addressStep':'Address','shipmentDetailsStep':'Shipment','packageStep':'Package','paymentStep':'Payment','docsStep':'Documents','pickupStep':'Pickup','summaryStep':'Summary','shipperInfo':'Shipper Information','receiverInfo':'Receiver Information','shipperName':'Name','shipperCompany':'Company','shipperPhone':'Phone','shipperAddress1':'Address Line 1','shipperAddress2':'Address Line 2','shipperAddress3':'Address Line 3','shipperCountry':'Country','shipperPostalCode':'Postal Code','shipperCity':'City','receiverName':'Name','receiverCompany':'Company','receiverPhone':'Phone','receiverAddress1':'Address Line 1','receiverAddress2':'Address Line 2','receiverAddress3':'Address Line 3','receiverCountry':'Country','receiverPostalCode':'Postal Code','receiverCity':'City','document':'Document','package':'Package','addLineItem':'Add Line Item','shipmentRef':'Shipment Reference (optional)','protectShipment':'Protect Your Shipment (Insurance)','packageDetails':'Package Details','addPiece':'Add Piece','shipperAccount':'Shipper Account','billingAccount':'Billing Account', 'dutiesAccount':'Duties & Taxes Account','incoterm':'Incoterm','shipmentDate':'Shipment Date','docUpload':'Document Upload','docUploadDesc':'Upload additional documents (max 5MB)','pickupBooking':'Pickup Booking','requestPickup':'Request a pickup','pickupCloseTime':'Pickup Close Time','pickupLocation':'Pickup Location (e.g., Reception)','summary':'Summary','previous':'Previous','next':'Next','createShipmentBtn':'Create Shipment','allRightsReserved':'All rights reserved.','fillAllFields':'Please fill in all required fields.','typeOrSelectCountry': 'Type or select a country', 'backToMain': 'Back to Main', 'shipperEmail': 'Email Address', 'receiverEmail': 'Email Address', 'shipperVat': 'VAT / Tax ID', 'receiverVat': 'VAT / Tax ID', 'whatIsTheItem': 'What is the item?', 'commodityCode': 'Commodity Code', 'quantity': 'Quantity', 'units': 'Units', 'valuePerItem': 'Value (Per Item)', 'weight': 'Weight (KG)', 'whereWasItMade': 'Where was the item made?', 'totalUnits': 'Total Units:', 'totalWeight': 'Total Weight:', 'totalValue': 'Total Value:', 'insuredValue': 'Insured Value', 'describeDocuments': 'Describe the documents in your shipment', 'fillAllFieldsInItem': 'Please fill in the previous item completely.', 'customsInvoiceDetails': 'Customs Invoice Details', 'createInvoice': 'Create Invoice', 'useMyOwnInvoice': 'Use My Own Invoice', 'invoiceNumber': 'Invoice Number', 'itemDescription': 'Item Description', 'totalItemValue': 'Total Item Value', 'summarizeShipment': 'Summarize the contents of your shipment', 'shipmentDescription': '(shipment description)', 'totalPackages': 'Total Packages:', 'totalWeightKg': 'Total Weight:', 'lengthCm': 'Length (cm)', 'widthCm': 'Width (cm)', 'heightCm': 'Height (cm)', 'weightKg': 'Weight (Kg)', 'dimensionsCm': 'Dimensions (cm)', 'fillAllFieldsInPiece': 'Please fill in the previous package completely.', 'receiverWillPay': 'Receiver will pay', 'uploadCustomsDocs': 'Upload Your Customs Documents', 'uploadDocsDesc1': 'You can upload and submit your customs invoice or any other customs documents as image files and submit them to us electronically.', 'uploadDocsDesc2': 'If you do not upload document images, remember to print and provide your documents with your shipment.', 'uploadDocsQuestion': 'Would you like to upload image files?', 'yes': 'Yes', 'browseForFile': 'Browse for File', 'orDropHere': ' or Drop Here', 'fileTypesAllowed': 'File Type Allowed: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, or PDF', 'maxFileSize': 'Maximum file size: 5 MB', 'fileNameEnglishOnly': 'File name must be in English only', 'pickupYes': 'Yes – Schedule Pickup', 'pickupNo': 'No - Don\'t need to Pickup', 'pickupDropOffLink': 'Where can I drop off my shipment?', 'pickupSendingOn': 'I\'m sending my shipment on', 'pickupWindow': 'Pickup Window – When courier may arrive and shipment is ready', 'pickupWindowHint': 'Please allow at least 90 minutes for your Pickup Window', 'pickupLocation': 'Where should the courier pick up the shipment?', 'pickupTotalWeight': 'Total Pickup Weight', 'pickupInstructions': 'Instructions for the courier', 'pickupAddress': 'Pickup Address', 'editAddress': 'Edit', 'saveAddress': 'Save', 'editShipment': 'Edit Shipment', 'summaryShipper': 'Shipper', 'summaryReceiver': 'Receiver', 'summaryShipmentInfo': 'Shipment Information', 'summaryPackageInfo': 'Package Information', 'summaryPaymentInfo': 'Payment Information', 'summaryDocumentInfo': 'Document Information', 'summaryPickupInfo': 'Pickup Information', 'requestPickup': 'Request a pickup', 'summaryPickupDate': 'Pickup Date', 'summaryPickupTime': 'Pickup Time', 'phoneMinLength': 'Phone number must be at least 4 characters long', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account number must be 9 characters.', 'uploadLabelOwnInvoice': 'Upload an image of your customs invoice.', 'uploadLabelCreateInvoice': "DHL will create an electronic customs invoice from the details you've provided for this shipment.", 'creatingShipment': 'Creating shipment...', 'apiErrorTitle': 'An Error Occurred', 'multipleProblemsFound': 'Multiple problems found', 'useShipperForBilling': 'Use this account to pay for transportation charges', 'selectPrintSize': 'Please select a print size', 'printA4': 'A4 Size', 'printLabel': 'Label Size', 'selectPrintSizeError': 'Please select a print size before creating the shipment'
             }
@@ -1740,29 +1740,29 @@
             if (hasUnsavedChanges) { e.preventDefault(); e.returnValue = ''; return ''; }
         });
 
+        // --- MODIFICATION: Updated input event listener ---
         document.getElementById('ship-now-form').addEventListener('input', (e) => {
             hasUnsavedChanges = true;
             const target = e.target;
             const id = target.id;
+            const asciiOnlyRegex = /[^\u0000-\u007F]/g;
 
             if (id.includes('-account')) {
-                let value = target.value;
-                value = value.replace(/[^0-9]/g, '');
-                target.value = value;
+                target.value = target.value.replace(/[^0-9]/g, '');
                 updateInputValidationState(target);
             } else if (id.includes('-city')) {
-                target.value = target.value.toUpperCase();
+                // Apply both ASCII only and uppercase
+                target.value = target.value.replace(asciiOnlyRegex, '').toUpperCase();
             } else {
-                const asciiOnlyRegex = /[^\u0000-\u007F]/g;
-                const phoneRegex = /[^\d+-]/g;
-                const numberOnlyRegex = /[^\d]/g;
-
-                if (id.includes('name') || id.includes('company') || id.includes('address') || id.includes('postalcode') || id.includes('shipment-reference') || target.classList.contains('item-description') || id === 'invoice-number' || id === 'summarize-shipment') {
+                const phoneRegex = /[^\d+\-()\s]/g; // Allow digits, +, -, (), space
+                
+                // Apply ASCII only to a broader range of fields
+                if (id.includes('name') || id.includes('company') || id.includes('address') || id.includes('postalcode') || id.includes('shipment-reference') || target.classList.contains('item-description') || id === 'invoice-number' || id === 'summarize-shipment' || id.includes('-email') || id.includes('-vat')) {
                     target.value = target.value.replace(asciiOnlyRegex, '');
                 } else if (target.type === 'tel') {
                     target.value = target.value.replace(phoneRegex, '');
                 } else if (id === 'insurance-value') {
-                    target.value = target.value.replace(numberOnlyRegex, '');
+                    target.value = target.value.replace(/[^\d]/g, '');
                 }
             }
             if (target.matches('input[required], select[required]')) {
@@ -1820,6 +1820,7 @@
             }
         });
 
+        // --- MODIFICATION: Updated confirm shipment button click handler ---
         document.getElementById('confirm-shipment-button').addEventListener('click', async (event) => {
             event.preventDefault();
             const loadingModal = document.getElementById('loading-modal');
@@ -1854,12 +1855,12 @@
                     body: JSON.stringify(payload)
                 });
 
+                const responseData = await response.json();
+
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw errorData;
+                    throw responseData; // Throw the parsed JSON error response
                 }
                 
-                const responseData = await response.json();
                 sessionStorage.setItem('shipmentResponse', JSON.stringify(responseData));
                 sessionStorage.setItem('shipmentLanguage', currentLanguage);
                 
@@ -1872,15 +1873,27 @@
                 let errorTitle = getTranslatedText('apiErrorTitle');
                 let errorDetailsHtml = error.detail || error.message || 'An unknown error occurred.';
 
-                if (error.title && error.title.includes("Multiple problems") && Array.isArray(error.additionalDetails)) {
-                    errorTitle = getTranslatedText('multipleErrorsFound');
-                    const detailsList = error.additionalDetails.map(detail => `<li>${detail.message}</li>`).join('');
-                    errorDetailsHtml = `<ul class="error-details-list">${detailsList}</ul>`;
+                if ((error.title && error.title.toLowerCase().includes("multiple problem")) || (Array.isArray(error.additionalDetails) && error.additionalDetails.length > 0)) {
+                    errorTitle = getTranslatedText('multipleProblemsFound');
+                    
+                    let additionalDetailsContent = '';
+                    if (Array.isArray(error.additionalDetails)) {
+                        const detailsList = error.additionalDetails.map(detail => {
+                            if (typeof detail === 'string') {
+                                return `<li>${detail}</li>`;
+                            } else if (detail.message) {
+                                return `<li>${detail.message}</li>`;
+                            }
+                            return '';
+                        }).join('');
+                        additionalDetailsContent = `<ul class="error-details-list">${detailsList}</ul>`;
+                    }
+                    
+                    errorDetailsHtml = `${error.detail || error.message || ''}<br>${additionalDetailsContent}`;
                 }
 
-                formMsg.innerHTML = `<span class="font-bold">${errorTitle}</span>${errorDetailsHtml}`;
-                formMsg.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
-                // --- MODIFIED: Scroll to the error message ---
+                formMsg.innerHTML = `<div class="text-left w-full"><span class="font-bold">${errorTitle}</span><br>${errorDetailsHtml}</div>`;
+                formMsg.className = 'p-4 rounded-md flex bg-red-100 text-red-700 break-words';
                 formMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } finally {
                 loadingModal.classList.add('hidden');
@@ -1978,6 +1991,7 @@
             dropdown.classList.add('hidden');
         }
 
+        // --- MODIFICATION: Updated address validation logic ---
         async function fetchAddressSuggestions(countryCode, value, type, inputElement, prefix) {
             if (!countryCode || value.length < 3) {
                 hideAddressDropdown();
@@ -2007,20 +2021,27 @@
 
         function displayAddressSuggestions(data, inputElement, prefix) {
             const dropdown = getOrCreateAddressDropdown();
-            // --- MODIFIED: No longer filter out results with null postal codes ---
-            const locations = data?.postalLocationList;
+            let locations = data?.postalLocationList;
 
             if (!locations || locations.length === 0) {
                 hideAddressDropdown();
                 return;
             }
 
-            // --- MODIFIED: Handle null postal codes gracefully for display ---
+            const hasPostalCodes = locations.some(loc => loc.postalCode && loc.postalCode.trim() !== '');
+
+            if (!hasPostalCodes) {
+                const distinctCities = [...new Map(locations.map(item => [item.city.toUpperCase(), item])).values()];
+                locations = Array.from(distinctCities);
+            }
+
             dropdown.innerHTML = locations.map(loc => {
-                const postalCodeDisplay = loc.postalCode || ''; // Show an empty string if null
-                const postalCodeData = loc.postalCode || ''; // Store an empty string in the data-attribute if null
+                const postalCodeDisplay = loc.postalCode || '';
+                const postalCodeData = loc.postalCode || '';
+                const displayText = hasPostalCodes ? `${postalCodeDisplay} ${loc.city}` : `${loc.city}`;
+                
                 return `<div class="address-dropdown-item" data-postalcode="${postalCodeData}" data-city="${loc.city}">
-                            ${postalCodeDisplay} ${loc.city}
+                            ${displayText}
                         </div>`;
             }).join('').trim();
 
@@ -2044,14 +2065,16 @@
                     const postalCode = item.dataset.postalcode;
                     const city = item.dataset.city;
                     const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
+                    const cityInput = document.getElementById(`${prefix}-city`);
 
-                    // --- MODIFIED: Set value (even if it's an empty string for null postal codes) ---
-                    postalCodeInput.value = postalCode;
-                    document.getElementById(`${prefix}-city`).value = city;
+                    if (postalCodeInput) {
+                        postalCodeInput.value = postalCode;
+                        updateInputValidationState(postalCodeInput);
+                    }
                     
-                    updateInputValidationState(document.getElementById(`${prefix}-city`));
-                    updateInputValidationState(postalCodeInput);
-
+                    cityInput.value = city;
+                    updateInputValidationState(cityInput);
+                    
                     hideAddressDropdown();
                 });
             });
