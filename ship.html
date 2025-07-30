@@ -1825,17 +1825,15 @@
             const loadingModal = document.getElementById('loading-modal');
             const formMsg = document.getElementById('form-message');
             
-            // --- NEW: Validate print size selection ---
             const isA4 = document.getElementById('print-size-a4').classList.contains('active');
             const isLabel = document.getElementById('print-size-label').classList.contains('active');
             if (!isA4 && !isLabel) {
                 formMsg.textContent = getTranslatedText('selectPrintSizeError');
                 formMsg.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
                 formMsg.classList.remove('hidden');
-                document.getElementById('print-options-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                formMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
-            // --- END: New validation ---
 
             loadingModal.classList.remove('hidden');
             formMsg.textContent = getTranslatedText('creatingShipment');
@@ -1882,6 +1880,8 @@
 
                 formMsg.innerHTML = `<span class="font-bold">${errorTitle}</span>${errorDetailsHtml}`;
                 formMsg.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
+                // --- MODIFIED: Scroll to the error message ---
+                formMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } finally {
                 loadingModal.classList.add('hidden');
             }
@@ -2079,20 +2079,18 @@
             }
         });
 
-        // --- NEW: Print size button logic ---
         const printA4Btn = document.getElementById('print-size-a4');
         const printLabelBtn = document.getElementById('print-size-label');
         printA4Btn.addEventListener('click', () => {
             printA4Btn.classList.add('active');
             printLabelBtn.classList.remove('active');
-            formMessage.classList.add('hidden'); // Hide error if user selects an option
+            formMessage.classList.add('hidden');
         });
         printLabelBtn.addEventListener('click', () => {
             printLabelBtn.classList.add('active');
             printA4Btn.classList.remove('active');
-            formMessage.classList.add('hidden'); // Hide error if user selects an option
+            formMessage.classList.add('hidden');
         });
-        // --- END: New logic ---
 
         // --- Initial Setup ---
         setupTheme();
