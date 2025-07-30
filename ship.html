@@ -17,6 +17,14 @@
         .dark-mode .country-dropdown, .dark-mode .document-dropdown { background-color: #374151; border-color: #4b5563; }
         .dark-mode .country-dropdown-item:hover, .dark-mode .document-dropdown-item:hover { background-color: #4b5563; }
         
+        /* --- NEW: Styles for Address Validation Dropdown --- */
+        .address-dropdown { position: absolute; z-index: 30; width: auto; min-width: 100%; background-color: white; border: 1px solid #d1d5db; border-radius: 0.375rem; margin-top: 0.25rem; max-height: 15rem; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .address-dropdown-item { padding: 0.5rem 1rem; cursor: pointer; white-space: nowrap; }
+        .address-dropdown-item:hover { background-color: #f3f4f6; }
+        .dark-mode .address-dropdown { background-color: #374151; border-color: #4b5563; }
+        .dark-mode .address-dropdown-item:hover { background-color: #4b5563; }
+        /* --- END: New Styles --- */
+
         .input-field.is-invalid { border-color: #ef4444; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); }
         .input-field:disabled { background-color: #e5e7eb; cursor: not-allowed; }
         .dark-mode .input-field:disabled { background-color: #374151; opacity: 0.6; }
@@ -173,8 +181,8 @@
                             <div><label for="shipper-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><input type="text" id="shipper-address2" class="input-field"></div>
                             <div><label for="shipper-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><input type="text" id="shipper-address3" class="input-field"></div>
                             <div class="grid grid-cols-2 gap-4">
-                                <div><label for="shipper-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode">Postal Code</label><input type="text" id="shipper-postalcode" class="input-field"></div>
-                                <div><label for="shipper-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity">City</label><div class="relative"><input type="text" id="shipper-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                <div class="relative"><label for="shipper-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode">Postal Code</label><input type="text" id="shipper-postalcode" class="input-field"></div>
+                                <div class="relative"><label for="shipper-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity">City</label><div class="relative"><input type="text" id="shipper-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             </div>
                             <div><label for="shipper-email" class="block text-sm font-medium mb-1" data-i18n="shipperEmail">Email Address</label><input type="email" id="shipper-email" class="input-field"></div>
                             <div><label for="shipper-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone">Phone</label><div class="relative"><input type="tel" id="shipper-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
@@ -189,8 +197,8 @@
                             <div><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field"></div>
                              <div><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field"></div>
                              <div class="grid grid-cols-2 gap-4">
-                                <div><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
-                                <div><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
+                                <div class="relative"><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             </div>
                             <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
                             <div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
@@ -552,7 +560,6 @@
     </main>
     <footer class="bg-gray-800 text-white py-8 mt-8"><div class="text-center text-sm text-gray-400">&copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span></div></footer>
 
-    <script src="create-shipment.js"></script>
     <script>
     let timeSlider = null; 
 
@@ -1927,6 +1934,133 @@
              document.getElementById('use-my-own-invoice-btn').click();
         }
 
+        // --- NEW: Address Validation Logic ---
+        const backendValidateUrl = 'https://dbs-back-viruzjokes-projects.vercel.app/api/validate-address';
+        let addressDropdown;
+
+        // Debounce function to limit API calls while typing
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        // Creates the shared dropdown element if it doesn't exist
+        function getOrCreateAddressDropdown() {
+            if (!addressDropdown) {
+                addressDropdown = document.createElement('div');
+                addressDropdown.className = 'address-dropdown hidden';
+                document.body.appendChild(addressDropdown);
+            }
+            return addressDropdown;
+        }
+
+        // Hides the address dropdown
+        function hideAddressDropdown() {
+            const dropdown = getOrCreateAddressDropdown();
+            dropdown.classList.add('hidden');
+        }
+
+        // Fetches address suggestions from the backend
+        async function fetchAddressSuggestions(countryCode, value, type, inputElement, prefix) {
+            if (!countryCode || value.length < 3) {
+                hideAddressDropdown();
+                return;
+            }
+
+            const params = new URLSearchParams({ countryCode });
+            if (type === 'postalCode') {
+                params.append('postalCode', value);
+            } else {
+                params.append('city', value);
+            }
+
+            try {
+                const response = await fetch(`${backendValidateUrl}?${params.toString()}`);
+                if (!response.ok) {
+                    hideAddressDropdown();
+                    return;
+                }
+                const data = await response.json();
+                displayAddressSuggestions(data, inputElement, prefix);
+            } catch (error) {
+                console.error('Error fetching address suggestions:', error);
+                hideAddressDropdown();
+            }
+        }
+
+        // Displays the suggestions in the dropdown
+        function displayAddressSuggestions(data, inputElement, prefix) {
+            const dropdown = getOrCreateAddressDropdown();
+            const locations = data?.postalLocationList;
+
+            if (!locations || locations.length === 0) {
+                hideAddressDropdown();
+                return;
+            }
+
+            dropdown.innerHTML = locations.map(loc => 
+                `<div class="address-dropdown-item" data-postalcode="${loc.postalCode}" data-city="${loc.city}">
+                    ${loc.postalCode} ${loc.city}
+                 </div>`
+            ).join('');
+
+            // Position and show the dropdown
+            const rect = inputElement.getBoundingClientRect();
+            dropdown.style.left = `${rect.left + window.scrollX}px`;
+            dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+            dropdown.style.width = `${rect.width}px`;
+            dropdown.classList.remove('hidden');
+
+            // Add click listeners to new items
+            dropdown.querySelectorAll('.address-dropdown-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const postalCode = item.dataset.postalcode;
+                    const city = item.dataset.city;
+
+                    document.getElementById(`${prefix}-postalcode`).value = postalCode;
+                    document.getElementById(`${prefix}-city`).value = city;
+                    
+                    // Trigger validation update for the fields
+                    updateInputValidationState(document.getElementById(`${prefix}-city`));
+
+                    hideAddressDropdown();
+                });
+            });
+        }
+
+        // Sets up the event listeners for a given address section (shipper or receiver)
+        function setupAddressValidation(prefix) {
+            const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
+            const cityInput = document.getElementById(`${prefix}-city`);
+            const countryValueInput = document.getElementById(`${prefix}-country-value`);
+
+            const debouncedFetch = debounce((value, type, element) => {
+                const countryCode = countryValueInput.value;
+                fetchAddressSuggestions(countryCode, value, type, element, prefix);
+            }, 500); // 500ms delay
+
+            postalCodeInput.addEventListener('input', () => {
+                debouncedFetch(postalCodeInput.value, 'postalCode', postalCodeInput);
+            });
+
+            cityInput.addEventListener('input', () => {
+                debouncedFetch(cityInput.value, 'city', cityInput);
+            });
+        }
+        
+        // Hide dropdown when clicking elsewhere
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.address-dropdown') && 
+                !e.target.matches('#shipper-postalcode, #shipper-city, #receiver-postalcode, #receiver-city')) {
+                hideAddressDropdown();
+            }
+        });
+        // --- END: Address Validation Logic ---
+
+
         // --- Initial Setup ---
         setupTheme();
         setupLanguageSwitch();
@@ -1937,6 +2071,10 @@
         initializeForm();
         initializeTimeSlider();
         setupDateSync();
+        
+        // Initialize address validation
+        setupAddressValidation('shipper');
+        setupAddressValidation('receiver');
         
         createLineItem();
         const firstItem = lineItemsContainer.querySelector('.line-item');
