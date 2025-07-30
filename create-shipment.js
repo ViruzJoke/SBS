@@ -2,7 +2,7 @@
  * =================================================================
  * DHL Backup Solution - Create Shipment Payload Builder
  * Author: Joker & Gemini
- * Version: 18.1.0 (Fixed Payer Account Logic)
+ * Version: 18.3.0 (Added Print Size Selection)
  * Description: This script collects all data from the ship.html form
  * and builds the correct root JSON payload for the DHL API.
  * =================================================================
@@ -42,6 +42,18 @@ async function buildShipmentPayload() {
     const isInsuranceRequested = getChecked('protect-shipment');
     const isDocUploadRequested = getChecked('upload-documents-checkbox');
 
+    // --- NEW: Check for print size selection ---
+    const isA4 = document.getElementById('print-size-a4')?.classList.contains('active');
+    const isLabel = document.getElementById('print-size-label')?.classList.contains('active');
+
+    // This check is now primarily handled in the main script's event listener,
+    // but it's a good failsafe here.
+    if (!isA4 && !isLabel) {
+        console.error("Print size not selected.");
+        // The UI should prevent this from being called, but we return null just in case.
+        return null; 
+    }
+    // --- END: New Check ---
 
     let payload = {};
     let valueAddedServices = [];
@@ -51,55 +63,37 @@ async function buildShipmentPayload() {
 
     payload.productCode = isDocument ? 'D' : 'P';
 
-    // [FIXED] Payer Account Logic
     payload.accounts = [];
     const shipperAccount = getVal('shipper-account');
     const useShipperForBilling = getChecked('use-shipper-for-billing');
     const billingAccount = getVal('billing-account');
 
-    // 1. Shipper Account (always required)
-    payload.accounts.push({
-        typeCode: "shipper",
-        number: shipperAccount
-    });
+    payload.accounts.push({ typeCode: "shipper", number: shipperAccount });
+    payload.accounts.push({ typeCode: "payer", number: useShipperForBilling ? shipperAccount : billingAccount });
 
-    // 2. Payer Account (for transportation charges)
-    // If the checkbox is checked, the shipper pays. Otherwise, the separate billing account pays.
-    // This ensures a "payer" is always included in the payload.
-    payload.accounts.push({
-        typeCode: "payer",
-        number: useShipperForBilling ? shipperAccount : billingAccount
-    });
-
-    // 3. Duties & Taxes Account
     if (isPackage && !receiverPaysTaxes) {
         const dutiesAccount = getVal('duties-account');
         if (dutiesAccount) {
-            payload.accounts.push({
-                typeCode: "duties-taxes",
-                number: dutiesAccount
-            });
+            payload.accounts.push({ typeCode: "duties-taxes", number: dutiesAccount });
         }
     }
 
-    const getAddressDetails = (prefix) => {
-        return {
-            postalAddress: {
-                postalCode: getVal(`${prefix}-postalcode`),
-                cityName: getVal(`${prefix}-city`),
-                countryCode: getVal(`${prefix}-country-value`),
-                addressLine1: getVal(`${prefix}-address1`),
-                addressLine2: getVal(`${prefix}-address2`) || undefined,
-                addressLine3: getVal(`${prefix}-address3`) || undefined,
-            },
-            contactInformation: {
-                fullName: getVal(`${prefix}-name`),
-                companyName: getVal(`${prefix}-company`),
-                phone: getVal(`${prefix}-phone`),
-                email: getVal(`${prefix}-email`) || undefined,
-            }
-        };
-    };
+    const getAddressDetails = (prefix) => ({
+        postalAddress: {
+            postalCode: getVal(`${prefix}-postalcode`),
+            cityName: getVal(`${prefix}-city`),
+            countryCode: getVal(`${prefix}-country-value`),
+            addressLine1: getVal(`${prefix}-address1`),
+            addressLine2: getVal(`${prefix}-address2`) || undefined,
+            addressLine3: getVal(`${prefix}-address3`) || undefined,
+        },
+        contactInformation: {
+            fullName: getVal(`${prefix}-name`),
+            companyName: getVal(`${prefix}-company`),
+            phone: getVal(`${prefix}-phone`),
+            email: getVal(`${prefix}-email`) || undefined,
+        }
+    });
 
     payload.customerDetails = {
         shipperDetails: getAddressDetails('shipper'),
@@ -114,14 +108,9 @@ async function buildShipmentPayload() {
     
     if (isDocument) {
         payload.content.description = getVal('document-description-input') || "Documents";
-        
         payload.content.packages.push({
             weight: 0.5,
-            dimensions: {
-                length: 1,
-                width: 38,
-                height: 48
-            }
+            dimensions: { length: 1, width: 38, height: 48 }
         });
     }
 
@@ -160,7 +149,6 @@ async function buildShipmentPayload() {
             lineItems: lineItems.map((item, index) => {
                 const weight = parseFloat(item.querySelector('.item-weight').value) || 0;
                 const commodityCodeValue = item.querySelector('.commodity-code').value;
-
                 const lineItemObject = {
                     number: index + 1,
                     description: item.querySelector('.item-description').value,
@@ -171,25 +159,14 @@ async function buildShipmentPayload() {
                     },
                     exportReasonType: "permanent",
                     manufacturerCountry: item.querySelector('.item-made-in').value,
-                    weight: {
-                        netValue: weight,
-                        grossValue: weight,
-                    },
+                    weight: { netValue: weight, grossValue: weight },
                 };
-
                 if (commodityCodeValue) {
-                    lineItemObject.commodityCodes = [{
-                        typeCode: "inbound",
-                        value: commodityCodeValue,
-                    }];
+                    lineItemObject.commodityCodes = [{ typeCode: "inbound", value: commodityCodeValue }];
                 }
-
                 return lineItemObject;
             }),
-            invoice: {
-                number: getVal('invoice-number'),
-                date: shipDate,
-            }
+            invoice: { number: getVal('invoice-number'), date: shipDate }
         };
 
         document.querySelectorAll('#package-pieces-container .package-piece-item').forEach(piece => {
@@ -211,14 +188,10 @@ async function buildShipmentPayload() {
     const refInputId = isDocument ? 'shipment-reference-doc' : 'shipment-reference-pkg';
     const shipmentReference = getVal(refInputId);
     if (shipmentReference) {
-        payload.customerReferences = [{
-            typeCode: "CU",
-            value: shipmentReference
-        }];
+        payload.customerReferences = [{ typeCode: "CU", value: shipmentReference }];
     }
 
     const docUploader = document.getElementById('doc-uploader');
-
     if (isDocUploadRequested) {
         valueAddedServices.push({ serviceCode: "WY" });
     }
@@ -226,7 +199,6 @@ async function buildShipmentPayload() {
     if (isDocUploadRequested && docUploader.files.length > 0) {
         const file = docUploader.files[0];
         const fileExtension = file.name.split('.').pop().toUpperCase();
-        
         try {
             const base64Content = await fileToBase64(file);
             payload.documentImages = [{
@@ -236,7 +208,6 @@ async function buildShipmentPayload() {
             }];
         } catch (error) {
             console.error("Error encoding file to Base64:", error);
-            // Using a more user-friendly way to show error instead of alert
             const formMessage = document.getElementById('form-message');
             formMessage.textContent = "Could not process the uploaded file. Please try again.";
             formMessage.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
@@ -264,14 +235,11 @@ async function buildShipmentPayload() {
             const closeTimeInMinutes = parseFloat(sliderValues[1]);
             const hours = Math.floor(closeTimeInMinutes / 60);
             const minutes = Math.round(closeTimeInMinutes % 60);
-
             payload.pickup = {
                 isRequested: true,
                 closeTime: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`,
                 location: getVal('pickup-location-select'),
-                specialInstructions: [{
-                    value: getVal('pickup-instructions') || ""
-                }],
+                specialInstructions: [{ value: getVal('pickup-instructions') || "" }],
                 pickupDetails: {
                     postalAddress: {
                         postalCode: getVal('pickup-postalcode'),
@@ -289,24 +257,27 @@ async function buildShipmentPayload() {
                 }
             };
         } else {
-             console.error('DEBUG: timeSlider not found or is null. Using fallback pickup object.');
              payload.pickup = { isRequested: true };
         }
     } else {
         payload.pickup = { isRequested: false };
     }
     
+    // --- MODIFIED: Set template names based on print size selection ---
+    const labelTemplateName = isA4 ? "ECOM26_84_A4_001" : "ECOM26_84_001";
+    const waybillTemplateName = isA4 ? "ARCH_8X4_A4_002" : "ARCH_8X4";
+
     payload.outputImageProperties = {
         encodingFormat: "pdf",
         imageOptions: [
             {
                 typeCode: "label",
-                templateName: "ECOM26_84_A4_001",
+                templateName: labelTemplateName,
                 isRequested: true,
             },
 			{
                 typeCode: "waybillDoc",
-                templateName: "ARCH_8X4_A4_002",
+                templateName: waybillTemplateName,
                 isRequested: true,
             },
             {
@@ -317,11 +288,11 @@ async function buildShipmentPayload() {
         ],
 		"splitInvoiceAndReceipt":true
     };
+    // --- END: Modified section ---
 
     if (isPackage && createInvoiceRequested) {
         const isProforma = document.getElementById('invoice-type-proforma').classList.contains('active');
         const invoiceType = isProforma ? "proforma" : "commercial";
-
         payload.outputImageProperties.imageOptions.push({
             typeCode: "invoice",
             invoiceType: invoiceType,
@@ -333,6 +304,5 @@ async function buildShipmentPayload() {
         payload.valueAddedServices = valueAddedServices;
     }
 
-    console.log("DEBUG: Final Payload:", JSON.stringify(payload, null, 2));
     return payload;
 }
