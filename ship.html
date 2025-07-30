@@ -17,13 +17,13 @@
         .dark-mode .country-dropdown, .dark-mode .document-dropdown { background-color: #374151; border-color: #4b5563; }
         .dark-mode .country-dropdown-item:hover, .dark-mode .document-dropdown-item:hover { background-color: #4b5563; }
         
-        /* --- NEW: Styles for Address Validation Dropdown --- */
-        .address-dropdown { position: absolute; z-index: 30; width: auto; min-width: 100%; background-color: white; border: 1px solid #d1d5db; border-radius: 0.375rem; margin-top: 0.25rem; max-height: 15rem; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        /* --- MODIFIED: Styles for Address Validation Dropdown --- */
+        .address-dropdown { position: absolute; z-index: 30; background-color: white; border: 1px solid #d1d5db; border-radius: 0.375rem; margin-top: 0.25rem; max-height: 15rem; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .address-dropdown-item { padding: 0.5rem 1rem; cursor: pointer; white-space: nowrap; }
         .address-dropdown-item:hover { background-color: #f3f4f6; }
         .dark-mode .address-dropdown { background-color: #374151; border-color: #4b5563; }
         .dark-mode .address-dropdown-item:hover { background-color: #4b5563; }
-        /* --- END: New Styles --- */
+        /* --- END: Modified Styles --- */
 
         .input-field.is-invalid { border-color: #ef4444; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); }
         .input-field:disabled { background-color: #e5e7eb; cursor: not-allowed; }
@@ -2007,12 +2007,23 @@
                  </div>`
             ).join('');
 
-            // Position and show the dropdown
+            // --- MODIFIED: Position and size the dropdown ---
+            const parentInfoBox = inputElement.closest('.p-4.border.rounded-lg');
             const rect = inputElement.getBoundingClientRect();
-            dropdown.style.left = `${rect.left + window.scrollX}px`;
-            dropdown.style.top = `${rect.bottom + window.scrollY}px`;
-            dropdown.style.width = `${rect.width}px`;
+            
+            if (parentInfoBox) {
+                const parentRect = parentInfoBox.getBoundingClientRect();
+                dropdown.style.left = `${parentRect.left + window.scrollX}px`;
+                dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+                dropdown.style.width = `${parentRect.width}px`;
+            } else {
+                // Fallback to original positioning if parent box isn't found
+                dropdown.style.left = `${rect.left + window.scrollX}px`;
+                dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+                dropdown.style.width = `${rect.width}px`;
+            }
             dropdown.classList.remove('hidden');
+            // --- END: Modified positioning ---
 
             // Add click listeners to new items
             dropdown.querySelectorAll('.address-dropdown-item').forEach(item => {
