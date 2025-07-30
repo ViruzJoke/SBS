@@ -17,13 +17,11 @@
         .dark-mode .country-dropdown, .dark-mode .document-dropdown { background-color: #374151; border-color: #4b5563; }
         .dark-mode .country-dropdown-item:hover, .dark-mode .document-dropdown-item:hover { background-color: #4b5563; }
         
-        /* --- MODIFIED: Styles for Address Validation Dropdown --- */
         .address-dropdown { position: absolute; z-index: 30; background-color: white; border: 1px solid #d1d5db; border-radius: 0.375rem; margin-top: 0.25rem; max-height: 15rem; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .address-dropdown-item { padding: 0.5rem 1rem; cursor: pointer; white-space: nowrap; }
         .address-dropdown-item:hover { background-color: #f3f4f6; }
         .dark-mode .address-dropdown { background-color: #374151; border-color: #4b5563; }
         .dark-mode .address-dropdown-item:hover { background-color: #4b5563; }
-        /* --- END: Modified Styles --- */
 
         .input-field.is-invalid { border-color: #ef4444; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); }
         .input-field:disabled { background-color: #e5e7eb; cursor: not-allowed; }
@@ -110,19 +108,18 @@
         .progress-step.is-complete {
             cursor: pointer;
         }
-        /* -- NEW -- Style for skipped/disabled steps */
         .progress-step.is-disabled {
             cursor: not-allowed;
             opacity: 0.6;
         }
         .progress-step.is-disabled .step-circle {
-            background-color: #e5e7eb; /* gray-200 */
-            border-color: #d1d5db; /* gray-300 */
-            color: #9ca3af; /* gray-400 */
+            background-color: #e5e7eb;
+            border-color: #d1d5db;
+            color: #9ca3af;
         }
         .dark-mode .progress-step.is-disabled .step-circle {
-            background-color: #374151; /* gray-700 */
-            border-color: #4b5563; /* gray-600 */
+            background-color: #374151;
+            border-color: #4b5563;
         }
     </style>
 </head>
@@ -531,6 +528,20 @@
                         </div>
                         <div id="summary-details-content" class="text-sm space-y-6"></div>
                     </div>
+
+                    <!-- NEW PRINT OPTIONS SECTION -->
+                    <div id="print-options-container" class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
+                        <h3 class="text-xl font-semibold" data-i18n="selectPrintSize">กรุณาเลือกขนาดในการปริ้น</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button type="button" id="print-size-a4" class="shipment-type-button p-4 rounded-lg flex flex-col items-center justify-center text-center">
+                                <span class="font-semibold" data-i18n="printA4">ขนาด A4</span>
+                            </button>
+                            <button type="button" id="print-size-label" class="shipment-type-button p-4 rounded-lg flex flex-col items-center justify-center text-center">
+                                <span class="font-semibold" data-i18n="printLabel">ขนาด Label</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- END NEW PRINT OPTIONS SECTION -->
                 </div>
 
                 <div class="flex justify-between gap-4 mt-6">
@@ -560,14 +571,15 @@
     </main>
     <footer class="bg-gray-800 text-white py-8 mt-8"><div class="text-center text-sm text-gray-400">&copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span></div></footer>
 
+    <script src="create-shipment.js"></script>
     <script>
     let timeSlider = null; 
 
     document.addEventListener('DOMContentLoaded', () => {
         const translations = {
-            'th': { 'leaveSiteTitle': 'ออกจากหน้านี้?', 'leaveSiteBody': 'การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก', 'stayButton': 'อยู่ต่อ', 'leaveButton': 'ออก', 'createShipment':'สร้างใบนำส่ง','addressStep':'ที่อยู่','shipmentDetailsStep':'ชิปเมนต์','packageStep':'แพ็คเกจ','paymentStep':'การชำระเงิน','docsStep':'เอกสาร','pickupStep':'การนัดรับสินค้า','summaryStep':'สรุป','shipperInfo':'ข้อมูลผู้ส่ง','receiverInfo':'ข้อมูลผู้รับ','shipperName':'ชื่อผู้ส่ง','shipperCompany':'บริษัทผู้ส่ง','shipperPhone':'เบอร์โทรผู้ส่ง','shipperAddress1':'ที่อยู่ 1','shipperAddress2':'ที่อยู่ 2','shipperAddress3':'ที่อยู่ 3','shipperCountry':'ประเทศ','shipperPostalCode':'รหัสไปรษณีย์','shipperCity':'เมือง','receiverName':'ชื่อผู้รับ','receiverCompany':'บริษัทผู้รับ','receiverPhone':'เบอร์โทรผู้รับ','receiverAddress1':'ที่อยู่ 1','receiverAddress2':'ที่อยู่ 2','receiverAddress3':'ที่อยู่ 3','receiverCountry':'ประเทศ','receiverPostalCode':'รหัสไปรษณีย์','receiverCity':'เมือง','document':'เอกสาร','package':'พัสดุ','addLineItem':'เพิ่มรายการสินค้า','shipmentRef':'เลขที่อ้างอิง (optional)','protectShipment':'เพิ่มความคุ้มครองการจัดส่ง (ประกัน)','packageDetails':'รายละเอียดแพ็คเกจ','addPiece':'เพิ่มกล่อง','shipperAccount':'บัญชีผู้ส่ง','billingAccount':'บัญชีสำหรับวางบิล', 'dutiesAccount':'บัญชีผู้ชำระภาษี','incoterm':'Incoterm','shipmentDate':'วันที่ส่ง','docUpload':'อัปโหลดเอกสาร','docUploadDesc':'อัปโหลดเอกสารเพิ่มเติม (ไม่เกิน 5MB)','summary':'สรุปข้อมูล','previous':'ย้อนกลับ','next':'ถัดไป','createShipmentBtn':'สร้างใบนำส่ง','allRightsReserved':'สงวนลิขสิทธิ์.','fillAllFields':'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน','typeOrSelectCountry': 'พิมพ์หรือเลือกประเทศ', 'backToMain': 'กลับหน้าหลัก', 'shipperEmail': 'อีเมลผู้ส่ง', 'receiverEmail': 'อีเมลผู้รับ', 'shipperVat': 'เลขประจำตัวผู้เสียภาษีผู้ส่ง', 'receiverVat': 'เลขประจำตัวผู้เสียภาษีผู้รับ', 'whatIsTheItem': 'สินค้าคืออะไร?', 'commodityCode': 'รหัสพิกัดศุลกากร', 'quantity': 'จำนวน', 'units': 'หน่วย', 'valuePerItem': 'มูลค่า (ต่อชิ้น)', 'weight': 'น้ำหนัก (KG)', 'whereWasItMade': 'ผลิตที่ประเทศ', 'totalUnits': 'จำนวนรวม:', 'totalWeight': 'น้ำหนักรวม:', 'totalValue': 'มูลค่ารวม:', 'insuredValue': 'มูลค่าประกัน', 'describeDocuments': 'ระบุประเภทเอกสารในชิปเมนต์ของคุณ', 'fillAllFieldsInItem': 'กรุณากรอกข้อมูลในรายการก่อนหน้าให้ครบถ้วน', 'customsInvoiceDetails': 'รายละเอียดใบกำกับสินค้า', 'createInvoice': 'สร้าง Invoice', 'useMyOwnInvoice': 'ใช้ Invoice ของฉัน', 'invoiceNumber': 'หมายเลข Invoice', 'itemDescription': 'รายละเอียดสินค้า', 'totalItemValue': 'มูลค่ารวม', 'summarizeShipment': 'สรุปรายการสินค้าในชิปเมนต์', 'shipmentDescription': '(shipment description)', 'totalPackages': 'จำนวนแพ็คเกจรวม:', 'totalWeightKg': 'น้ำหนักรวม:', 'lengthCm': 'ยาว (ซม.)', 'widthCm': 'กว้าง (ซม.)', 'heightCm': 'สูง (ซม.)', 'weightKg': 'น้ำหนัก (Kg)', 'dimensionsCm': 'ขนาด (ซม.)', 'fillAllFieldsInPiece': 'กรุณากรอกข้อมูลในแพ็คเกจก่อนหน้าให้ครบถ้วน', 'receiverWillPay': 'ผู้รับชำระภาษี', 'uploadCustomsDocs': 'อัปโหลดเอกสารศุลกากรของคุณ', 'uploadDocsDesc1': 'คุณสามารถอัปโหลดและส่งใบกำกับสินค้าหรือเอกสารทางศุลกากรอื่นๆ ในรูปแบบไฟล์ภาพและส่งมาให้เราทางอิเล็กทรอนิกส์ได้', 'uploadDocsDesc2': 'หากคุณไม่ได้อัปโหลดรูปภาพเอกสาร โปรดอย่าลืมพิมพ์และจัดเตรียมเอกสารของคุณมาพร้อมกับชิปเมนต์', 'uploadDocsQuestion': 'คุณต้องการอัปโหลดไฟล์ภาพหรือไม่?', 'yes': 'ใช่', 'browseForFile': 'เลือกไฟล์', 'orDropHere': ' หรือลากมาวางที่นี่', 'fileTypesAllowed': 'ประเภทไฟล์ที่อนุญาต: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, หรือ PDF', 'maxFileSize': 'ขนาดไฟล์สูงสุด: 5 MB', 'fileNameEnglishOnly': 'ชื่อไฟล์ต้องเป็นภาษาอังกฤษเท่านั้น', 'pickupYes': 'ใช่ – นัดรับสินค้า', 'pickupNo': 'ไม่ – ไม่ต้องการนัดรับ', 'pickupDropOffLink': 'ฉันสามารถนำส่งพัสดุได้ที่ไหน?', 'pickupSendingOn': 'ฉันจะส่งของในวันที่', 'pickupWindow': 'ช่วงเวลานัดรับ – เวลาที่พนักงานอาจมาถึงและพัสดุพร้อม', 'pickupWindowHint': 'กรุณาเผื่อช่วงเวลาอย่างน้อย 90 นาที', 'pickupLocation': 'พนักงานควรไปรับพัสดุที่ไหน?', 'pickupTotalWeight': 'น้ำหนักรวมของพัสดุ', 'pickupInstructions': 'คำแนะนำสำหรับพนักงาน (ถ้ามี)', 'pickupAddress': 'ที่อยู่สำหรับนัดรับ', 'editAddress': 'แก้ไข', 'saveAddress': 'บันทึก', 'editShipment': 'แก้ไขชิปเมนต์', 'summaryShipper': 'ผู้ส่ง', 'summaryReceiver': 'ผู้รับ', 'summaryShipmentInfo': 'ข้อมูลชิปเมนต์', 'summaryPackageInfo': 'ข้อมูลแพ็คเกจ', 'summaryPaymentInfo': 'ข้อมูลการชำระเงิน', 'summaryDocumentInfo': 'ข้อมูลเอกสาร', 'summaryPickupInfo': 'ข้อมูลการนัดรับสินค้า', 'requestPickup': 'ต้องการนัดรับสินค้า', 'summaryPickupDate': 'วันที่นัดรับ', 'summaryPickupTime': 'เวลานัดรับ', 'phoneMinLength': 'เบอร์โทรศัพท์ต้องมีอย่างน้อย 4 ตัวอักษร', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account Number ต้องมี 9 ตัวอักษร', 'uploadLabelOwnInvoice': 'อัปโหลดรูปภาพใบกำกับสินค้าของคุณ', 'uploadLabelCreateInvoice': "DHL จะสร้างใบกำกับสินค้าอิเล็กทรอนิกส์จากรายละเอียดที่คุณให้ไว้สำหรับชิปเมนต์นี้", 'creatingShipment': 'กำลังสร้างใบนำส่ง...', 'apiErrorTitle': 'เกิดข้อผิดพลาด', 'multipleErrorsFound': 'พบปัญหาหลายรายการ', 'useShipperForBilling': 'ใช้บัญชีนี้สำหรับชำระค่าขนส่ง'
+            'th': { 'leaveSiteTitle': 'ออกจากหน้านี้?', 'leaveSiteBody': 'การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก', 'stayButton': 'อยู่ต่อ', 'leaveButton': 'ออก', 'createShipment':'สร้างใบนำส่ง','addressStep':'ที่อยู่','shipmentDetailsStep':'ชิปเมนต์','packageStep':'แพ็คเกจ','paymentStep':'การชำระเงิน','docsStep':'เอกสาร','pickupStep':'การนัดรับสินค้า','summaryStep':'สรุป','shipperInfo':'ข้อมูลผู้ส่ง','receiverInfo':'ข้อมูลผู้รับ','shipperName':'ชื่อผู้ส่ง','shipperCompany':'บริษัทผู้ส่ง','shipperPhone':'เบอร์โทรผู้ส่ง','shipperAddress1':'ที่อยู่ 1','shipperAddress2':'ที่อยู่ 2','shipperAddress3':'ที่อยู่ 3','shipperCountry':'ประเทศ','shipperPostalCode':'รหัสไปรษณีย์','shipperCity':'เมือง','receiverName':'ชื่อผู้รับ','receiverCompany':'บริษัทผู้รับ','receiverPhone':'เบอร์โทรผู้รับ','receiverAddress1':'ที่อยู่ 1','receiverAddress2':'ที่อยู่ 2','receiverAddress3':'ที่อยู่ 3','receiverCountry':'ประเทศ','receiverPostalCode':'รหัสไปรษณีย์','receiverCity':'เมือง','document':'เอกสาร','package':'พัสดุ','addLineItem':'เพิ่มรายการสินค้า','shipmentRef':'เลขที่อ้างอิง (optional)','protectShipment':'เพิ่มความคุ้มครองการจัดส่ง (ประกัน)','packageDetails':'รายละเอียดแพ็คเกจ','addPiece':'เพิ่มกล่อง','shipperAccount':'บัญชีผู้ส่ง','billingAccount':'บัญชีสำหรับวางบิล', 'dutiesAccount':'บัญชีผู้ชำระภาษี','incoterm':'Incoterm','shipmentDate':'วันที่ส่ง','docUpload':'อัปโหลดเอกสาร','docUploadDesc':'อัปโหลดเอกสารเพิ่มเติม (ไม่เกิน 5MB)','summary':'สรุปข้อมูล','previous':'ย้อนกลับ','next':'ถัดไป','createShipmentBtn':'สร้างใบนำส่ง','allRightsReserved':'สงวนลิขสิทธิ์.','fillAllFields':'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน','typeOrSelectCountry': 'พิมพ์หรือเลือกประเทศ', 'backToMain': 'กลับหน้าหลัก', 'shipperEmail': 'อีเมลผู้ส่ง', 'receiverEmail': 'อีเมลผู้รับ', 'shipperVat': 'เลขประจำตัวผู้เสียภาษีผู้ส่ง', 'receiverVat': 'เลขประจำตัวผู้เสียภาษีผู้รับ', 'whatIsTheItem': 'สินค้าคืออะไร?', 'commodityCode': 'รหัสพิกัดศุลกากร', 'quantity': 'จำนวน', 'units': 'หน่วย', 'valuePerItem': 'มูลค่า (ต่อชิ้น)', 'weight': 'น้ำหนัก (KG)', 'whereWasItMade': 'ผลิตที่ประเทศ', 'totalUnits': 'จำนวนรวม:', 'totalWeight': 'น้ำหนักรวม:', 'totalValue': 'มูลค่ารวม:', 'insuredValue': 'มูลค่าประกัน', 'describeDocuments': 'ระบุประเภทเอกสารในชิปเมนต์ของคุณ', 'fillAllFieldsInItem': 'กรุณากรอกข้อมูลในรายการก่อนหน้าให้ครบถ้วน', 'customsInvoiceDetails': 'รายละเอียดใบกำกับสินค้า', 'createInvoice': 'สร้าง Invoice', 'useMyOwnInvoice': 'ใช้ Invoice ของฉัน', 'invoiceNumber': 'หมายเลข Invoice', 'itemDescription': 'รายละเอียดสินค้า', 'totalItemValue': 'มูลค่ารวม', 'summarizeShipment': 'สรุปรายการสินค้าในชิปเมนต์', 'shipmentDescription': '(shipment description)', 'totalPackages': 'จำนวนแพ็คเกจรวม:', 'totalWeightKg': 'น้ำหนักรวม:', 'lengthCm': 'ยาว (ซม.)', 'widthCm': 'กว้าง (ซม.)', 'heightCm': 'สูง (ซม.)', 'weightKg': 'น้ำหนัก (Kg)', 'dimensionsCm': 'ขนาด (ซม.)', 'fillAllFieldsInPiece': 'กรุณากรอกข้อมูลในแพ็คเกจก่อนหน้าให้ครบถ้วน', 'receiverWillPay': 'ผู้รับชำระภาษี', 'uploadCustomsDocs': 'อัปโหลดเอกสารศุลกากรของคุณ', 'uploadDocsDesc1': 'คุณสามารถอัปโหลดและส่งใบกำกับสินค้าหรือเอกสารทางศุลกากรอื่นๆ ในรูปแบบไฟล์ภาพและส่งมาให้เราทางอิเล็กทรอนิกส์ได้', 'uploadDocsDesc2': 'หากคุณไม่ได้อัปโหลดรูปภาพเอกสาร โปรดอย่าลืมพิมพ์และจัดเตรียมเอกสารของคุณมาพร้อมกับชิปเมนต์', 'uploadDocsQuestion': 'คุณต้องการอัปโหลดไฟล์ภาพหรือไม่?', 'yes': 'ใช่', 'browseForFile': 'เลือกไฟล์', 'orDropHere': ' หรือลากมาวางที่นี่', 'fileTypesAllowed': 'ประเภทไฟล์ที่อนุญาต: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, หรือ PDF', 'maxFileSize': 'ขนาดไฟล์สูงสุด: 5 MB', 'fileNameEnglishOnly': 'ชื่อไฟล์ต้องเป็นภาษาอังกฤษเท่านั้น', 'pickupYes': 'ใช่ – นัดรับสินค้า', 'pickupNo': 'ไม่ – ไม่ต้องการนัดรับ', 'pickupDropOffLink': 'ฉันสามารถนำส่งพัสดุได้ที่ไหน?', 'pickupSendingOn': 'ฉันจะส่งของในวันที่', 'pickupWindow': 'ช่วงเวลานัดรับ – เวลาที่พนักงานอาจมาถึงและพัสดุพร้อม', 'pickupWindowHint': 'กรุณาเผื่อช่วงเวลาอย่างน้อย 90 นาที', 'pickupLocation': 'พนักงานควรไปรับพัสดุที่ไหน?', 'pickupTotalWeight': 'น้ำหนักรวมของพัสดุ', 'pickupInstructions': 'คำแนะนำสำหรับพนักงาน (ถ้ามี)', 'pickupAddress': 'ที่อยู่สำหรับนัดรับ', 'editAddress': 'แก้ไข', 'saveAddress': 'บันทึก', 'editShipment': 'แก้ไขชิปเมนต์', 'summaryShipper': 'ผู้ส่ง', 'summaryReceiver': 'ผู้รับ', 'summaryShipmentInfo': 'ข้อมูลชิปเมนต์', 'summaryPackageInfo': 'ข้อมูลแพ็คเกจ', 'summaryPaymentInfo': 'ข้อมูลการชำระเงิน', 'summaryDocumentInfo': 'ข้อมูลเอกสาร', 'summaryPickupInfo': 'ข้อมูลการนัดรับสินค้า', 'requestPickup': 'ต้องการนัดรับสินค้า', 'summaryPickupDate': 'วันที่นัดรับ', 'summaryPickupTime': 'เวลานัดรับ', 'phoneMinLength': 'เบอร์โทรศัพท์ต้องมีอย่างน้อย 4 ตัวอักษร', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account Number ต้องมี 9 ตัวอักษร', 'uploadLabelOwnInvoice': 'อัปโหลดรูปภาพใบกำกับสินค้าของคุณ', 'uploadLabelCreateInvoice': "DHL จะสร้างใบกำกับสินค้าอิเล็กทรอนิกส์จากรายละเอียดที่คุณให้ไว้สำหรับชิปเมนต์นี้", 'creatingShipment': 'กำลังสร้างใบนำส่ง...', 'apiErrorTitle': 'เกิดข้อผิดพลาด', 'multipleErrorsFound': 'พบปัญหาหลายรายการ', 'useShipperForBilling': 'ใช้บัญชีนี้สำหรับชำระค่าขนส่ง', 'selectPrintSize': 'กรุณาเลือกขนาดในการปริ้น', 'printA4': 'ขนาด A4', 'printLabel': 'ขนาด Label', 'selectPrintSizeError': 'กรุณาเลือกขนาดในการปริ้นก่อนสร้างใบนำส่ง'
             },
-            'en': { 'leaveSiteTitle': 'Leave Site?', 'leaveSiteBody': 'Changes you made may not be saved.', 'stayButton': 'Stay', 'leaveButton': 'Leave', 'createShipment':'Create Shipment','addressStep':'Address','shipmentDetailsStep':'Shipment','packageStep':'Package','paymentStep':'Payment','docsStep':'Documents','pickupStep':'Pickup','summaryStep':'Summary','shipperInfo':'Shipper Information','receiverInfo':'Receiver Information','shipperName':'Name','shipperCompany':'Company','shipperPhone':'Phone','shipperAddress1':'Address Line 1','shipperAddress2':'Address Line 2','shipperAddress3':'Address Line 3','shipperCountry':'Country','shipperPostalCode':'Postal Code','shipperCity':'City','receiverName':'Name','receiverCompany':'Company','receiverPhone':'Phone','receiverAddress1':'Address Line 1','receiverAddress2':'Address Line 2','receiverAddress3':'Address Line 3','receiverCountry':'Country','receiverPostalCode':'Postal Code','receiverCity':'City','document':'Document','package':'Package','addLineItem':'Add Line Item','shipmentRef':'Shipment Reference (optional)','protectShipment':'Protect Your Shipment (Insurance)','packageDetails':'Package Details','addPiece':'Add Piece','shipperAccount':'Shipper Account','billingAccount':'Billing Account', 'dutiesAccount':'Duties & Taxes Account','incoterm':'Incoterm','shipmentDate':'Shipment Date','docUpload':'Document Upload','docUploadDesc':'Upload additional documents (max 5MB)','pickupBooking':'Pickup Booking','requestPickup':'Request a pickup','pickupCloseTime':'Pickup Close Time','pickupLocation':'Pickup Location (e.g., Reception)','summary':'Summary','previous':'Previous','next':'Next','createShipmentBtn':'Create Shipment','allRightsReserved':'All rights reserved.','fillAllFields':'Please fill in all required fields.','typeOrSelectCountry': 'Type or select a country', 'backToMain': 'Back to Main', 'shipperEmail': 'Email Address', 'receiverEmail': 'Email Address', 'shipperVat': 'VAT / Tax ID', 'receiverVat': 'VAT / Tax ID', 'whatIsTheItem': 'What is the item?', 'commodityCode': 'Commodity Code', 'quantity': 'Quantity', 'units': 'Units', 'valuePerItem': 'Value (Per Item)', 'weight': 'Weight (KG)', 'whereWasItMade': 'Where was the item made?', 'totalUnits': 'Total Units:', 'totalWeight': 'Total Weight:', 'totalValue': 'Total Value:', 'insuredValue': 'Insured Value', 'describeDocuments': 'Describe the documents in your shipment', 'fillAllFieldsInItem': 'Please fill in the previous item completely.', 'customsInvoiceDetails': 'Customs Invoice Details', 'createInvoice': 'Create Invoice', 'useMyOwnInvoice': 'Use My Own Invoice', 'invoiceNumber': 'Invoice Number', 'itemDescription': 'Item Description', 'totalItemValue': 'Total Item Value', 'summarizeShipment': 'Summarize the contents of your shipment', 'shipmentDescription': '(shipment description)', 'totalPackages': 'Total Packages:', 'totalWeightKg': 'Total Weight:', 'lengthCm': 'Length (cm)', 'widthCm': 'Width (cm)', 'heightCm': 'Height (cm)', 'weightKg': 'Weight (Kg)', 'dimensionsCm': 'Dimensions (cm)', 'fillAllFieldsInPiece': 'Please fill in the previous package completely.', 'receiverWillPay': 'Receiver will pay', 'uploadCustomsDocs': 'Upload Your Customs Documents', 'uploadDocsDesc1': 'You can upload and submit your customs invoice or any other customs documents as image files and submit them to us electronically.', 'uploadDocsDesc2': 'If you do not upload document images, remember to print and provide your documents with your shipment.', 'uploadDocsQuestion': 'Would you like to upload image files?', 'yes': 'Yes', 'browseForFile': 'Browse for File', 'orDropHere': ' or Drop Here', 'fileTypesAllowed': 'File Type Allowed: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, or PDF', 'maxFileSize': 'Maximum file size: 5 MB', 'fileNameEnglishOnly': 'File name must be in English only', 'pickupYes': 'Yes – Schedule Pickup', 'pickupNo': 'No - Don\'t need to Pickup', 'pickupDropOffLink': 'Where can I drop off my shipment?', 'pickupSendingOn': 'I\'m sending my shipment on', 'pickupWindow': 'Pickup Window – When courier may arrive and shipment is ready', 'pickupWindowHint': 'Please allow at least 90 minutes for your Pickup Window', 'pickupLocation': 'Where should the courier pick up the shipment?', 'pickupTotalWeight': 'Total Pickup Weight', 'pickupInstructions': 'Instructions for the courier', 'pickupAddress': 'Pickup Address', 'editAddress': 'Edit', 'saveAddress': 'Save', 'editShipment': 'Edit Shipment', 'summaryShipper': 'Shipper', 'summaryReceiver': 'Receiver', 'summaryShipmentInfo': 'Shipment Information', 'summaryPackageInfo': 'Package Information', 'summaryPaymentInfo': 'Payment Information', 'summaryDocumentInfo': 'Document Information', 'summaryPickupInfo': 'Pickup Information', 'requestPickup': 'Request a pickup', 'summaryPickupDate': 'Pickup Date', 'summaryPickupTime': 'Pickup Time', 'phoneMinLength': 'Phone number must be at least 4 characters long', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account number must be 9 characters.', 'uploadLabelOwnInvoice': 'Upload an image of your customs invoice.', 'uploadLabelCreateInvoice': "DHL will create an electronic customs invoice from the details you've provided for this shipment.", 'creatingShipment': 'Creating shipment...', 'apiErrorTitle': 'An Error Occurred', 'multipleProblemsFound': 'Multiple problems found', 'useShipperForBilling': 'Use this account to pay for transportation charges'
+            'en': { 'leaveSiteTitle': 'Leave Site?', 'leaveSiteBody': 'Changes you made may not be saved.', 'stayButton': 'Stay', 'leaveButton': 'Leave', 'createShipment':'Create Shipment','addressStep':'Address','shipmentDetailsStep':'Shipment','packageStep':'Package','paymentStep':'Payment','docsStep':'Documents','pickupStep':'Pickup','summaryStep':'Summary','shipperInfo':'Shipper Information','receiverInfo':'Receiver Information','shipperName':'Name','shipperCompany':'Company','shipperPhone':'Phone','shipperAddress1':'Address Line 1','shipperAddress2':'Address Line 2','shipperAddress3':'Address Line 3','shipperCountry':'Country','shipperPostalCode':'Postal Code','shipperCity':'City','receiverName':'Name','receiverCompany':'Company','receiverPhone':'Phone','receiverAddress1':'Address Line 1','receiverAddress2':'Address Line 2','receiverAddress3':'Address Line 3','receiverCountry':'Country','receiverPostalCode':'Postal Code','receiverCity':'City','document':'Document','package':'Package','addLineItem':'Add Line Item','shipmentRef':'Shipment Reference (optional)','protectShipment':'Protect Your Shipment (Insurance)','packageDetails':'Package Details','addPiece':'Add Piece','shipperAccount':'Shipper Account','billingAccount':'Billing Account', 'dutiesAccount':'Duties & Taxes Account','incoterm':'Incoterm','shipmentDate':'Shipment Date','docUpload':'Document Upload','docUploadDesc':'Upload additional documents (max 5MB)','pickupBooking':'Pickup Booking','requestPickup':'Request a pickup','pickupCloseTime':'Pickup Close Time','pickupLocation':'Pickup Location (e.g., Reception)','summary':'Summary','previous':'Previous','next':'Next','createShipmentBtn':'Create Shipment','allRightsReserved':'All rights reserved.','fillAllFields':'Please fill in all required fields.','typeOrSelectCountry': 'Type or select a country', 'backToMain': 'Back to Main', 'shipperEmail': 'Email Address', 'receiverEmail': 'Email Address', 'shipperVat': 'VAT / Tax ID', 'receiverVat': 'VAT / Tax ID', 'whatIsTheItem': 'What is the item?', 'commodityCode': 'Commodity Code', 'quantity': 'Quantity', 'units': 'Units', 'valuePerItem': 'Value (Per Item)', 'weight': 'Weight (KG)', 'whereWasItMade': 'Where was the item made?', 'totalUnits': 'Total Units:', 'totalWeight': 'Total Weight:', 'totalValue': 'Total Value:', 'insuredValue': 'Insured Value', 'describeDocuments': 'Describe the documents in your shipment', 'fillAllFieldsInItem': 'Please fill in the previous item completely.', 'customsInvoiceDetails': 'Customs Invoice Details', 'createInvoice': 'Create Invoice', 'useMyOwnInvoice': 'Use My Own Invoice', 'invoiceNumber': 'Invoice Number', 'itemDescription': 'Item Description', 'totalItemValue': 'Total Item Value', 'summarizeShipment': 'Summarize the contents of your shipment', 'shipmentDescription': '(shipment description)', 'totalPackages': 'Total Packages:', 'totalWeightKg': 'Total Weight:', 'lengthCm': 'Length (cm)', 'widthCm': 'Width (cm)', 'heightCm': 'Height (cm)', 'weightKg': 'Weight (Kg)', 'dimensionsCm': 'Dimensions (cm)', 'fillAllFieldsInPiece': 'Please fill in the previous package completely.', 'receiverWillPay': 'Receiver will pay', 'uploadCustomsDocs': 'Upload Your Customs Documents', 'uploadDocsDesc1': 'You can upload and submit your customs invoice or any other customs documents as image files and submit them to us electronically.', 'uploadDocsDesc2': 'If you do not upload document images, remember to print and provide your documents with your shipment.', 'uploadDocsQuestion': 'Would you like to upload image files?', 'yes': 'Yes', 'browseForFile': 'Browse for File', 'orDropHere': ' or Drop Here', 'fileTypesAllowed': 'File Type Allowed: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, or PDF', 'maxFileSize': 'Maximum file size: 5 MB', 'fileNameEnglishOnly': 'File name must be in English only', 'pickupYes': 'Yes – Schedule Pickup', 'pickupNo': 'No - Don\'t need to Pickup', 'pickupDropOffLink': 'Where can I drop off my shipment?', 'pickupSendingOn': 'I\'m sending my shipment on', 'pickupWindow': 'Pickup Window – When courier may arrive and shipment is ready', 'pickupWindowHint': 'Please allow at least 90 minutes for your Pickup Window', 'pickupLocation': 'Where should the courier pick up the shipment?', 'pickupTotalWeight': 'Total Pickup Weight', 'pickupInstructions': 'Instructions for the courier', 'pickupAddress': 'Pickup Address', 'editAddress': 'Edit', 'saveAddress': 'Save', 'editShipment': 'Edit Shipment', 'summaryShipper': 'Shipper', 'summaryReceiver': 'Receiver', 'summaryShipmentInfo': 'Shipment Information', 'summaryPackageInfo': 'Package Information', 'summaryPaymentInfo': 'Payment Information', 'summaryDocumentInfo': 'Document Information', 'summaryPickupInfo': 'Pickup Information', 'requestPickup': 'Request a pickup', 'summaryPickupDate': 'Pickup Date', 'summaryPickupTime': 'Pickup Time', 'phoneMinLength': 'Phone number must be at least 4 characters long', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account number must be 9 characters.', 'uploadLabelOwnInvoice': 'Upload an image of your customs invoice.', 'uploadLabelCreateInvoice': "DHL will create an electronic customs invoice from the details you've provided for this shipment.", 'creatingShipment': 'Creating shipment...', 'apiErrorTitle': 'An Error Occurred', 'multipleProblemsFound': 'Multiple problems found', 'useShipperForBilling': 'Use this account to pay for transportation charges', 'selectPrintSize': 'Please select a print size', 'printA4': 'A4 Size', 'printLabel': 'Label Size', 'selectPrintSizeError': 'Please select a print size before creating the shipment'
             }
         };
         const countryList = [ { "name": "Afghanistan", "code": "AF" }, { "name": "Albania", "code": "AL" }, { "name": "Algeria", "code": "DZ" }, { "name": "American Samoa", "code": "AS" }, { "name": "Andorra", "code": "AD" }, { "name": "Angola", "code": "AO" }, { "name": "Anguilla", "code": "AI" }, { "name": "Antigua", "code": "AG" }, { "name": "Argentina", "code": "AR" }, { "name": "Armenia", "code": "AM" }, { "name": "Aruba", "code": "AW" }, { "name": "Australia", "code": "AU" }, { "name": "Austria", "code": "AT" }, { "name": "Azerbaijan", "code": "AZ" }, { "name": "Bahamas", "code": "BS" }, { "name": "Bahrain", "code": "BH" }, { "name": "Bangladesh", "code": "BD" }, { "name": "Barbados", "code": "BB" }, { "name": "Belarus", "code": "BY" }, { "name": "Belgium", "code": "BE" }, { "name": "Belize", "code": "BZ" }, { "name": "Benin", "code": "BJ" }, { "name": "Bermuda", "code": "BM" }, { "name": "Bhutan", "code": "BT" }, { "name": "Bolivia", "code": "BO" }, { "name": "Bonaire", "code": "BQ" }, { "name": "Bosnia and Herzegovina", "code": "BA" }, { "name": "Botswana", "code": "BW" }, { "name": "Brazil", "code": "BR" }, { "name": "Brunei", "code": "BN" }, { "name": "Bulgaria", "code": "BG" }, { "name": "Burkina Faso", "code": "BF" }, { "name": "Burundi", "code": "BI" }, { "name": "Cambodia", "code": "KH" }, { "name": "Cameroon", "code": "CM" }, { "name": "Canada", "code": "CA" }, { "name": "Canary Islands, The", "code": "IC" }, { "name": "Cape Verde", "code": "CV" }, { "name": "Cayman Islands", "code": "KY" }, { "name": "Central African Republic", "code": "CF" }, { "name": "Chad", "code": "TD" }, { "name": "Chile", "code": "CL" }, { "name": "China, People's Republic", "code": "CN" }, { "name": "Colombia", "code": "CO" }, { "name": "Comoros", "code": "KM" }, { "name": "Congo", "code": "CG" }, { "name": "Congo, The Democratic Republic of", "code": "CD" }, { "name": "Cook Islands", "code": "CK" }, { "name": "Costa Rica", "code": "CR" }, { "name": "Cote D'ivoire", "code": "CI" }, { "name": "Croatia", "code": "HR" }, { "name": "Cuba", "code": "CU" }, { "name": "Curacao", "code": "CW" }, { "name": "Cyprus", "code": "CY" }, { "name": "Czech Republic, The", "code": "CZ" }, { "name": "Denmark", "code": "DK" }, { "name": "Djibouti", "code": "DJ" }, { "name": "Dominica", "code": "DM" }, { "name": "Dominican Republic", "code": "DO" }, { "name": "East Timor", "code": "TL" }, { "name": "Ecuador", "code": "EC" }, { "name": "Egypt", "code": "EG" }, { "name": "El Salvador", "code": "SV" }, { "name": "Eritrea", "code": "ER" }, { "name": "Estonia", "code": "EE" }, { "name": "Ethiopia", "code": "ET" }, { "name": "Falkland Islands", "code": "FK" }, { "name": "Faroe Islands", "code": "FO" }, { "name": "Fiji", "code": "FJ" }, { "name": "Finland", "code": "FI" }, { "name": "France", "code": "FR" }, { "name": "French Guyana", "code": "GF" }, { "name": "Gabon", "code": "GA" }, { "name": "Gambia", "code": "GM" }, { "name": "Georgia", "code": "GE" }, { "name": "Germany", "code": "DE" }, { "name": "Ghana", "code": "GH" }, { "name": "Gibraltar", "code": "GI" }, { "name": "Greece", "code": "GR" }, { "name": "Greenland", "code": "GL" }, { "name": "Grenada", "code": "GD" }, { "name": "Guadeloupe", "code": "GP" }, { "name": "Guam", "code": "GU" }, { "name": "Guatemala", "code": "GT" }, { "name": "Guernsey", "code": "GG" }, { "name": "Guinea Republic", "code": "GN" }, { "name": "Guinea-Bissau", "code": "GW" }, { "name": "Guinea-Equatorial", "code": "GQ" }, { "name": "Guyana", "code": "GY" }, { "name": "Haiti", "code": "HT" }, { "name": "Honduras", "code": "HN" }, { "name": "Hong Kong", "code": "HK" }, { "name": "Hungary", "code": "HU" }, { "name": "Iceland", "code": "IS" }, { "name": "India", "code": "IN" }, { "name": "Indonesia", "code": "ID" }, { "name": "Iran (Islamic Republic of)", "code": "IR" }, { "name": "Iraq", "code": "IQ" }, { "name": "Ireland, Republic of", "code": "IE" }, { "name": "Israel", "code": "IL" }, { "name": "Italy", "code": "IT" }, { "name": "Jamaica", "code": "JM" }, { "name": "Japan", "code": "JP" }, { "name": "Jersey", "code": "JE" }, { "name": "Jordan", "code": "JO" }, { "name": "Kazakhstan", "code": "KZ" }, { "name": "Kenya", "code": "KE" }, { "name": "Kiribati", "code": "KI" }, { "name": "Korea, Republic of", "code": "KR" }, { "name": "Korea, The D.P.R of (North K.)", "code": "KP" }, { "name": "Kosovo", "code": "KV" }, { "name": "Kuwait", "code": "KW" }, { "name": "Kyrgyzstan", "code": "KG" }, { "name": "Lao People's Democratic Republic", "code": "LA" }, { "name": "Latvia", "code": "LV" }, { "name": "Lebanon", "code": "LB" }, { "name": "Lesotho", "code": "LS" }, { "name": "Liberia", "code": "LR" }, { "name": "Libya", "code": "LY" }, { "name": "Liechtenstein", "code": "LI" }, { "name": "Lithuania", "code": "LT" }, { "name": "Luxembourg", "code": "LU" }, { "name": "Macau", "code": "MO" }, { "name": "Macedonia, Republic of", "code": "MK" }, { "name": "Madagascar", "code": "MG" }, { "name": "Malawi", "code": "MW" }, { "name": "Malaysia", "code": "MY" }, { "name": "Maldives", "code": "MV" }, { "name": "Mali", "code": "ML" }, { "name": "Malta", "code": "MT" }, { "name": "Marshall Islands", "code": "MH" }, { "name": "Martinique", "code": "MQ" }, { "name": "Mauritania", "code": "MR" }, { "name": "Mauritius", "code": "MU" }, { "name": "Mayotte", "code": "YT" }, { "name": "Mexico", "code": "MX" }, { "name": "Micronesia, Federated States of", "code": "FM" }, { "name": "Moldova, Republic of", "code": "MD" }, { "name": "Monaco", "code": "MC" }, { "name": "Mongolia", "code": "MN" }, { "name": "Montenegro, Republic of", "code": "ME" }, { "name": "Montserrat", "code": "MS" }, { "name": "Morocco", "code": "MA" }, { "name": "Mozambique", "code": "MZ" }, { "name": "Myanmar", "code": "MM" }, { "name": "Namibia", "code": "NA" }, { "name": "Nauru, Republic of", "code": "NR" }, { "name": "Nepal", "code": "NP" }, { "name": "Netherlands, The", "code": "NL" }, { "name": "New Caledonia", "code": "NC" }, { "name": "New Zealand", "code": "NZ" }, { "name": "Nicaragua", "code": "NI" }, { "name": "Niger", "code": "NE" }, { "name": "Nigeria", "code": "NG" }, { "name": "Niue", "code": "NU" }, { "name": "Northern Mariana Islands", "code": "MP" }, { "name": "Norway", "code": "NO" }, { "name": "Oman", "code": "OM" }, { "name": "Pakistan", "code": "PK" }, { "name": "Palau", "code": "PW" }, { "name": "Panama", "code": "PA" }, { "name": "Papua New Guinea", "code": "PG" }, { "name": "Paraguay", "code": "PY" }, { "name": "Peru", "code": "PE" }, { "name": "Philippines, The", "code": "PH" }, { "name": "Poland", "code": "PL" }, { "name": "Portugal", "code": "PT" }, { "name": "Puerto Rico", "code": "PR" }, { "name": "Qatar", "code": "QA" }, { "name": "Reunion, Island of", "code": "RE" }, { "name": "Romania", "code": "RO" }, { "name": "Russian Federation, The", "code": "RU" }, { "name": "Rwanda", "code": "RW" }, { "name": "Saipan", "code": "SP" }, { "name": "San Marino", "code": "SM" }, { "name": "Sao Tome and Principe", "code": "ST" }, { "name": "Saudi Arabia", "code": "SA" }, { "name": "Senegal", "code": "SN" }, { "name": "Serbia, Republic of", "code": "RS" }, { "name": "Seychelles", "code": "SC" }, { "name": "Sierra Leone", "code": "SL" }, { "name": "Singapore", "code": "SG" }, { "name": "Slovakia", "code": "SK" }, { "name": "Slovenia", "code": "SI" }, { "name": "Solomon Islands", "code": "SB" }, { "name": "Somalia", "code": "SO" }, { "name": "Somaliland, Rep of (North Somalia)", "code": "XS" }, { "name": "South Africa", "code": "ZA" }, { "name": "South Sudan", "code": "SS" }, { "name": "Spain", "code": "ES" }, { "name": "Sri Lanka", "code": "LK" }, { "name": "St. Barthelemy", "code": "XY" }, { "name": "St. Eustatius", "code": "XE" }, { "name": "St. Helena", "code": "SH" }, { "name": "St. Kitts and Nevis", "code": "KN" }, { "name": "St. Lucia", "code": "LC" }, { "name": "St. Maarten", "code": "SX" }, { "name": "St. Vincent", "code": "VC" }, { "name": "Sudan", "code": "SD" }, { "name": "Suriname", "code": "SR" }, { "name": "Swaziland", "code": "SZ" }, { "name": "Sweden", "code": "SE" }, { "name": "Switzerland", "code": "CH" }, { "name": "Syria", "code": "SY" }, { "name": "Tahiti", "code": "PF" }, { "name": "Taiwan", "code": "TW" }, { "name": "Tanzania", "code": "TZ" }, { "name": "Thailand", "code": "TH" }, { "name": "Togo", "code": "TG" }, { "name": "Tonga", "code": "TO" }, { "name": "Trinidad and Tobago", "code": "TT" }, { "name": "Tunisia", "code": "TN" }, { "name": "Turkey", "code": "TR" }, { "name": "Turkmenistan", "code": "TM" }, { "name": "Turks and Caicos Islands", "code": "TC" }, { "name": "Tuvalu", "code": "TV" }, { "name": "Uganda", "code": "UG" }, { "name": "Ukraine", "code": "UA" }, { "name": "United Arab Emirates", "code": "AE" }, { "name": "United Kingdom", "code": "GB" }, { "name": "United States of America", "code": "US" }, { "name": "Uruguay", "code": "UY" }, { "name": "Uzbekistan", "code": "UZ" }, { "name": "Vanuatu", "code": "VU" }, { "name": "Vatican City", "code": "VA" }, { "name": "Venezuela", "code": "VE" }, { "name": "Vietnam", "code": "VN" }, { "name": "Virgin Islands (British)", "code": "VG" }, { "name": "Virgin Islands (US)", "code": "VI" }, { "name": "Yemen, Republic of", "code": "YE" }, { "name": "Zambia", "code": "ZM" }, { "name": "Zimbabwe", "code": "ZW" } ];
@@ -1158,7 +1170,7 @@
             dutiesAccountContainer.classList.add('hidden');
             incotermContainer.classList.add('hidden');
             incotermSelect.required = false;
-            updateStepIndicator(); // <-- NEW: Update indicator on type change
+            updateStepIndicator();
         });
 
         document.getElementById('ship-type-package').addEventListener('click', (e) => {
@@ -1177,7 +1189,7 @@
             dutiesAccountContainer.classList.remove('hidden');
             incotermContainer.classList.remove('hidden');
             incotermSelect.required = true;
-            updateStepIndicator(); // <-- NEW: Update indicator on type change
+            updateStepIndicator();
         });
         
         document.getElementById('protect-shipment').addEventListener('change', (e) => {
@@ -1412,7 +1424,6 @@
             updateInputValidationState(dutiesAccountInput);
         });
 
-        // [MODIFIED] v5: Event listener for the new checkbox
         const useShipperForBillingCheckbox = document.getElementById('use-shipper-for-billing');
         const billingAccountContainer = document.getElementById('billing-account-container');
         const billingAccountInput = document.getElementById('billing-account');
@@ -1763,7 +1774,6 @@
             if (validateCurrentStep()) {
                 const isDocument = document.getElementById('ship-type-document').classList.contains('active');
                 
-                // -- MODIFIED -- Skip step 5 for documents
                 if (isDocument && currentStep === 4) {
                     changeStep(6);
                     return;
@@ -1786,7 +1796,6 @@
         prevButton.addEventListener('click', () => {
              const isDocument = document.getElementById('ship-type-document').classList.contains('active');
              
-             // -- MODIFIED -- Skip step 5 for documents
              if (isDocument && currentStep === 6) {
                  changeStep(4);
                  return;
@@ -1800,7 +1809,6 @@
             const stepElement = e.target.closest('.progress-step');
             if (!stepElement) return;
 
-            // -- MODIFIED -- Prevent clicking on disabled steps
             if (stepElement.classList.contains('is-disabled')) {
                 return;
             }
@@ -1817,6 +1825,18 @@
             const loadingModal = document.getElementById('loading-modal');
             const formMsg = document.getElementById('form-message');
             
+            // --- NEW: Validate print size selection ---
+            const isA4 = document.getElementById('print-size-a4').classList.contains('active');
+            const isLabel = document.getElementById('print-size-label').classList.contains('active');
+            if (!isA4 && !isLabel) {
+                formMsg.textContent = getTranslatedText('selectPrintSizeError');
+                formMsg.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
+                formMsg.classList.remove('hidden');
+                document.getElementById('print-options-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            // --- END: New validation ---
+
             loadingModal.classList.remove('hidden');
             formMsg.textContent = getTranslatedText('creatingShipment');
             formMsg.className = 'p-4 rounded-md text-center bg-blue-100 text-blue-700 break-words';
@@ -1875,16 +1895,14 @@
             const hours = now.getHours();
             const minutes = now.getMinutes();
 
-            // Check if current time is after the cutoff (4:30 PM)
             const isAfterCutoff = hours > 16 || (hours === 16 && minutes > 30);
 
             if (isAfterCutoff) {
-                now.setDate(now.getDate() + 1); // Move to the next day
+                now.setDate(now.getDate() + 1);
             }
 
-            // Check if the calculated day is a Sunday (getDay() returns 0 for Sunday)
             if (now.getDay() === 0) { 
-                now.setDate(now.getDate() + 1); // If it's Sunday, skip to Monday
+                now.setDate(now.getDate() + 1);
             }
 
             const nextValidDateStr = now.toISOString().slice(0, 10);
@@ -1934,11 +1952,10 @@
              document.getElementById('use-my-own-invoice-btn').click();
         }
 
-        // --- NEW: Address Validation Logic ---
+        // --- Address Validation Logic ---
         const backendValidateUrl = 'https://dbs-back-viruzjokes-projects.vercel.app/api/validate-address';
         let addressDropdown;
 
-        // Debounce function to limit API calls while typing
         function debounce(func, delay) {
             let timeout;
             return function(...args) {
@@ -1947,7 +1964,6 @@
             };
         }
 
-        // Creates the shared dropdown element if it doesn't exist
         function getOrCreateAddressDropdown() {
             if (!addressDropdown) {
                 addressDropdown = document.createElement('div');
@@ -1957,13 +1973,11 @@
             return addressDropdown;
         }
 
-        // Hides the address dropdown
         function hideAddressDropdown() {
             const dropdown = getOrCreateAddressDropdown();
             dropdown.classList.add('hidden');
         }
 
-        // Fetches address suggestions from the backend
         async function fetchAddressSuggestions(countryCode, value, type, inputElement, prefix) {
             if (!countryCode || value.length < 3) {
                 hideAddressDropdown();
@@ -1991,10 +2005,9 @@
             }
         }
 
-        // Displays the suggestions in the dropdown
         function displayAddressSuggestions(data, inputElement, prefix) {
             const dropdown = getOrCreateAddressDropdown();
-            const locations = data?.postalLocationList;
+            const locations = data?.postalLocationList?.filter(loc => loc.postalCode);
 
             if (!locations || locations.length === 0) {
                 hideAddressDropdown();
@@ -2007,7 +2020,6 @@
                  </div>`
             ).join('');
 
-            // --- MODIFIED: Position and size the dropdown ---
             const parentInfoBox = inputElement.closest('.p-4.border.rounded-lg');
             const rect = inputElement.getBoundingClientRect();
             
@@ -2017,32 +2029,30 @@
                 dropdown.style.top = `${rect.bottom + window.scrollY}px`;
                 dropdown.style.width = `${parentRect.width}px`;
             } else {
-                // Fallback to original positioning if parent box isn't found
                 dropdown.style.left = `${rect.left + window.scrollX}px`;
                 dropdown.style.top = `${rect.bottom + window.scrollY}px`;
                 dropdown.style.width = `${rect.width}px`;
             }
             dropdown.classList.remove('hidden');
-            // --- END: Modified positioning ---
 
-            // Add click listeners to new items
             dropdown.querySelectorAll('.address-dropdown-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const postalCode = item.dataset.postalcode;
                     const city = item.dataset.city;
 
-                    document.getElementById(`${prefix}-postalcode`).value = postalCode;
+                    if (postalCode && postalCode !== 'null') {
+                        document.getElementById(`${prefix}-postalcode`).value = postalCode;
+                    }
                     document.getElementById(`${prefix}-city`).value = city;
                     
-                    // Trigger validation update for the fields
                     updateInputValidationState(document.getElementById(`${prefix}-city`));
+                    updateInputValidationState(document.getElementById(`${prefix}-postalcode`));
 
                     hideAddressDropdown();
                 });
             });
         }
 
-        // Sets up the event listeners for a given address section (shipper or receiver)
         function setupAddressValidation(prefix) {
             const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
             const cityInput = document.getElementById(`${prefix}-city`);
@@ -2051,7 +2061,7 @@
             const debouncedFetch = debounce((value, type, element) => {
                 const countryCode = countryValueInput.value;
                 fetchAddressSuggestions(countryCode, value, type, element, prefix);
-            }, 500); // 500ms delay
+            }, 500);
 
             postalCodeInput.addEventListener('input', () => {
                 debouncedFetch(postalCodeInput.value, 'postalCode', postalCodeInput);
@@ -2062,15 +2072,27 @@
             });
         }
         
-        // Hide dropdown when clicking elsewhere
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.address-dropdown') && 
                 !e.target.matches('#shipper-postalcode, #shipper-city, #receiver-postalcode, #receiver-city')) {
                 hideAddressDropdown();
             }
         });
-        // --- END: Address Validation Logic ---
 
+        // --- NEW: Print size button logic ---
+        const printA4Btn = document.getElementById('print-size-a4');
+        const printLabelBtn = document.getElementById('print-size-label');
+        printA4Btn.addEventListener('click', () => {
+            printA4Btn.classList.add('active');
+            printLabelBtn.classList.remove('active');
+            formMessage.classList.add('hidden'); // Hide error if user selects an option
+        });
+        printLabelBtn.addEventListener('click', () => {
+            printLabelBtn.classList.add('active');
+            printA4Btn.classList.remove('active');
+            formMessage.classList.add('hidden'); // Hide error if user selects an option
+        });
+        // --- END: New logic ---
 
         // --- Initial Setup ---
         setupTheme();
@@ -2083,7 +2105,6 @@
         initializeTimeSlider();
         setupDateSync();
         
-        // Initialize address validation
         setupAddressValidation('shipper');
         setupAddressValidation('receiver');
         
