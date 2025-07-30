@@ -2007,18 +2007,22 @@
 
         function displayAddressSuggestions(data, inputElement, prefix) {
             const dropdown = getOrCreateAddressDropdown();
-            const locations = data?.postalLocationList?.filter(loc => loc.postalCode);
+            // --- MODIFIED: No longer filter out results with null postal codes ---
+            const locations = data?.postalLocationList;
 
             if (!locations || locations.length === 0) {
                 hideAddressDropdown();
                 return;
             }
 
-            dropdown.innerHTML = locations.map(loc => 
-                `<div class="address-dropdown-item" data-postalcode="${loc.postalCode}" data-city="${loc.city}">
-                    ${loc.postalCode} ${loc.city}
-                 </div>`
-            ).join('');
+            // --- MODIFIED: Handle null postal codes gracefully for display ---
+            dropdown.innerHTML = locations.map(loc => {
+                const postalCodeDisplay = loc.postalCode || ''; // Show an empty string if null
+                const postalCodeData = loc.postalCode || ''; // Store an empty string in the data-attribute if null
+                return `<div class="address-dropdown-item" data-postalcode="${postalCodeData}" data-city="${loc.city}">
+                            ${postalCodeDisplay} ${loc.city}
+                        </div>`;
+            }).join('').trim();
 
             const parentInfoBox = inputElement.closest('.p-4.border.rounded-lg');
             const rect = inputElement.getBoundingClientRect();
@@ -2039,14 +2043,14 @@
                 item.addEventListener('click', () => {
                     const postalCode = item.dataset.postalcode;
                     const city = item.dataset.city;
+                    const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
 
-                    if (postalCode && postalCode !== 'null') {
-                        document.getElementById(`${prefix}-postalcode`).value = postalCode;
-                    }
+                    // --- MODIFIED: Set value (even if it's an empty string for null postal codes) ---
+                    postalCodeInput.value = postalCode;
                     document.getElementById(`${prefix}-city`).value = city;
                     
                     updateInputValidationState(document.getElementById(`${prefix}-city`));
-                    updateInputValidationState(document.getElementById(`${prefix}-postalcode`));
+                    updateInputValidationState(postalCodeInput);
 
                     hideAddressDropdown();
                 });
