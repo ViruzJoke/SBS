@@ -581,7 +581,7 @@
 
     <script src="create-shipment.js"></script>
     <script>
-        let timeSlider = null; 
+            let timeSlider = null; 
 
     document.addEventListener('DOMContentLoaded', () => {
         const translations = {
@@ -2037,6 +2037,9 @@
             dropdown.classList.add('hidden');
         }
 
+        // =================================================================
+        // CORRECTED FUNCTION START
+        // =================================================================
         async function fetchAddressSuggestions(countryCode, value, type, inputElement, prefix) {
             if (!countryCode || value.length < 3) {
                 hideAddressDropdown();
@@ -2047,7 +2050,8 @@
             if (type === 'postalCode') {
                 params.append('postalCode', value);
             } else {
-                params.append('city', value);
+                // FIXED: Send 'cityName' as the parameter key instead of 'city'
+                params.append('cityName', value);
             }
 
             try {
@@ -2063,10 +2067,7 @@
                 hideAddressDropdown();
             }
         }
-
-        // =================================================================
-        // CORRECTED FUNCTION START
-        // =================================================================
+        
         function displayAddressSuggestions(data, inputElement, prefix) {
             const dropdown = getOrCreateAddressDropdown();
             let locations = data?.postalLocationList;
@@ -2092,7 +2093,6 @@
                 // Condition 2: No postal codes, no suburbs. Show unique cities (e.g., HK)
                 const uniqueKeys = new Set();
                 processedLocations = locations.filter(loc => {
-                    // FIXED: Use `cityName` for the key as it's the correct property
                     const key = loc.cityName;
                     if (uniqueKeys.has(key)) {
                         return false;
@@ -2106,7 +2106,7 @@
             dropdown.innerHTML = processedLocations.map(loc => {
                 const postalCodeDisplay = loc.postalCode || '';
                 const postalCodeData = loc.postalCode || '';
-                const cityData = loc.cityName || ''; // FIXED: Use `cityName` from API response
+                const cityData = loc.cityName || ''; 
                 const suburbData = loc.countyName || '';
                 let displayText = '';
                 
@@ -2118,7 +2118,6 @@
                     displayText = cityData;
                 }
                 
-                // FIXED: Use correct property `cityData` for the data-city attribute
                 return `<div class="address-dropdown-item" data-postalcode="${postalCodeData}" data-city="${cityData}" data-suburb="${suburbData}">
                             ${displayText}
                         </div>`;
@@ -2142,7 +2141,7 @@
             dropdown.querySelectorAll('.address-dropdown-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const postalCode = item.dataset.postalcode;
-                    const city = item.dataset.city; // This will now receive the correct cityName
+                    const city = item.dataset.city;
                     const suburb = item.dataset.suburb;
                     
                     const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
@@ -2233,6 +2232,7 @@
         updateContentLanguage();
         changeStep(1);
     });
+
     </script>
 </body>
 </html>
