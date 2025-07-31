@@ -2064,6 +2064,7 @@
             }
         }
 
+        // [MODIFIED] Updated address suggestion logic to handle suburbs correctly
         function displayAddressSuggestions(data, inputElement, prefix) {
             const dropdown = getOrCreateAddressDropdown();
             let locations = data?.postalLocationList;
@@ -2074,13 +2075,26 @@
             }
 
             const hasPostalCodes = locations.some(loc => loc.postalCode && loc.postalCode.trim() !== '');
+            const hasSuburbs = locations.some(loc => loc.countyName && loc.countyName.trim() !== '');
 
-            if (!hasPostalCodes) {
-                const distinctCities = [...new Map(locations.map(item => [item.city.toUpperCase(), item])).values()];
-                locations = Array.from(distinctCities);
+            let processedLocations = [];
+
+            if (hasPostalCodes) {
+                processedLocations = locations;
+            } else {
+                const uniqueKeys = new Set();
+                processedLocations = locations.filter(loc => {
+                    const key = hasSuburbs ? `${loc.cityName}-${loc.countyName}` : loc.cityName;
+                    if (uniqueKeys.has(key)) {
+                        return false;
+                    } else {
+                        uniqueKeys.add(key);
+                        return true;
+                    }
+                });
             }
 
-            dropdown.innerHTML = locations.map(loc => {
+            dropdown.innerHTML = processedLocations.map(loc => {
                 const postalCodeDisplay = loc.postalCode || '';
                 const postalCodeData = loc.postalCode || '';
                 const countyName = loc.countyName || '';
@@ -2088,7 +2102,7 @@
                 
                 if (hasPostalCodes) {
                     displayText = `${postalCodeDisplay} ${loc.city}`;
-                } else if (countyName) {
+                } else if (hasSuburbs) {
                     displayText = `${loc.city} - ${countyName}`;
                 } else {
                     displayText = `${loc.city}`;
