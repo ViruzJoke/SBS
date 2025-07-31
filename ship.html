@@ -2064,7 +2064,6 @@
             }
         }
 
-        // [MODIFIED] Updated address suggestion logic to handle suburbs correctly
         function displayAddressSuggestions(data, inputElement, prefix) {
             const dropdown = getOrCreateAddressDropdown();
             let locations = data?.postalLocationList;
@@ -2081,10 +2080,13 @@
 
             if (hasPostalCodes) {
                 processedLocations = locations;
-            } else {
+            } else if (hasSuburbs) {
+                 processedLocations = locations;
+            }
+            else {
                 const uniqueKeys = new Set();
                 processedLocations = locations.filter(loc => {
-                    const key = hasSuburbs ? `${loc.cityName}-${loc.countyName}` : loc.cityName;
+                    const key = loc.cityName;
                     if (uniqueKeys.has(key)) {
                         return false;
                     } else {
