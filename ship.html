@@ -581,7 +581,7 @@
 
     <script src="create-shipment.js"></script>
     <script>
-            let timeSlider = null; 
+                let timeSlider = null; 
 
     document.addEventListener('DOMContentLoaded', () => {
         const translations = {
@@ -2050,8 +2050,8 @@
             if (type === 'postalCode') {
                 params.append('postalCode', value);
             } else {
-                // FIXED: Send 'cityName' as the parameter key instead of 'city'
-                params.append('cityName', value);
+                // FIXED: Reverted to use 'city' as the request parameter name.
+                params.append('city', value);
             }
 
             try {
@@ -2231,6 +2231,8 @@
         updateSummary();
         updateContentLanguage();
         changeStep(1);
+    });
+
     });
 
     </script>
