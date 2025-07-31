@@ -581,7 +581,7 @@
 
     <script src="create-shipment.js"></script>
     <script>
-    let timeSlider = null; 
+        let timeSlider = null; 
 
     document.addEventListener('DOMContentLoaded', () => {
         const translations = {
@@ -2064,6 +2064,9 @@
             }
         }
 
+        // =================================================================
+        // CORRECTED FUNCTION START
+        // =================================================================
         function displayAddressSuggestions(data, inputElement, prefix) {
             const dropdown = getOrCreateAddressDropdown();
             let locations = data?.postalLocationList;
@@ -2079,13 +2082,17 @@
             let processedLocations = [];
 
             if (hasPostalCodes) {
+                // Condition 1: Has postal codes, use the full list (e.g., TH)
                 processedLocations = locations;
             } else if (hasSuburbs) {
-                 processedLocations = locations;
+                // Condition 3: No postal codes, but has suburbs. Use the full list (e.g., VN)
+                processedLocations = locations;
             }
             else {
+                // Condition 2: No postal codes, no suburbs. Show unique cities (e.g., HK)
                 const uniqueKeys = new Set();
                 processedLocations = locations.filter(loc => {
+                    // FIXED: Use `cityName` for the key as it's the correct property
                     const key = loc.cityName;
                     if (uniqueKeys.has(key)) {
                         return false;
@@ -2099,22 +2106,24 @@
             dropdown.innerHTML = processedLocations.map(loc => {
                 const postalCodeDisplay = loc.postalCode || '';
                 const postalCodeData = loc.postalCode || '';
-                const countyName = loc.countyName || '';
+                const cityData = loc.cityName || ''; // FIXED: Use `cityName` from API response
+                const suburbData = loc.countyName || '';
                 let displayText = '';
                 
                 if (hasPostalCodes) {
-                    displayText = `${postalCodeDisplay} ${loc.city}`;
+                    displayText = `${postalCodeDisplay} ${cityData}`;
                 } else if (hasSuburbs) {
-                    displayText = `${loc.city} - ${countyName}`;
+                    displayText = `${cityData} - ${suburbData}`;
                 } else {
-                    displayText = `${loc.city}`;
+                    displayText = cityData;
                 }
                 
-                return `<div class="address-dropdown-item" data-postalcode="${postalCodeData}" data-city="${loc.city}" data-suburb="${countyName}">
+                // FIXED: Use correct property `cityData` for the data-city attribute
+                return `<div class="address-dropdown-item" data-postalcode="${postalCodeData}" data-city="${cityData}" data-suburb="${suburbData}">
                             ${displayText}
                         </div>`;
             }).join('').trim();
-
+            
             const parentInfoBox = inputElement.closest('.p-4.border.rounded-lg');
             const rect = inputElement.getBoundingClientRect();
             
@@ -2133,7 +2142,7 @@
             dropdown.querySelectorAll('.address-dropdown-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const postalCode = item.dataset.postalcode;
-                    const city = item.dataset.city;
+                    const city = item.dataset.city; // This will now receive the correct cityName
                     const suburb = item.dataset.suburb;
                     
                     const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
@@ -2156,6 +2165,9 @@
                 });
             });
         }
+        // =================================================================
+        // CORRECTED FUNCTION END
+        // =================================================================
 
         function setupAddressValidation(prefix) {
             const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
