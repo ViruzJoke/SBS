@@ -581,7 +581,7 @@
 
     <script src="create-shipment.js"></script>
     <script>
-        let timeSlider = null; 
+            let timeSlider = null; 
 
     document.addEventListener('DOMContentLoaded', () => {
         const translations = {
@@ -2055,7 +2055,7 @@
                     return;
                 }
                 params.append('city', value);
-            } else if (type === 'suburb') { // ** NEW ** Handle suburb search
+            } else if (type === 'suburb') {
                  if (value.length < 3) { 
                     hideAddressDropdown();
                     return;
@@ -2116,15 +2116,11 @@
                 const suburbData = loc.countyName || '';
                 let displayText = '';
                 
-                // ** NEW LOGIC ** Determine display text based on conditions
                 if (hasPostalCodes) {
-                    // Condition 1 (e.g., TH, JP): Show "PostalCode City"
                     displayText = `${postalCodeDisplay} ${cityData}`.trim();
                 } else if (hasSuburbs) {
-                    // Condition 3 (e.g., VN): Show "City - Suburb"
                     displayText = `${cityData} - ${suburbData}`;
                 } else {
-                    // Condition 2 (e.g., HK): Show "City"
                     displayText = cityData;
                 }
                 
@@ -2178,7 +2174,7 @@
         function setupAddressValidation(prefix) {
             const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
             const cityInput = document.getElementById(`${prefix}-city`);
-            const suburbInput = document.getElementById(`${prefix}-suburb`); // ** NEW ** Get suburb input
+            const suburbInput = document.getElementById(`${prefix}-suburb`);
             const countryValueInput = document.getElementById(`${prefix}-country-value`);
 
             const debouncedFetch = debounce((value, type, element) => {
@@ -2194,7 +2190,6 @@
                 debouncedFetch(cityInput.value, 'city', cityInput);
             });
 
-            // ** NEW ** Add event listener for suburb input
             if (suburbInput) {
                 suburbInput.addEventListener('input', () => {
                     debouncedFetch(suburbInput.value, 'suburb', suburbInput);
@@ -2207,7 +2202,7 @@
         
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.address-dropdown') && 
-                !e.target.matches('#shipper-postalcode, #shipper-city, #receiver-postalcode, #receiver-city, #receiver-suburb')) { // ** NEW ** Add suburb to exclusion
+                !e.target.matches('#shipper-postalcode, #shipper-city, #receiver-postalcode, #receiver-city, #receiver-suburb')) {
                 hideAddressDropdown();
             }
         });
@@ -2250,7 +2245,6 @@
         updateContentLanguage();
         changeStep(1);
     });
-
     </script>
 </body>
 </html>
