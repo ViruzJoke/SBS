@@ -95,12 +95,12 @@ async function buildShipmentPayload() {
         }
     };
 
-    // เพิ่ม cityDistrict สำหรับผู้รับ ถ้ามีข้อมูล suburb
+    // เพิ่ม countyName สำหรับผู้รับ ถ้ามีข้อมูล suburb
     if (prefix === 'receiver') {
         const suburb = getVal('receiver-suburb');
         if (suburb) {
-            // [แก้ไข] เปลี่ยนจาก countyName เป็น cityDistrict
-            details.postalAddress.cityDistrict = suburb;
+            // [แก้ไข] เปลี่ยนจาก countyName เป็น countyName
+            details.postalAddress.countyName = suburb;
         }
     }
     
@@ -341,4 +341,5 @@ async function buildShipmentPayload() {
 
     console.log("DEBUG: Final Payload:", JSON.stringify(payload, null, 2));
     return payload;
+
 }
