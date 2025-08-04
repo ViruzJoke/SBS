@@ -2051,123 +2051,122 @@
             // DEBUGGING AND REVISED FUNCTION START
             // =================================================================
             async function fetchAddressSuggestions(countryCode, value, type, inputElement, prefix) {
-                if (!countryCode || value.length < 2) {
-                    hideAddressDropdown();
-                    return;
-                }
-
-                const params = new URLSearchParams({ countryCode });
-                if (type === 'postalCode') {
-                    params.append('postalCode', value);
-                } else {
-                    params.append('city', value);
-                }
-
-                try {
-                    const apiUrl = `${backendValidateUrl}?${params.toString()}`;
-                    console.log(`[DEBUG] Fetching: ${apiUrl}`); // Added log
-                    const response = await fetch(apiUrl);
-                    
-                    if (!response.ok) {
-                        console.error('[DEBUG] API response not OK:', response.status, response.statusText);
-                        hideAddressDropdown();
-                        return;
-                    }
-                    const data = await response.json();
-                    console.log('[DEBUG] Received data from API:', data); // Added log
-                    
-                    const locations = data?.address || [];
-                    console.log('[DEBUG] Extracted locations:', locations); // Added log
-
-                    displayAddressSuggestions(locations, inputElement, prefix);
-                } catch (error) {
-                    console.error('[DEBUG] Error fetching address suggestions:', error);
-                    hideAddressDropdown();
-                }
+            if (!countryCode || value.length < 2) {
+                hideAddressDropdown();
+                return;
             }
-            
-            function displayAddressSuggestions(locations, inputElement, prefix) {
-                const dropdown = getOrCreateAddressDropdown();
 
-                if (!locations || locations.length === 0) {
+            const params = new URLSearchParams({ countryCode });
+            if (type === 'postalCode') {
+                params.append('postalCode', value);
+            } else {
+                params.append('city', value);
+            }
+
+            try {
+                const response = await fetch(`${backendValidateUrl}?${params.toString()}`);
+                if (!response.ok) {
                     hideAddressDropdown();
                     return;
                 }
+                const data = await response.json();
+                displayAddressSuggestions(data, inputElement, prefix);
+            } catch (error) {
+                console.error('Error fetching address suggestions:', error);
+                hideAddressDropdown();
+            }
+        }
+        
+        function displayAddressSuggestions(data, inputElement, prefix) {
+            const dropdown = getOrCreateAddressDropdown();
+            const locations = data?.postalLocationList;
 
-                const uniqueLocations = [];
-                const seen = new Set();
+            if (!locations || locations.length === 0) {
+                hideAddressDropdown();
+                return;
+            }
 
-                for (const loc of locations) {
-                    const postalCode = loc.postalCode || '';
-                    const cityName = loc.cityName || '';
-                    const suburb = loc.countyName || '';
-                    let key = '';
+            // Determine the scenario based on the data structure of the first item
+            const firstItem = locations[0];
+            const hasPostalCodes = !!firstItem.postalCode;
+            const hasSuburbs = !!firstItem.cityDistrict;
 
-                    if (postalCode) { key = `${postalCode}-${cityName}`; } 
-                    else if (suburb) { key = `${cityName}-${suburb}`; } 
-                    else { key = cityName; }
-                    
-                    if (key && !seen.has(key)) {
-                        uniqueLocations.push(loc);
-                        seen.add(key);
+            let processedLocations = [];
+            if (hasPostalCodes || hasSuburbs) {
+                // Scenarios 1 (e.g., TH) and 3 (e.g., VN): Use the full list as is.
+                processedLocations = locations;
+            } else {
+                // Scenario 2 (e.g., HK): Filter for unique city names.
+                const uniqueCities = new Set();
+                processedLocations = locations.filter(loc => {
+                    if (uniqueCities.has(loc.city)) {
+                        return false;
                     }
-                }
-                
-                dropdown.innerHTML = uniqueLocations.map(loc => {
-                    const postalCode = loc.postalCode || '';
-                    const city = loc.cityName || ''; 
-                    const suburb = loc.countyName || '';
-                    let displayText = '';
-                    
-                    if (postalCode && city) { displayText = `${postalCode} - ${city}`; } 
-                    else if (city && suburb) { displayText = `${city} - ${suburb}`; } 
-                    else { displayText = city; }
-                    
-                    return `<div class="address-dropdown-item" data-postalcode="${postalCode}" data-city="${city}" data-suburb="${suburb}">
-                                ${displayText}
-                            </div>`;
-                }).join('');
-                
-                if (dropdown.innerHTML.trim() === '') {
-                    hideAddressDropdown();
-                    return;
-                }
-                
-                // Simplified positioning logic
-                const rect = inputElement.getBoundingClientRect();
-                dropdown.style.left = `${rect.left + window.scrollX}px`;
-                dropdown.style.top = `${rect.bottom + window.scrollY}px`;
-                dropdown.style.width = `${rect.width}px`;
-                
-                dropdown.classList.remove('hidden');
-
-                dropdown.querySelectorAll('.address-dropdown-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        const postalCodeVal = item.dataset.postalcode;
-                        const cityVal = item.dataset.city;
-                        const suburbVal = item.dataset.suburb;
-                        
-                        const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
-                        const cityInput = document.getElementById(`${prefix}-city`);
-                        const suburbInput = document.getElementById(`${prefix}-suburb`);
-
-                        if (postalCodeInput) {
-                            postalCodeInput.value = postalCodeVal;
-                            updateInputValidationState(postalCodeInput);
-                        }
-                        if (cityInput) {
-                            cityInput.value = cityVal;
-                            updateInputValidationState(cityInput);
-                        }
-                        if (suburbInput) {
-                            suburbInput.value = suburbVal;
-                            updateInputValidationState(suburbInput);
-                        }
-                        
-                        hideAddressDropdown();
-                    });
+                    uniqueCities.add(loc.city);
+                    return true;
                 });
             }
+
+            dropdown.innerHTML = processedLocations.map(loc => {
+                const postalCodeData = loc.postalCode || '';
+                const cityData = loc.city || '';
+                const suburbData = loc.cityDistrict || '';
+                let displayText = '';
+
+                if (hasPostalCodes) {
+                    // Scenario 1 (e.g., TH): "10330 BANGKOK"
+                    displayText = `${postalCodeData} ${cityData}`;
+                } else if (hasSuburbs) {
+                    // Scenario 3 (e.g., VN): "HO CHI MINH - BINH CHANH-AN PHU TAY COMMUNE"
+                    displayText = `${cityData} - ${suburbData}`;
+                } else {
+                    // Scenario 2 (e.g., HK): "HONG KONG"
+                    displayText = cityData;
+                }
+
+                return `<div class="address-dropdown-item" data-postalcode="${postalCodeData}" data-city="${cityData}" data-suburb="${suburbData}">
+                            ${displayText}
+                        </div>`;
+            }).join('');
+
+            if (dropdown.innerHTML.trim() === '') {
+                hideAddressDropdown();
+                return;
+            }
+            
+            const rect = inputElement.getBoundingClientRect();
+            dropdown.style.left = `${rect.left + window.scrollX}px`;
+            dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+            dropdown.style.width = `${rect.width}px`;
+            dropdown.classList.remove('hidden');
+
+            dropdown.querySelectorAll('.address-dropdown-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const postalCode = item.dataset.postalcode;
+                    const city = item.dataset.city;
+                    const suburb = item.dataset.suburb;
+                    
+                    const postalCodeInput = document.getElementById(`${prefix}-postalcode`);
+                    const cityInput = document.getElementById(`${prefix}-city`);
+                    const suburbInput = document.getElementById(`${prefix}-suburb`);
+
+                    if (postalCodeInput) {
+                        postalCodeInput.value = postalCode;
+                        updateInputValidationState(postalCodeInput);
+                    }
+                    if (cityInput) {
+                        cityInput.value = city;
+                        updateInputValidationState(cityInput);
+                    }
+                    if (suburbInput) {
+                        suburbInput.value = suburb;
+                        updateInputValidationState(suburbInput);
+                    }
+                    
+                    hideAddressDropdown();
+                });
+            });
+        }
             // =================================================================
             // DEBUGGING AND REVISED FUNCTION END
             // =================================================================
