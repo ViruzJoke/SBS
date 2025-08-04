@@ -353,6 +353,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Part 1 Ends Here. Part 2 contains Steps 4-7 and the <script> block. -->
                 <!-- Step 4: Payment -->
                 <div id="ship-now-step-4" class="ship-now-step hidden space-y-4">
                     <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
@@ -2046,10 +2048,10 @@
             }
 
             // =================================================================
-            // CORRECTED AND REVISED FUNCTION START
+            // DEBUGGING AND REVISED FUNCTION START
             // =================================================================
             async function fetchAddressSuggestions(countryCode, value, type, inputElement, prefix) {
-                if (!countryCode || value.length < 2) { // Changed to 2 for better UX
+                if (!countryCode || value.length < 2) {
                     hideAddressDropdown();
                     return;
                 }
@@ -2062,18 +2064,24 @@
                 }
 
                 try {
-                    const response = await fetch(`${backendValidateUrl}?${params.toString()}`);
+                    const apiUrl = `${backendValidateUrl}?${params.toString()}`;
+                    console.log(`[DEBUG] Fetching: ${apiUrl}`); // Added log
+                    const response = await fetch(apiUrl);
+                    
                     if (!response.ok) {
+                        console.error('[DEBUG] API response not OK:', response.status, response.statusText);
                         hideAddressDropdown();
                         return;
                     }
                     const data = await response.json();
+                    console.log('[DEBUG] Received data from API:', data); // Added log
                     
-                    // The 'address' property from your JSON examples is now correctly handled here.
                     const locations = data?.address || [];
+                    console.log('[DEBUG] Extracted locations:', locations); // Added log
+
                     displayAddressSuggestions(locations, inputElement, prefix);
                 } catch (error) {
-                    console.error('Error fetching address suggestions:', error);
+                    console.error('[DEBUG] Error fetching address suggestions:', error);
                     hideAddressDropdown();
                 }
             }
@@ -2090,19 +2098,14 @@
                 const seen = new Set();
 
                 for (const loc of locations) {
-                    // Create a unique key based on the relevant data for each case
                     const postalCode = loc.postalCode || '';
                     const cityName = loc.cityName || '';
-                    const suburb = loc.countyName || ''; // countyName is the suburb
+                    const suburb = loc.countyName || '';
                     let key = '';
 
-                    if (postalCode) { // Case 1: ID, TH etc.
-                        key = `${postalCode}-${cityName}`;
-                    } else if (suburb) { // Case 3: VN
-                        key = `${cityName}-${suburb}`;
-                    } else { // Case 2: HK
-                        key = cityName;
-                    }
+                    if (postalCode) { key = `${postalCode}-${cityName}`; } 
+                    else if (suburb) { key = `${cityName}-${suburb}`; } 
+                    else { key = cityName; }
                     
                     if (key && !seen.has(key)) {
                         uniqueLocations.push(loc);
@@ -2113,17 +2116,12 @@
                 dropdown.innerHTML = uniqueLocations.map(loc => {
                     const postalCode = loc.postalCode || '';
                     const city = loc.cityName || ''; 
-                    const suburb = loc.countyName || ''; // Mapped from countyName
+                    const suburb = loc.countyName || '';
                     let displayText = '';
                     
-                    // Determine display text based on available data
-                    if (postalCode && city) { // Case 1: ID
-                        displayText = `${postalCode} - ${city}`;
-                    } else if (city && suburb) { // Case 3: VN
-                        displayText = `${city} - ${suburb}`;
-                    } else { // Case 2: HK
-                        displayText = city;
-                    }
+                    if (postalCode && city) { displayText = `${postalCode} - ${city}`; } 
+                    else if (city && suburb) { displayText = `${city} - ${suburb}`; } 
+                    else { displayText = city; }
                     
                     return `<div class="address-dropdown-item" data-postalcode="${postalCode}" data-city="${city}" data-suburb="${suburb}">
                                 ${displayText}
@@ -2135,19 +2133,12 @@
                     return;
                 }
                 
-                const parentInfoBox = inputElement.closest('.p-4.border.rounded-lg');
+                // Simplified positioning logic
                 const rect = inputElement.getBoundingClientRect();
+                dropdown.style.left = `${rect.left + window.scrollX}px`;
+                dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+                dropdown.style.width = `${rect.width}px`;
                 
-                if (parentInfoBox) {
-                    const parentRect = parentInfoBox.getBoundingClientRect();
-                    dropdown.style.left = `${parentRect.left + window.scrollX}px`;
-                    dropdown.style.top = `${rect.bottom + window.scrollY}px`;
-                    dropdown.style.width = `${parentRect.width}px`;
-                } else {
-                    dropdown.style.left = `${rect.left + window.scrollX}px`;
-                    dropdown.style.top = `${rect.bottom + window.scrollY}px`;
-                    dropdown.style.width = `${rect.width}px`;
-                }
                 dropdown.classList.remove('hidden');
 
                 dropdown.querySelectorAll('.address-dropdown-item').forEach(item => {
@@ -2178,7 +2169,7 @@
                 });
             }
             // =================================================================
-            // CORRECTED AND REVISED FUNCTION END
+            // DEBUGGING AND REVISED FUNCTION END
             // =================================================================
 
             function setupAddressValidation(prefix) {
@@ -2189,7 +2180,7 @@
                 const debouncedFetch = debounce((value, type, element) => {
                     const countryCode = countryValueInput.value;
                     fetchAddressSuggestions(countryCode, value, type, element, prefix);
-                }, 300); // Reduced delay for better responsiveness
+                }, 300);
 
                 if(postalCodeInput) {
                     postalCodeInput.addEventListener('input', () => {
