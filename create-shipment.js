@@ -2,7 +2,7 @@
  * =================================================================
  * DHL Backup Solution - Create Shipment Payload Builder
  * Author: Joker & Gemini
- * Version: 20.0.0 (Mapped Suburb to countyName field)
+ * Version: 21.0.0 (Added VAT/Tax ID and updated suburb mapping)
  * Description: This script collects all data from the ship.html form
  * and builds the correct root JSON payload for the DHL API.
  * =================================================================
@@ -76,36 +76,47 @@ async function buildShipmentPayload() {
         }
     }
 
-    // [MODIFIED] Mapped suburb to countyName for the receiver
     const getAddressDetails = (prefix) => {
-    const details = {
-        postalAddress: {
-            postalCode: getVal(`${prefix}-postalcode`),
-            cityName: getVal(`${prefix}-city`),
-            countryCode: getVal(`${prefix}-country-value`),
-            addressLine1: getVal(`${prefix}-address1`),
-            addressLine2: getVal(`${prefix}-address2`) || undefined,
-            addressLine3: getVal(`${prefix}-address3`) || undefined,
-        },
-        contactInformation: {
-            fullName: getVal(`${prefix}-name`),
-            companyName: getVal(`${prefix}-company`),
-            phone: getVal(`${prefix}-phone`),
-            email: getVal(`${prefix}-email`) || undefined,
-        }
-    };
+        const details = {
+            postalAddress: {
+                postalCode: getVal(`${prefix}-postalcode`),
+                cityName: getVal(`${prefix}-city`),
+                countryCode: getVal(`${prefix}-country-value`),
+                addressLine1: getVal(`${prefix}-address1`),
+                addressLine2: getVal(`${prefix}-address2`) || undefined,
+                addressLine3: getVal(`${prefix}-address3`) || undefined,
+            },
+            contactInformation: {
+                fullName: getVal(`${prefix}-name`),
+                companyName: getVal(`${prefix}-company`),
+                phone: getVal(`${prefix}-phone`),
+                email: getVal(`${prefix}-email`) || undefined,
+            }
+        };
 
-    // เพิ่ม countyName สำหรับผู้รับ ถ้ามีข้อมูล suburb
-    if (prefix === 'receiver') {
-        const suburb = getVal('receiver-suburb');
-        if (suburb) {
-            // [แก้ไข] เปลี่ยนจาก countyName เป็น countyName
-            details.postalAddress.countyName = suburb;
+        // เพิ่ม countyName สำหรับผู้รับ ถ้ามีข้อมูล suburb
+        if (prefix === 'receiver') {
+            const suburb = getVal('receiver-suburb');
+            if (suburb) {
+                details.postalAddress.countyName = suburb;
+            }
         }
-    }
-    
-    return details;
-};
+
+        // เพิ่ม registration number (VAT/Tax ID) หากมีการกรอกข้อมูล
+        const vatNumber = getVal(`${prefix}-vat`);
+        const countryCode = getVal(`${prefix}-country-value`);
+        if (vatNumber && countryCode) {
+            details.registrationNumbers = [
+                {
+                    typeCode: "VAT",
+                    number: vatNumber,
+                    issuerCountryCode: countryCode
+                }
+            ];
+        }
+        
+        return details;
+    };
 
 
     payload.customerDetails = {
@@ -341,5 +352,4 @@ async function buildShipmentPayload() {
 
     console.log("DEBUG: Final Payload:", JSON.stringify(payload, null, 2));
     return payload;
-
 }
