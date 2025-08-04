@@ -2,7 +2,7 @@
  * =================================================================
  * DHL Backup Solution - Create Shipment Payload Builder
  * Author: Joker & Gemini
- * Version: 21.0.0 (Accepts pickup times as parameter to resolve scope issue)
+ * Version: 20.0.0 (Mapped Suburb to countyName field)
  * Description: This script collects all data from the ship.html form
  * and builds the correct root JSON payload for the DHL API.
  * =================================================================
@@ -18,6 +18,7 @@ function fileToBase64(file) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
+            // result includes the "data:mime/type;base64," prefix, remove it
             resolve(reader.result.split(',')[1]);
         };
         reader.onerror = error => reject(error);
@@ -26,10 +27,9 @@ function fileToBase64(file) {
 
 /**
  * Gathers all data from the form and builds the complete JSON payload.
- * @param {Array|null} pickupTimeValues - The start and end time values from the noUiSlider.
  * @returns {Promise<Object|null>} A promise that resolves with the shipment payload object, or null on failure.
  */
-async function buildShipmentPayload(pickupTimeValues) {
+async function buildShipmentPayload() {
     // Helper functions to get value from an element by ID
     const getVal = (id) => document.getElementById(id)?.value || '';
     const getChecked = (id) => document.getElementById(id)?.checked || false;
@@ -56,16 +56,27 @@ async function buildShipmentPayload(pickupTimeValues) {
     const useShipperForBilling = getChecked('use-shipper-for-billing');
     const billingAccount = getVal('billing-account');
 
-    payload.accounts.push({ typeCode: "shipper", number: shipperAccount });
-    payload.accounts.push({ typeCode: "payer", number: useShipperForBilling ? shipperAccount : billingAccount });
+    payload.accounts.push({
+        typeCode: "shipper",
+        number: shipperAccount
+    });
+
+    payload.accounts.push({
+        typeCode: "payer",
+        number: useShipperForBilling ? shipperAccount : billingAccount
+    });
 
     if (isPackage && !receiverPaysTaxes) {
         const dutiesAccount = getVal('duties-account');
         if (dutiesAccount) {
-            payload.accounts.push({ typeCode: "duties-taxes", number: dutiesAccount });
+            payload.accounts.push({
+                typeCode: "duties-taxes",
+                number: dutiesAccount
+            });
         }
     }
 
+    // [MODIFIED] Mapped suburb to countyName for the receiver
     const getAddressDetails = (prefix) => {
         const details = {
             postalAddress: {
@@ -84,6 +95,7 @@ async function buildShipmentPayload(pickupTimeValues) {
             }
         };
 
+        // Add countyName for receiver if suburb has a value
         if (prefix === 'receiver') {
             const suburb = getVal('receiver-suburb');
             if (suburb) {
@@ -108,9 +120,14 @@ async function buildShipmentPayload(pickupTimeValues) {
     
     if (isDocument) {
         payload.content.description = getVal('document-description-input') || "Documents";
+        
         payload.content.packages.push({
             weight: 0.5,
-            dimensions: { length: 1, width: 38, height: 48 }
+            dimensions: {
+                length: 1,
+                width: 38,
+                height: 48
+            }
         });
     }
 
@@ -149,6 +166,7 @@ async function buildShipmentPayload(pickupTimeValues) {
             lineItems: lineItems.map((item, index) => {
                 const weight = parseFloat(item.querySelector('.item-weight').value) || 0;
                 const commodityCodeValue = item.querySelector('.commodity-code').value;
+
                 const lineItemObject = {
                     number: index + 1,
                     description: item.querySelector('.item-description').value,
@@ -159,11 +177,19 @@ async function buildShipmentPayload(pickupTimeValues) {
                     },
                     exportReasonType: "permanent",
                     manufacturerCountry: item.querySelector('.item-made-in').value,
-                    weight: { netValue: weight, grossValue: weight },
+                    weight: {
+                        netValue: weight,
+                        grossValue: weight,
+                    },
                 };
+
                 if (commodityCodeValue) {
-                    lineItemObject.commodityCodes = [{ typeCode: "inbound", value: commodityCodeValue }];
+                    lineItemObject.commodityCodes = [{
+                        typeCode: "inbound",
+                        value: commodityCodeValue,
+                    }];
                 }
+
                 return lineItemObject;
             }),
             invoice: {
@@ -191,16 +217,22 @@ async function buildShipmentPayload(pickupTimeValues) {
     const refInputId = isDocument ? 'shipment-reference-doc' : 'shipment-reference-pkg';
     const shipmentReference = getVal(refInputId);
     if (shipmentReference) {
-        payload.customerReferences = [{ typeCode: "CU", value: shipmentReference }];
+        payload.customerReferences = [{
+            typeCode: "CU",
+            value: shipmentReference
+        }];
     }
 
     const docUploader = document.getElementById('doc-uploader');
+
     if (isDocUploadRequested) {
         valueAddedServices.push({ serviceCode: "WY" });
     }
+
     if (isDocUploadRequested && docUploader.files.length > 0) {
         const file = docUploader.files[0];
         const fileExtension = file.name.split('.').pop().toUpperCase();
+        
         try {
             const base64Content = await fileToBase64(file);
             payload.documentImages = [{
@@ -232,8 +264,9 @@ async function buildShipmentPayload(pickupTimeValues) {
     }
 
     if (isPickupRequested) {
-        if (pickupTimeValues) {
-            const closeTimeInMinutes = parseFloat(pickupTimeValues[1]);
+        if (typeof timeSlider !== 'undefined' && timeSlider) {
+            const sliderValues = timeSlider.get(); 
+            const closeTimeInMinutes = parseFloat(sliderValues[1]);
             const hours = Math.floor(closeTimeInMinutes / 60);
             const minutes = Math.round(closeTimeInMinutes % 60);
 
@@ -241,7 +274,9 @@ async function buildShipmentPayload(pickupTimeValues) {
                 isRequested: true,
                 closeTime: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`,
                 location: getVal('pickup-location-select'),
-                specialInstructions: [{ value: getVal('pickup-instructions') || "" }],
+                specialInstructions: [{
+                    value: getVal('pickup-instructions') || ""
+                }],
                 pickupDetails: {
                     postalAddress: {
                         postalCode: getVal('pickup-postalcode'),
@@ -259,7 +294,8 @@ async function buildShipmentPayload(pickupTimeValues) {
                 }
             };
         } else {
-             payload.pickup = { isRequested: true }; // Fallback
+             console.error('DEBUG: timeSlider not found or is null. Using fallback pickup object.');
+             payload.pickup = { isRequested: true };
         }
     } else {
         payload.pickup = { isRequested: false };
@@ -268,16 +304,29 @@ async function buildShipmentPayload(pickupTimeValues) {
     payload.outputImageProperties = {
         encodingFormat: "pdf",
         imageOptions: [
-            { typeCode: "label", templateName: "ECOM26_84_A4_001", isRequested: true },
-			{ typeCode: "waybillDoc", templateName: "ARCH_8X4_A4_002", isRequested: true },
-            { typeCode: "shipmentReceipt", isRequested: true, templateName: "SHIPRCPT_EN_001" }
+            {
+                typeCode: "label",
+                templateName: "ECOM26_84_A4_001",
+                isRequested: true,
+            },
+			{
+                typeCode: "waybillDoc",
+                templateName: "ARCH_8X4_A4_002",
+                isRequested: true,
+            },
+            {
+                typeCode: "shipmentReceipt",
+                isRequested: true,
+                templateName: "SHIPRCPT_EN_001",
+            }
         ],
-		splitInvoiceAndReceipt:true
+		"splitInvoiceAndReceipt":true
     };
 
     if (isPackage && createInvoiceRequested) {
         const isProforma = document.getElementById('invoice-type-proforma').classList.contains('active');
         const invoiceType = isProforma ? "proforma" : "commercial";
+
         payload.outputImageProperties.imageOptions.push({
             typeCode: "invoice",
             invoiceType: invoiceType,
