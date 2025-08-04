@@ -78,33 +78,34 @@ async function buildShipmentPayload() {
 
     // [MODIFIED] Mapped suburb to countyName for the receiver
     const getAddressDetails = (prefix) => {
-        const details = {
-            postalAddress: {
-                postalCode: getVal(`${prefix}-postalcode`),
-                cityName: getVal(`${prefix}-city`),
-                countryCode: getVal(`${prefix}-country-value`),
-                addressLine1: getVal(`${prefix}-address1`),
-                addressLine2: getVal(`${prefix}-address2`) || undefined,
-                addressLine3: getVal(`${prefix}-address3`) || undefined,
-            },
-            contactInformation: {
-                fullName: getVal(`${prefix}-name`),
-                companyName: getVal(`${prefix}-company`),
-                phone: getVal(`${prefix}-phone`),
-                email: getVal(`${prefix}-email`) || undefined,
-            }
-        };
-
-        // Add countyName for receiver if suburb has a value
-        if (prefix === 'receiver') {
-            const suburb = getVal('receiver-suburb');
-            if (suburb) {
-                details.postalAddress.countyName = suburb;
-            }
+    const details = {
+        postalAddress: {
+            postalCode: getVal(`${prefix}-postalcode`),
+            cityName: getVal(`${prefix}-city`),
+            countryCode: getVal(`${prefix}-country-value`),
+            addressLine1: getVal(`${prefix}-address1`),
+            addressLine2: getVal(`${prefix}-address2`) || undefined,
+            addressLine3: getVal(`${prefix}-address3`) || undefined,
+        },
+        contactInformation: {
+            fullName: getVal(`${prefix}-name`),
+            companyName: getVal(`${prefix}-company`),
+            phone: getVal(`${prefix}-phone`),
+            email: getVal(`${prefix}-email`) || undefined,
         }
-        
-        return details;
     };
+
+    // เพิ่ม cityDistrict สำหรับผู้รับ ถ้ามีข้อมูล suburb
+    if (prefix === 'receiver') {
+        const suburb = getVal('receiver-suburb');
+        if (suburb) {
+            // [แก้ไข] เปลี่ยนจาก countyName เป็น cityDistrict
+            details.postalAddress.cityDistrict = suburb;
+        }
+    }
+    
+    return details;
+};
 
 
     payload.customerDetails = {
