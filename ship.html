@@ -684,60 +684,66 @@
         }
         
         function setupCountryComboBox(inputId, valueId, dropdownId) {
-            const input = document.getElementById(inputId);
-            const valueHolder = document.getElementById(valueId);
-            const dropdown = document.getElementById(dropdownId);
-            if (!input || !dropdown) {
-                console.error("ComboBox setup failed for:", inputId);
-                return;
-            }
+    const input = document.getElementById(inputId);
+    const valueHolder = document.getElementById(valueId);
+    const dropdown = document.getElementById(dropdownId);
+    if (!input || !dropdown) {
+        console.error("ComboBox setup failed for:", inputId);
+        return;
+    }
 
-            input.setAttribute('data-i18n-placeholder', 'typeOrSelectCountry');
-            const renderDropdown = (filter = '') => {
-                const filteredList = countryList.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()));
-                dropdown.innerHTML = filteredList.map(c => 
-                    `<div class="country-dropdown-item" data-code="${c.code}" data-name="${c.name}">
-                        <img src="https://flagcdn.com/w20/${c.code.toLowerCase()}.png" alt="${c.name} flag">
-                        <span>${c.name}</span>
-                    </div>`
-                ).join('');
-            };
-            input.addEventListener('focus', () => { renderDropdown(input.value); dropdown.classList.remove('hidden'); });
-            input.addEventListener('input', () => { 
-                renderDropdown(input.value); 
-                if(valueHolder) valueHolder.value = '';
-                dropdown.classList.remove('hidden'); 
-                updateInputValidationState(input);
-            });
-            dropdown.addEventListener('click', (e) => {
-                const item = e.target.closest('.country-dropdown-item');
-                if (item) {
-                    const prefix = inputId.split('-')[0];
-                    const previousCountry = valueHolder.value;
-                    const newCountry = item.dataset.code;
+    input.setAttribute('data-i18n-placeholder', 'typeOrSelectCountry');
+    const renderDropdown = (filter = '') => {
+        const filteredList = countryList.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()));
+        dropdown.innerHTML = filteredList.map(c => 
+            `<div class="country-dropdown-item" data-code="${c.code}" data-name="${c.name}">
+                <img src="https://flagcdn.com/w20/${c.code.toLowerCase()}.png" alt="${c.name} flag">
+                <span>${c.name}</span>
+            </div>`
+        ).join('');
+    };
+    input.addEventListener('focus', () => { renderDropdown(input.value); dropdown.classList.remove('hidden'); });
+    input.addEventListener('input', () => { 
+        renderDropdown(input.value); 
+        if(valueHolder) valueHolder.value = '';
+        dropdown.classList.remove('hidden'); 
+        updateInputValidationState(input);
+    });
+    dropdown.addEventListener('click', (e) => {
+        const item = e.target.closest('.country-dropdown-item');
+        if (item) {
+            const prefix = inputId.split('-')[0];
+            const previousCountry = valueHolder.value;
+            const newCountry = item.dataset.code;
 
-                    input.value = item.dataset.name;
-                    if(valueHolder) valueHolder.value = newCountry;
-                    dropdown.classList.add('hidden');
-                    updateInputValidationState(input);
+            input.value = item.dataset.name;
+            if(valueHolder) valueHolder.value = newCountry;
+            dropdown.classList.add('hidden');
+            updateInputValidationState(input);
 
-                    if (previousCountry !== newCountry) {
-                        const postalInput = document.getElementById(`${prefix}-postalcode`);
-                        const cityInput = document.getElementById(`${prefix}-city`);
-                        if (postalInput) postalInput.value = '';
-                        if (cityInput) {
-                            cityInput.value = '';
-                            updateInputValidationState(cityInput);
-                        }
-                    }
-                    
-                    if (prefix === 'receiver') {
-                        checkCountryConditions(newCountry);
-                    }
+            if (previousCountry !== newCountry) {
+                const postalInput = document.getElementById(`${prefix}-postalcode`);
+                const cityInput = document.getElementById(`${prefix}-city`);
+                const suburbInput = document.getElementById(`${prefix}-suburb`); // เพิ่มตัวแปร suburb
+
+                if (postalInput) postalInput.value = '';
+                if (cityInput) {
+                    cityInput.value = '';
+                    updateInputValidationState(cityInput);
                 }
-            });
-            document.addEventListener('click', (e) => { if (!input.contains(e.target) && !dropdown.contains(e.target)) { dropdown.classList.add('hidden'); } });
+                // เพิ่มเงื่อนไขเคลียร์ค่า suburb
+                if (suburbInput) {
+                    suburbInput.value = '';
+                }
+            }
+            
+            if (prefix === 'receiver') {
+                checkCountryConditions(newCountry);
+            }
         }
+    });
+    document.addEventListener('click', (e) => { if (!input.contains(e.target) && !dropdown.contains(e.target)) { dropdown.classList.add('hidden'); } });
+}
         
         function updateInputValidationState(inputElement) {
             if (!inputElement.hasAttribute('required')) return;
@@ -1786,34 +1792,37 @@
         });
 
         document.getElementById('ship-now-form').addEventListener('input', (e) => {
-            hasUnsavedChanges = true;
-            const target = e.target;
-            const id = target.id;
+    hasUnsavedChanges = true;
+    const target = e.target;
+    const id = target.id;
 
-            if (id.includes('-account')) {
-                let value = target.value;
-                value = value.replace(/[^0-9]/g, '');
-                target.value = value;
-                updateInputValidationState(target);
-            } else if (id.includes('-city')) {
-                target.value = target.value.toUpperCase();
-            } else {
-                const asciiOnlyRegex = /[^\u0000-\u007F]/g;
-                const phoneRegex = /[^\d+-]/g;
-                const numberOnlyRegex = /[^\d]/g;
+    if (id.includes('-account')) {
+        let value = target.value;
+        value = value.replace(/[^0-9]/g, '');
+        target.value = value;
+        updateInputValidationState(target);
+    } else if (id.includes('-city')) {
+        // เพิ่มกฎ ASCII และยังคงการทำเป็นตัวพิมพ์ใหญ่
+        const asciiOnlyRegex = /[^\u0000-\u007F]/g;
+        target.value = target.value.replace(asciiOnlyRegex, '').toUpperCase();
+    } else {
+        const asciiOnlyRegex = /[^\u0000-\u007F]/g;
+        const phoneRegex = /[^\d+-]/g;
+        const numberOnlyRegex = /[^\d]/g;
 
-                if (id.includes('name') || id.includes('company') || id.includes('address') || id.includes('postalcode') || id.includes('shipment-reference') || target.classList.contains('item-description') || id === 'invoice-number' || id === 'summarize-shipment' || id.includes('suburb')) {
-                    target.value = target.value.replace(asciiOnlyRegex, '');
-                } else if (target.type === 'tel') {
-                    target.value = target.value.replace(phoneRegex, '');
-                } else if (id === 'insurance-value') {
-                    target.value = target.value.replace(numberOnlyRegex, '');
-                }
-            }
-            if (target.matches('input[required], select[required]')) {
-                 updateInputValidationState(target);
-            }
-        });
+        // เพิ่ม id ของช่องที่ต้องการให้รับเฉพาะ ASCII
+        if (id.includes('name') || id.includes('company') || id.includes('address') || id.includes('postalcode') || id.includes('shipment-reference') || target.classList.contains('item-description') || id === 'invoice-number' || id === 'summarize-shipment' || id.includes('suburb') || id.includes('-country-input') || id.includes('-email') || id.includes('-vat')) {
+            target.value = target.value.replace(asciiOnlyRegex, '');
+        } else if (target.type === 'tel') {
+            target.value = target.value.replace(phoneRegex, '');
+        } else if (id === 'insurance-value') {
+            target.value = target.value.replace(numberOnlyRegex, '');
+        }
+    }
+    if (target.matches('input[required], select[required]')) {
+         updateInputValidationState(target);
+    }
+});
         
         nextButton.addEventListener('click', () => {
             if (validateCurrentStep()) {
