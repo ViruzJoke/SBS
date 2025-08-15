@@ -102,6 +102,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            sessionStorage.removeItem('termsAccepted');
+
             const translations = { 
                 'th': { 
                     'homepage': 'หน้าหลัก', 'gettingStartedTitle': 'เริ่มต้นใช้งาน', 'createShipment': 'สร้างใบนำส่ง', 
@@ -183,11 +185,19 @@
             consentCheckbox.addEventListener('change', () => {
                 const isChecked = consentCheckbox.checked;
                 toggleCreateButton(isChecked);
+                
+                if (isChecked) {
+                    sessionStorage.setItem('termsAccepted', 'true');
+                } else {
+                    sessionStorage.removeItem('termsAccepted');
+                }
             });
 
             createShipmentBtn.addEventListener('click', (event) => {
                 if (createShipmentBtn.classList.contains('is-disabled')) {
                     event.preventDefault();
+                } else {
+                    sessionStorage.setItem('termsAccepted', 'true');
                 }
             });
 

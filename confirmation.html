@@ -71,6 +71,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+			if (sessionStorage.getItem('termsAccepted') !== 'true') {
+                window.location.href = 'index.html';
+                return; // หยุดการทำงานของ script ที่เหลือ
+            }
             // --- Translations ---
             const translations = {
                 'th': { 'confirmationTitle': 'สร้างใบนำส่งสำเร็จ!', 'confirmationSubtitle': 'ข้อมูลใบนำส่งสินค้าของคุณพร้อมสำหรับพิมพ์และดาวน์โหลด', 'awbLabel': 'หมายเลข AWB ของคุณคือ:', 'pickupNumberTitle': 'หมายเลขยืนยันการนัดรับสินค้า', 'downloadLabel': 'ดาวน์โหลดใบนำส่ง', 'downloadReceipt': 'ดาวน์โหลดใบสรุปการจัดส่ง', 'downloadInvoice': 'ดาวน์โหลดใบอินวอยซ์', 'pieceIdTitle': 'หมายเลข Piece ID', 'warningsTitle': 'คำเตือนจากระบบ', 'createNewShipment': 'สร้างใบนำส่งใหม่', 'backToMain': 'กลับหน้าหลัก', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'loadingData': 'กำลังโหลดข้อมูล...', 'noShipmentData': 'ไม่พบข้อมูลการจัดส่ง กรุณาสร้างใบนำส่งใหม่อีกครั้ง', 'downloadError': 'เกิดข้อผิดพลาดในการเตรียมไฟล์สำหรับดาวน์โหลด', 'downloadDisabled': 'ไฟล์นี้ไม่สามารถดาวน์โหลดได้', 'downloadLabelAndInvoice': 'ดาวน์โหลด Label และ Invoice' },
