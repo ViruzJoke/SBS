@@ -1671,12 +1671,12 @@
             document.getElementById('pickup-phone').value = shipperPhone;
             
             const addressHTML = `
-                <p><strong>${shipperName || ''}</strong>, ${company}</p>
-                <p>${address1}</p>
-                ${address2 ? `<p>${address2}</p>` : ''}
-                ${address3 ? `<p>${address3}</p>` : ''}
-                <p>${city}, ${postal}</p>
-                <p>Tel: ${phone}</p>
+                <p><strong>${shipperName || ''}</strong>, ${shipperCompany}</p>
+                <p>${shipperAddress1}</p>
+                ${shipperAddress2 ? `<p>${shipperAddress2}</p>` : ''}
+                ${shipperAddress3 ? `<p>${shipperAddress3}</p>` : ''}
+                <p>${shipperCity}, ${shipperPostal}</p>
+                <p>Tel: ${shipperPhone}</p>
             `;
             document.getElementById('pickup-address-display').innerHTML = addressHTML;
         }
