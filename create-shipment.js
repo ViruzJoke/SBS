@@ -1,29 +1,14 @@
-/**
- * =================================================================
- * Shipment Creation Backup Solution - Create Shipment Payload Builder
- * Author: Joker
- * Version: 21.0.0 (Added VAT/Tax ID and updated suburb mapping)
- * Description: This script collects all data from the ship.html form
- * and builds the correct root JSON payload for the DHL API.
- * =================================================================
- */
-
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-            // result includes the "data:mime/type;base64," prefix, remove it
             resolve(reader.result.split(',')[1]);
         };
         reader.onerror = error => reject(error);
     });
 }
 
-/**
- * Gathers all data from the form and builds the complete JSON payload.
- * @returns {Promise<Object|null>} A promise that resolves with the shipment payload object, or null on failure.
- */
 async function buildShipmentPayload() {
     const getVal = (id) => document.getElementById(id)?.value || '';
     const getChecked = (id) => document.getElementById(id)?.checked || false;
@@ -35,7 +20,6 @@ async function buildShipmentPayload() {
     const receiverPaysTaxes = getChecked('receiver-pays-checkbox');
     const isInsuranceRequested = getChecked('protect-shipment');
     const isDocUploadRequested = getChecked('upload-documents-checkbox');
-
 
     let payload = {};
     let valueAddedServices = [];
@@ -88,7 +72,6 @@ async function buildShipmentPayload() {
             }
         };
 
-        // Add countyName for receiver if detail include suburb
         if (prefix === 'receiver') {
             const suburb = getVal('receiver-suburb');
             if (suburb) {
@@ -96,7 +79,6 @@ async function buildShipmentPayload() {
             }
         }
 
-        // add registration number (VAT/Tax ID) if not null
         const vatNumber = getVal(`${prefix}-vat`);
         const countryCode = getVal(`${prefix}-country-value`);
         if (vatNumber && countryCode) {
@@ -111,7 +93,6 @@ async function buildShipmentPayload() {
         
         return details;
     };
-
 
     payload.customerDetails = {
         shipperDetails: getAddressDetails('shipper'),
@@ -307,17 +288,22 @@ async function buildShipmentPayload() {
         payload.pickup = { isRequested: false };
     }
     
+    const isA4 = document.getElementById('print-size-a4').classList.contains('active');
+    
+    const labelTemplate = isA4 ? "ECOM26_84_A4_001" : "ECOM26_84_001";
+    const waybillTemplate = isA4 ? "ARCH_8X4_A4_002" : "ARCH_8X4_001";
+
     payload.outputImageProperties = {
         encodingFormat: "pdf",
         imageOptions: [
             {
                 typeCode: "label",
-                templateName: "ECOM26_84_A4_001",
+                templateName: labelTemplate,
                 isRequested: true,
             },
 			{
                 typeCode: "waybillDoc",
-                templateName: "ARCH_8X4_A4_002",
+                templateName: waybillTemplate,
                 isRequested: true,
             },
             {
@@ -326,7 +312,7 @@ async function buildShipmentPayload() {
                 templateName: "SHIPRCPT_EN_001",
             }
         ],
-		"splitInvoiceAndReceipt":true
+		splitInvoiceAndReceipt: true
     };
 
     if (isPackage && createInvoiceRequested) {
@@ -347,4 +333,3 @@ async function buildShipmentPayload() {
     console.log("DEBUG: Final Payload:", JSON.stringify(payload, null, 2));
     return payload;
 }
-
