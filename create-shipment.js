@@ -1,18 +1,13 @@
 /**
  * =================================================================
- * DHL Backup Solution - Create Shipment Payload Builder
- * Author: Joker & Gemini
+ * Shipment Creation Backup Solution - Create Shipment Payload Builder
+ * Author: Joker
  * Version: 21.0.0 (Added VAT/Tax ID and updated suburb mapping)
  * Description: This script collects all data from the ship.html form
  * and builds the correct root JSON payload for the DHL API.
  * =================================================================
  */
 
-/**
- * Reads a file and converts it to a Base64 encoded string.
- * @param {File} file The file to encode.
- * @returns {Promise<string>} A promise that resolves with the Base64 string.
- */
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -30,7 +25,6 @@ function fileToBase64(file) {
  * @returns {Promise<Object|null>} A promise that resolves with the shipment payload object, or null on failure.
  */
 async function buildShipmentPayload() {
-    // Helper functions to get value from an element by ID
     const getVal = (id) => document.getElementById(id)?.value || '';
     const getChecked = (id) => document.getElementById(id)?.checked || false;
     
@@ -94,7 +88,7 @@ async function buildShipmentPayload() {
             }
         };
 
-        // เพิ่ม countyName สำหรับผู้รับ ถ้ามีข้อมูล suburb
+        // Add countyName for receiver if detail include suburb
         if (prefix === 'receiver') {
             const suburb = getVal('receiver-suburb');
             if (suburb) {
@@ -102,7 +96,7 @@ async function buildShipmentPayload() {
             }
         }
 
-        // เพิ่ม registration number (VAT/Tax ID) หากมีการกรอกข้อมูล
+        // add registration number (VAT/Tax ID) if not null
         const vatNumber = getVal(`${prefix}-vat`);
         const countryCode = getVal(`${prefix}-country-value`);
         if (vatNumber && countryCode) {
@@ -353,3 +347,4 @@ async function buildShipmentPayload() {
     console.log("DEBUG: Final Payload:", JSON.stringify(payload, null, 2));
     return payload;
 }
+
