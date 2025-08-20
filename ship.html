@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL Backup Solution - Create Shipment</title>
+    <title>Shipment Creation Backup Solution - Create Shipment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
@@ -125,7 +125,7 @@
 </head>
 <body class="with-faded-bg">
     <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10 rounded-b-xl">
-        <a href="index.html" class="flex items-center"><span class="text-4xl font-bold text-red-600">DHL</span><span class="ml-2 text-xl font-semibold text-gray-800  sm:block">Backup Solution</span></a>
+        <a href="index.html" class="flex items-center"><span class="text-4xl font-bold text-red-600">Shipment Creation</span><span class="ml-2 text-xl font-semibold text-gray-800  sm:block">Backup Solution</span></a>
         <nav class="flex items-center space-x-2 sm:space-x-4">			
 			<button id="clear-history-btn" class="utility-button px-4 py-2 flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
@@ -591,7 +591,7 @@
     document.addEventListener('DOMContentLoaded', () => {
 		if (sessionStorage.getItem('termsAccepted') !== 'true') {
             window.location.href = 'index.html';
-            return; // หยุดการทำงานของ script ที่เหลือ
+            return; // Stop remain script and redirect to home
         }
         const translations = {
             'th': { 'leaveSiteTitle': 'ออกจากหน้านี้?', 'leaveSiteBody': 'การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก', 'stayButton': 'อยู่ต่อ', 'leaveButton': 'ออก', 'createShipment':'สร้างใบนำส่ง','addressStep':'ที่อยู่','shipmentDetailsStep':'ชิปเมนต์','packageStep':'แพ็คเกจ','paymentStep':'การชำระเงิน','docsStep':'เอกสาร','pickupStep':'การนัดรับสินค้า','summaryStep':'สรุป','shipperInfo':'ข้อมูลผู้ส่ง','receiverInfo':'ข้อมูลผู้รับ','shipperName':'ชื่อผู้ส่ง','shipperCompany':'บริษัทผู้ส่ง','shipperPhone':'เบอร์โทรผู้ส่ง','shipperAddress1':'ที่อยู่ 1','shipperAddress2':'ที่อยู่ 2','shipperAddress3':'ที่อยู่ 3','shipperCountry':'ประเทศ','shipperPostalCode':'รหัสไปรษณีย์','shipperCity':'เมือง','receiverName':'ชื่อผู้รับ','receiverCompany':'บริษัทผู้รับ','receiverPhone':'เบอร์โทรผู้รับ','receiverAddress1':'ที่อยู่ 1','receiverAddress2':'ที่อยู่ 2','receiverAddress3':'ที่อยู่ 3','receiverCountry':'ประเทศ','receiverPostalCode':'รหัสไปรษณีย์','receiverCity':'เมือง', 'receiverSuburb': 'แขวง/ตำบล', 'document':'เอกสาร','package':'พัสดุ','addLineItem':'เพิ่มรายการสินค้า','shipmentRef':'เลขที่อ้างอิง (optional)','protectShipment':'เพิ่มความคุ้มครองการจัดส่ง (ประกัน)','packageDetails':'รายละเอียดแพ็คเกจ','addPiece':'เพิ่มกล่อง','shipperAccount':'บัญชีผู้ส่ง','billingAccount':'บัญชีสำหรับวางบิล', 'dutiesAccount':'บัญชีผู้ชำระภาษี','incoterm':'Incoterm','shipmentDate':'วันที่ส่ง','docUpload':'อัปโหลดเอกสาร','docUploadDesc':'อัปโหลดเอกสารเพิ่มเติม (ไม่เกิน 5MB)','summary':'สรุปข้อมูล','previous':'ย้อนกลับ','next':'ถัดไป','createShipmentBtn':'สร้างใบนำส่ง','allRightsReserved':'สงวนลิขสิทธิ์.','fillAllFields':'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน','typeOrSelectCountry': 'พิมพ์หรือเลือกประเทศ', 'backToMain': 'กลับหน้าหลัก', 'shipperEmail': 'อีเมลผู้ส่ง', 'receiverEmail': 'อีเมลผู้รับ', 'shipperVat': 'เลขประจำตัวผู้เสียภาษีผู้ส่ง', 'receiverVat': 'เลขประจำตัวผู้เสียภาษีผู้รับ', 'whatIsTheItem': 'สินค้าคืออะไร?', 'commodityCode': 'รหัสพิกัดศุลกากร', 'quantity': 'จำนวน', 'units': 'หน่วย', 'valuePerItem': 'มูลค่า (ต่อชิ้น)', 'weight': 'น้ำหนัก (KG)', 'whereWasItMade': 'ผลิตที่ประเทศ', 'totalUnits': 'จำนวนรวม:', 'totalWeight': 'น้ำหนักรวม:', 'totalValue': 'มูลค่ารวม:', 'insuredValue': 'มูลค่าประกัน', 'describeDocuments': 'ระบุประเภทเอกสารในชิปเมนต์ของคุณ', 'fillAllFieldsInItem': 'กรุณากรอกข้อมูลในรายการก่อนหน้าให้ครบถ้วน', 'customsInvoiceDetails': 'รายละเอียดใบกำกับสินค้า', 'createInvoice': 'สร้าง Invoice', 'useMyOwnInvoice': 'ใช้ Invoice ของฉัน', 'invoiceNumber': 'หมายเลข Invoice', 'itemDescription': 'รายละเอียดสินค้า', 'totalItemValue': 'มูลค่ารวม', 'summarizeShipment': 'สรุปรายการสินค้าในชิปเมนต์', 'shipmentDescription': '(shipment description)', 'totalPackages': 'จำนวนแพ็คเกจรวม:', 'totalWeightKg': 'น้ำหนักรวม:', 'lengthCm': 'ยาว (ซม.)', 'widthCm': 'กว้าง (ซม.)', 'heightCm': 'สูง (ซม.)', 'weightKg': 'น้ำหนัก (Kg)', 'dimensionsCm': 'ขนาด (ซม.)', 'fillAllFieldsInPiece': 'กรุณากรอกข้อมูลในแพ็คเกจก่อนหน้าให้ครบถ้วน', 'receiverWillPay': 'ผู้รับชำระภาษี', 'uploadCustomsDocs': 'อัปโหลดเอกสารศุลกากรของคุณ', 'uploadDocsDesc1': 'คุณสามารถอัปโหลดและส่งใบกำกับสินค้าหรือเอกสารทางศุลกากรอื่นๆ ในรูปแบบไฟล์ภาพและส่งมาให้เราทางอิเล็กทรอนิกส์ได้', 'uploadDocsDesc2': 'หากคุณไม่ได้อัปโหลดรูปภาพเอกสาร โปรดอย่าลืมพิมพ์และจัดเตรียมเอกสารของคุณมาพร้อมกับชิปเมนต์', 'uploadDocsQuestion': 'คุณต้องการอัปโหลดไฟล์ภาพหรือไม่?', 'yes': 'ใช่', 'browseForFile': 'เลือกไฟล์', 'orDropHere': ' หรือลากมาวางที่นี่', 'fileTypesAllowed': 'ประเภทไฟล์ที่อนุญาต: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, หรือ PDF', 'maxFileSize': 'ขนาดไฟล์สูงสุด: 5 MB', 'fileNameEnglishOnly': 'ชื่อไฟล์ต้องเป็นภาษาอังกฤษเท่านั้น', 'pickupYes': 'ใช่ – นัดรับสินค้า', 'pickupNo': 'ไม่ – ไม่ต้องการนัดรับ', 'pickupDropOffLink': 'ฉันสามารถนำส่งพัสดุได้ที่ไหน?', 'pickupSendingOn': 'ฉันจะส่งของในวันที่', 'pickupWindow': 'ช่วงเวลานัดรับ – เวลาที่พนักงานอาจมาถึงและพัสดุพร้อม', 'pickupWindowHint': 'กรุณาเผื่อช่วงเวลาอย่างน้อย 90 นาที', 'pickupLocation': 'พนักงานควรไปรับพัสดุที่ไหน?', 'pickupTotalWeight': 'น้ำหนักรวมของพัสดุ', 'pickupInstructions': 'คำแนะนำสำหรับพนักงาน (ถ้ามี)', 'pickupAddress': 'ที่อยู่สำหรับนัดรับ', 'editAddress': 'แก้ไข', 'saveAddress': 'บันทึก', 'editShipment': 'แก้ไขชิปเมนต์', 'summaryShipper': 'ผู้ส่ง', 'summaryReceiver': 'ผู้รับ', 'summaryShipmentInfo': 'ข้อมูลชิปเมนต์', 'summaryPackageInfo': 'ข้อมูลแพ็คเกจ', 'summaryPaymentInfo': 'ข้อมูลการชำระเงิน', 'summaryDocumentInfo': 'ข้อมูลเอกสาร', 'summaryPickupInfo': 'ข้อมูลการนัดรับสินค้า', 'requestPickup': 'ต้องการนัดรับสินค้า', 'summaryPickupDate': 'วันที่นัดรับ', 'summaryPickupTime': 'เวลานัดรับ', 'phoneMinLength': 'เบอร์โทรศัพท์ต้องมีอย่างน้อย 4 ตัวอักษร', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account Number ต้องมี 9 ตัวอักษร', 'uploadLabelOwnInvoice': 'อัปโหลดรูปภาพใบกำกับสินค้าของคุณ', 'uploadLabelCreateInvoice': "DHL จะสร้างใบกำกับสินค้าอิเล็กทรอนิกส์จากรายละเอียดที่คุณให้ไว้สำหรับชิปเมนต์นี้", 'creatingShipment': 'กำลังสร้างใบนำส่ง...', 'apiErrorTitle': 'เกิดข้อผิดพลาด', 'multipleProblemsFound': 'พบปัญหาหลายรายการ', 'useShipperForBilling': 'ใช้บัญชีนี้สำหรับชำระค่าขนส่ง', 'selectPrintSize': 'กรุณาเลือกขนาดในการปริ้น', 'printA4': 'ขนาด A4', 'printLabel': 'ขนาด Label', 'selectPrintSizeError': 'กรุณาเลือกขนาดในการปริ้นก่อนสร้างใบนำส่ง', 'mexicoTaxIdRequired': 'คุณจะต้องระบุหมายเลขผู้เสียภาษีด้วยหากส่งของไปที่ประเทศปลายทางนี้', 'clearHistory': 'ล้างประวัติ', 'clearHistoryConfirm': 'คุณต้องการล้างข้อมูลที่บันทึกไว้ทั้งหมดหรือไม่?'
@@ -605,7 +605,8 @@
         const uomList = [ { unitOfMeasurement: 'BOX', description: 'Boxes' }, { unitOfMeasurement: '2M2', description: 'Cubic Meters' }, { unitOfMeasurement: 'DPR', description: 'Dozen Pairs' }, { unitOfMeasurement: 'DOZ', description: 'Dozen' }, { unitOfMeasurement: 'PCS', description: 'Pieces' }, { unitOfMeasurement: 'GM', description: 'Grams' }, { unitOfMeasurement: 'GRS', description: 'Gross' }, { unitOfMeasurement: 'KG', description: 'Kilograms' }, { unitOfMeasurement: '3GM', description: 'Milligrams' }, { unitOfMeasurement: 'X', description: 'No Unit Required' }, { unitOfMeasurement: 'NO', description: 'Number' }, { unitOfMeasurement: 'PRS', description: 'Pairs' }, { unitOfMeasurement: 'CM2', description: 'Square Centimeters' }, { unitOfMeasurement: '2M2', description: 'Square Feet' }, { unitOfMeasurement: '3M2', description: 'Square Inches' }, { unitOfMeasurement: 'M2', description: 'Square Meters' }, { unitOfMeasurement: '4M2', description: 'Square Yards' }, { unitOfMeasurement: 'CM', description: 'Centimeters' }, { unitOfMeasurement: 'CONE', description: 'Cone' }, { unitOfMeasurement: 'CT', description: 'Carat' }, { unitOfMeasurement: 'EA', description: 'Each' }, { unitOfMeasurement: 'LBS', description: 'Pounds' }, { unitOfMeasurement: 'RILL', description: 'Rill' }, { unitOfMeasurement: 'ROLL', description: 'Roll' }, { unitOfMeasurement: 'SET', description: 'Set' }, { unitOfMeasurement: 'TU', description: 'Time Unit' }, { unitOfMeasurement: '2GM', description: 'centigram' }, { unitOfMeasurement: 'KM', description: 'kilometre' }, { unitOfMeasurement: 'IN', description: 'inch' }, { "name": "foot", "code": "FT" }, { unitOfMeasurement: 'YD', description: 'yard' }, { "name": "mile (statute mile)", "code": "MI" }, { unitOfMeasurement: 'LTR', description: 'litre' }, { unitOfMeasurement: 'MMQ', description: 'cubic millimetre' }, { unitOfMeasurement: 'CM3', description: 'cubic centimetre' }, { unitOfMeasurement: 'DMQ', 'description': 'cubic decimetre' }, { unitOfMeasurement: 'MLT', description: 'millilitre' }, { unitOfMeasurement: 'CLT', description: 'centilitre' }, { unitOfMeasurement: 'DLT', description: 'decilitre' }, { unitOfMeasurement: 'INQ', description: 'cubic inch' }, { unitOfMeasurement: 'FT3', description: 'cubic foot' }, { unitOfMeasurement: 'YD3', description: 'cubic yard' }, { unitOfMeasurement: 'GLL', description: 'gallon (UK)' }, { unitOfMeasurement: 'GLI', description: 'gallon (US)' }, { unitOfMeasurement: 'PT', description: 'pint (US)' }, { unitOfMeasurement: 'PTI', description: 'pint (UK)' }, { unitOfMeasurement: 'QTI', description: 'quart (UK)' }, { unitOfMeasurement: 'QTL', description: 'liquid quart (US)' }, { unitOfMeasurement: 'PTL', description: 'liquid pint (US)' }, { unitOfMeasurement: 'PTD', description: 'dry pint (US)' }, { unitOfMeasurement: 'OZI', description: 'fluid ounce (UK)' }, { unitOfMeasurement: 'J57', description: 'barrel (UK petroleum)' }, { unitOfMeasurement: 'NM3', description: 'Normalised cubic metre' }, { unitOfMeasurement: 'SM3', description: 'Standard cubic metre' }, { unitOfMeasurement: 'TNE', description: 'tonne (metric ton)' }, { unitOfMeasurement: 'LB', description: 'Pound' }, { unitOfMeasurement: 'ONZ', description: 'ounce (avoirdupois)' }, { unitOfMeasurement: 'CEL', description: 'degree Celsius' }, { unitOfMeasurement: 'M', description: 'Meters' } ];
         const incotermList = [ { incoterm: 'DAP', incotermName: 'Delivered at Place' }, { incoterm: 'DDU', incotermName: 'Delivered Duty Unpaid' }, { incoterm: 'DDP', incotermName: 'Delivered Duty Paid' }, { incoterm: 'DEQ', incotermName: 'Delivery ex Quay' }, { incoterm: 'FCA', incotermName: 'Free Carrier' }, { incoterm: 'FAS', incotermName: 'Free Alongside Ship' }, { incoterm: 'DAF', incotermName: 'Delivered at Frontier' }, { incoterm: 'FOB', incotermName: 'Free on Board' }, { incoterm: 'EXW', incotermName: 'Ex Works' }, { incoterm: 'CPT', incotermName: 'Carriage Paid To' }, { incoterm: 'DES', incotermName: 'Delivered ex Ship' }, { incoterm: 'CFR', incotermName: 'Cost and Freight' }, { incoterm: 'CIF', incotermName: 'Cost Insurance and Freight' }, { incoterm: 'CIP', incotermName: 'Carriage and Insurance Paid to' }, { incoterm: 'DAT', incotermName: 'Delivered at Terminal' }, { incoterm: 'DPU', incotermName: 'Delivered at Place Unloaded' } ];
         const pickupLocations = ["Reception", "Lobby", "Guard House", "Warehouse", "Mailroom"];
-        
+
+		// Individual notify base on country
         const countryConditions = {
             'MX': 'mexicoTaxIdRequired'
         };
@@ -2223,7 +2224,7 @@
             formMessage.classList.add('hidden');
         });
         
-        // --- START: Auto-fill with localStorage (เฉพาะ Step 1) ---
+        // --- START: Auto-fill with localStorage (Shipper Address only) ---
         const fieldsToSave = [
             'shipper-name', 'shipper-company', 'shipper-address1', 'shipper-address2', 'shipper-address3', 
             'shipper-postalcode', 'shipper-city', 'shipper-email', 'shipper-phone', 'shipper-vat'
@@ -2282,10 +2283,9 @@
         createPackagePiece();
         updateSummary();
         
-        // --- START: เรียกใช้ฟังก์ชัน localStorage และปุ่ม Clear ---
         loadFormDataFromLocalStorage();
         
-        const formToWatch = document.getElementById('ship-now-step-1'); // เปลี่ยนให้จับ event เฉพาะ step 1
+        const formToWatch = document.getElementById('ship-now-step-1'); 
         formToWatch.addEventListener('input', saveFormDataToLocalStorage);
 
         const clearButton = document.getElementById('clear-history-btn');
@@ -2294,7 +2294,6 @@
                 if (confirm(getTranslatedText('clearHistoryConfirm'))) {
                     localStorage.removeItem('dhlShipmentData');
                     
-                    // ล้างค่าในฟอร์มเฉพาะฟิลด์ที่บันทึกไว้
                     const form = document.getElementById('ship-now-form');
                     fieldsToSave.forEach(fieldId => {
                         const element = form.querySelector(`#${fieldId}`);
@@ -2303,12 +2302,12 @@
                         }
                     });
                     
-                    location.reload(); // รีโหลดหน้าเพื่อให้เห็นผล
+                    location.reload();
                     console.log('History cleared!');
                 }
             });
         }
-        // --- END: เรียกใช้ฟังก์ชัน localStorage และปุ่ม Clear ---
+        // --- END: Call function localStorage and Clear ---
         
         updateContentLanguage();
         changeStep(1);
@@ -2316,4 +2315,5 @@
     </script>
 </body>
 </html>
+
 
