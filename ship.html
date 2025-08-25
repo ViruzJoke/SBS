@@ -1796,34 +1796,50 @@
         });
 
         document.getElementById('ship-now-form').addEventListener('input', (e) => {
-            hasUnsavedChanges = true;
-            const target = e.target;
-            const id = target.id;
+        hasUnsavedChanges = true;
+        const target = e.target;
+        const id = target.id;
 
-            if (id.includes('-account')) {
-                let value = target.value;
-                value = value.replace(/[^0-9]/g, '');
-                target.value = value;
-                updateInputValidationState(target);
-            } else if (id.includes('-city')) {
-                target.value = target.value.toUpperCase();
-            } else {
-                const asciiOnlyRegex = /[^\u0000-\u007F]/g;
-                const phoneRegex = /[^\d+-]/g;
-                const numberOnlyRegex = /[^\d]/g;
+        if (id.includes('-account')) {
+            let value = target.value;
+            value = value.replace(/[^0-9]/g, '');
+            target.value = value;
+            updateInputValidationState(target);
+        } else {
+            const asciiOnlyRegex = /[^\u0000-\u007F]/g;
+            const phoneRegex = /[^\d+-]/g;
+            const numberOnlyRegex = /[^\d]/g;
 
-                if (id.includes('name') || id.includes('company') || id.includes('address') || id.includes('postalcode') || id.includes('shipment-reference') || target.classList.contains('item-description') || id === 'invoice-number' || id === 'summarize-shipment' || id.includes('suburb')) {
-                    target.value = target.value.replace(asciiOnlyRegex, '');
-                } else if (target.type === 'tel') {
-                    target.value = target.value.replace(phoneRegex, '');
-                } else if (id === 'insurance-value') {
-                    target.value = target.value.replace(numberOnlyRegex, '');
+            const isAsciiOnlyField = id.includes('name') || 
+                                     id.includes('company') || 
+                                     id.includes('address') || 
+                                     id.includes('postalcode') || 
+                                     id.includes('shipment-reference') || 
+                                     target.classList.contains('item-description') || 
+                                     id === 'invoice-number' || 
+                                     id === 'summarize-shipment' || 
+                                     id.includes('suburb') ||
+                                     id.includes('country-input') || 
+                                     id.includes('city') ||          
+                                     id.includes('email') ||         
+                                     id.includes('vat');             
+
+            if (isAsciiOnlyField) {
+                let value = target.value.replace(asciiOnlyRegex, '');
+                if (id.includes('city')) {
+                    value = value.toUpperCase();
                 }
+                target.value = value;
+            } else if (target.type === 'tel') {
+                target.value = target.value.replace(phoneRegex, '');
+            } else if (id === 'insurance-value') {
+                target.value = target.value.replace(numberOnlyRegex, '');
             }
-            if (target.matches('input[required], select[required]')) {
-                 updateInputValidationState(target);
-            }
-        });
+        }
+        if (target.matches('input[required], select[required]')) {
+             updateInputValidationState(target);
+        }
+    });
         
         nextButton.addEventListener('click', () => {
             if (validateCurrentStep()) {
