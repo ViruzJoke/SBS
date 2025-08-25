@@ -1907,7 +1907,7 @@
                 }
             }
 
-            // --- START: Added real-time length validation ---
+            // --- START: Updated real-time length validation and truncation ---
             let key = null;
             if (id.includes('-name')) key = 'name';
             else if (id.includes('-company')) key = 'company';
@@ -1922,9 +1922,13 @@
             else if (id.includes('-vat')) key = 'vat';
 
             if (key && maxLengths[key]) {
-                manageLengthError(target, maxLengths[key]);
+                const maxLength = maxLengths[key];
+                if (target.value.length > maxLength) {
+                    target.value = target.value.slice(0, maxLength);
+                }
+                manageLengthError(target, maxLength);
             }
-            // --- END: Added real-time length validation ---
+            // --- END: Updated real-time length validation and truncation ---
 
             if (target.matches('input[required], select[required]')) {
                  updateInputValidationState(target);
@@ -2419,6 +2423,7 @@
         changeStep(1);
     });
     </script>
+
 
 </body>
 </html>
