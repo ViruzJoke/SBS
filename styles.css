@@ -6,7 +6,6 @@
 /* Faded Background Style */
 .with-faded-bg {
     position: relative;
-    /* overflow: hidden; <-- THIS WAS THE PROBLEM, REMOVED IT */
 }
 
 .with-faded-bg::before {
@@ -17,11 +16,11 @@
     width: 100vw;
     height: 100vh;
     z-index: -1;
-    background-image: url('DBS_Background.jpg'); /* <-- แก้ชื่อไฟล์รูปภาพตรงนี้ */
+    background-image: url('DBS_Background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.1; /* <-- ปรับความจางตรงนี้ */
+    opacity: 0.1;
 }
 
 /* --- Base and Layout --- */
@@ -132,7 +131,6 @@ header, footer { width: 100%; z-index: 10; }
     z-index: 2; 
     flex: 0 1 auto;
 }
-/* -- NEW -- Add cursor pointer to completed steps */
 .progress-step.is-complete {
     cursor: pointer;
 }
@@ -178,99 +176,9 @@ header, footer { width: 100%; z-index: 10; }
 .progress-step.is-complete .step-number { display: none; }
 .progress-step.is-complete .step-check { display: block; }
 
-
-/* --- Accordion for Tracking, etc. --- */
-.accordion-item { 
-    border-bottom: 1px solid #e5e7eb; 
-}
-.accordion-item:last-child {
-    border-bottom: none;
-}
-.accordion-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 1rem; 
-    cursor: pointer; 
-    background-color: #f9fafb; 
-    transition: background-color 0.2s;
-}
-.accordion-header:hover {
-    background-color: #f3f4f6;
-}
-.accordion-body { 
-    max-height: 0; 
-    overflow: hidden; 
-    transition: max-height 0.4s ease-out;
-    background-color: #ffffff;
-}
-.accordion-body-content {
-    border-top: 1px solid #e5e7eb;
-}
-
-/* --- Tracking Timeline (Revised) --- */
-.tracking-timeline {
-    position: relative;
-    padding-left: 1.25rem; /* Space for the line */
-    border-left: 2px solid #e5e7eb; /* The vertical line */
-}
-.timeline-date-header {
-    font-weight: 600;
-    margin-bottom: 1rem;
-    padding-top: 1rem;
-}
-.timeline-date-header:first-of-type {
-    padding-top: 0;
-}
-.timeline-item {
-    position: relative;
-    padding-left: 2rem; /* Space between line and text */
-    padding-bottom: 1.5rem;
-}
-.timeline-item:last-child {
-    padding-bottom: 0.5rem;
-}
-.timeline-icon {
-    position: absolute;
-    left: -0.625rem; /* (Icon width - Border width) / 2 -> (1.25rem - 2px) / 2 */
-    top: 4px; /* Adjust vertical alignment */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.25rem; /* 20px */
-    height: 1.25rem; /* 20px */
-    border-radius: 9999px; /* full */
-    background-color: #d1d5db; /* gray-300 */
-}
-.timeline-item.is-latest .timeline-icon {
-    background-color: #10B981; /* green-500 */
-    transform: scale(1.1);
-}
-.timeline-icon svg {
-    width: 0.75rem; /* 12px */
-    height: 0.75rem; /* 12px */
-    color: white;
-}
-.timeline-content {
-    position: relative;
-}
-.timeline-timestamp {
-    font-weight: 500;
-    font-size: 0.875rem;
-}
-.timeline-status {
-    font-weight: 600;
-    color: #1f2937;
-}
-.timeline-location {
-    font-size: 0.875rem; /* text-sm */
-    color: #6b7280; /* gray-500 */
-}
-
-
 /* --- Dark Mode --- */
 body.dark-mode { background-color: #111827; color: #d1d5db; }
-body.dark-mode header, body.dark-mode footer, body.dark-mode .card { background-color: #1f2937; border-color: #374151; }
+body.dark-mode header, body.dark-mode .card { background-color: #1f2937; border-color: #374151; }
 body.dark-mode .text-gray-800, body.dark-mode .text-gray-700, body.dark-mode .text-gray-600, body.dark-mode .text-black, body.dark-mode label { color: #d1d5db; }
 body.dark-mode .input-field { background-color: #374151; color: #d1d5db; border-color: #4b5563; }
 body.dark-mode .input-field:focus { border-color: #fbbf24; }
@@ -283,12 +191,33 @@ body.dark-mode .step-circle { border-color: #4b5563; background-color: #1f2937; 
 body.dark-mode .progress-step.is-active .step-text { color: #f87171; }
 body.dark-mode .progress-step.is-complete .step-text { color: #d1d5db; }
 body.dark-mode .progress-step.is-complete .step-circle { background-color: #10B981; border-color: #10B981; }
-body.dark-mode .accordion-header { background-color: #2c374a; }
-body.dark-mode .accordion-header:hover { background-color: #374151; }
-body.dark-mode .accordion-body { background-color: #1f2937; }
-body.dark-mode .accordion-body-content { border-top-color: #374151; }
-body.dark-mode .tracking-timeline { border-left-color: #4b5563; }
-body.dark-mode .timeline-icon { background-color: #4b5563; }
-body.dark-mode .timeline-item.is-latest .timeline-icon { background-color: #10B981; }
-body.dark-mode .timeline-status { color: #e5e7eb; }
-body.dark-mode .timeline-location { color: #9ca3af; }
+
+/* --- START: Footer Styles --- */
+body:not(.dark-mode) footer {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+body:not(.dark-mode) footer h3 {
+    color: #1f2937;
+}
+body:not(.dark-mode) footer a:hover {
+    color: #dc2626;
+}
+body:not(.dark-mode) footer .border-t {
+    border-color: #e5e7eb;
+}
+
+body.dark-mode footer {
+    background-color: #1f2937;
+    color: #9ca3af;
+}
+body.dark-mode footer h3 {
+    color: #ffffff;
+}
+body.dark-mode footer a:hover {
+    color: #f59e0b;
+}
+body.dark-mode footer .border-t {
+    border-color: #374151;
+}
+/* --- END: Footer Styles --- */

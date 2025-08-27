@@ -23,8 +23,7 @@
         body:not(.dark-mode) .confirmation-warnings-box { background-color: #fffbeb; } /* bg-yellow-50 */
         body:not(.dark-mode) .confirmation-warnings-box .warnings-title { color: #d97706; } /* text-yellow-600 */
         body:not(.dark-mode) .confirmation-warnings-box .warnings-content { color: #92400e; } /* text-yellow-800 */
-        body:not(.dark-mode) footer { background-color: #f9fafb; color: #4b5563; } /* bg-gray-50 text-gray-600 */
-
+        
         /* Dark Mode Styles */
         .dark-mode .language-dropdown { background-color: #374151; border-color: #4b5563; }
         .dark-mode .language-dropdown a:hover { background-color: #4b5563; }
@@ -34,7 +33,6 @@
         .dark-mode .confirmation-warnings-box { background-color: #78350f20; }
         .dark-mode .confirmation-warnings-box .warnings-title { color: #f59e0b; }
         .dark-mode .confirmation-warnings-box .warnings-content { color: #fde68a; }
-        .dark-mode footer { background-color: #1f2937; color: #9ca3af; }
     </style>
 </head>
 <body class="with-faded-bg">
@@ -64,8 +62,39 @@
     </main>
     
     <footer>
-        <div class="text-center text-sm py-8 mt-8">
-            &copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span>
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center md:text-left">
+                    <h3 class="font-semibold mb-4 uppercase" data-i18n="contactSupport"></h3>
+                    <ul class="space-y-2">
+                        <li><a data-i18n-link="contactUs" target="_blank" class="text-sm" data-i18n="contactUs"></a></li>
+                    </ul>
+                </div>
+
+                <div class="text-center md:text-left">
+                    <h3 class="font-semibold mb-4 uppercase" data-i18n="legal"></h3>
+                    <ul class="space-y-2">
+                        <li><a data-i18n-link="termsOfUse" target="_blank" class="text-sm" data-i18n="termsOfUse"></a></li>
+                        <li><a data-i18n-link="privacyNotice" target="_blank" class="text-sm" data-i18n="privacyNotice"></a></li>
+                        <li><a data-i18n-link="fraudAwareness" target="_blank" class="text-sm" data-i18n="fraudAwareness"></a></li>
+                        <li><a data-i18n-link="legalNotice" target="_blank" class="text-sm" data-i18n="legalNotice"></a></li>
+                    </ul>
+                </div>
+
+                <div class="hidden md:block"></div>
+
+                <div class="col-span-2 md:col-span-1 text-center md:text-left flex flex-col items-center md:items-start">
+                    <img src="DHL_logo_rgb_black.svg" alt="DHL Group Logo" class="h-6 mb-5">
+                    <ul class="space-y-2">
+                        <li><a data-i18n-link="dhlExpress" target="_blank" class="text-sm" data-i18n="dhlExpress"></a></li>
+                        <li><a data-i18n-link="aboutDhl" target="_blank" class="text-sm" data-i18n="aboutDhl"></a></li>
+                        <li><a data-i18n-link="press" target="_blank" class="text-sm" data-i18n="press"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t mt-8 pt-6 text-center text-sm">
+                &copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span>
+            </div>
         </div>
     </footer>
 
@@ -75,27 +104,44 @@
                 window.location.href = 'index.html';
                 return;
             }
-            // --- Translations ---
             const translations = {
-                'th': { 'confirmationTitle': 'สร้างใบนำส่งสำเร็จ!', 'confirmationSubtitle': 'ข้อมูลใบนำส่งสินค้าของคุณพร้อมสำหรับพิมพ์และดาวน์โหลด', 'awbLabel': 'หมายเลข AWB ของคุณคือ:', 'pickupNumberTitle': 'หมายเลขยืนยันการนัดรับสินค้า', 'downloadLabel': 'ดาวน์โหลดใบนำส่ง', 'downloadReceipt': 'ดาวน์โหลดใบสรุปการจัดส่ง', 'downloadInvoice': 'ดาวน์โหลดใบอินวอยซ์', 'pieceIdTitle': 'หมายเลข Piece ID', 'warningsTitle': 'คำเตือนจากระบบ', 'createNewShipment': 'สร้างใบนำส่งใหม่', 'backToMain': 'กลับหน้าหลัก', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'loadingData': 'กำลังโหลดข้อมูล...', 'noShipmentData': 'ไม่พบข้อมูลการจัดส่ง กรุณาสร้างใบนำส่งใหม่อีกครั้ง', 'downloadError': 'เกิดข้อผิดพลาดในการเตรียมไฟล์สำหรับดาวน์โหลด', 'downloadDisabled': 'ไฟล์นี้ไม่สามารถดาวน์โหลดได้', 'downloadLabelAndInvoice': 'ดาวน์โหลด Label และ Invoice' },
-                'en': { 'confirmationTitle': 'Shipment Created Successfully!', 'confirmationSubtitle': 'Your shipment documents are ready to print and download.', 'awbLabel': 'Your AWB Number is:', 'pickupNumberTitle': 'Pickup Confirmation #', 'downloadLabel': 'Download Label', 'downloadReceipt': 'Download Receipt', 'downloadInvoice': 'Download Invoice', 'pieceIdTitle': 'Piece ID Numbers', 'warningsTitle': 'System Warnings', 'createNewShipment': 'Create New Shipment', 'backToMain': 'Back to Main', 'allRightsReserved': 'All rights reserved.', 'loadingData': 'Loading data...', 'noShipmentData': 'Shipment data not found. Please create a new shipment.', 'downloadError': 'Error preparing file for download', 'downloadDisabled': 'This file is not available for download', 'downloadLabelAndInvoice': 'Download Label & Invoice' }
+                'th': { 
+                    'confirmationTitle': 'สร้างใบนำส่งสำเร็จ!', 'confirmationSubtitle': 'ข้อมูลใบนำส่งสินค้าของคุณพร้อมสำหรับพิมพ์และดาวน์โหลด', 'awbLabel': 'หมายเลข AWB ของคุณคือ:', 'pickupNumberTitle': 'หมายเลขยืนยันการนัดรับสินค้า', 'downloadLabel': 'ดาวน์โหลดใบนำส่ง', 'downloadReceipt': 'ดาวน์โหลดใบสรุปการจัดส่ง', 'downloadInvoice': 'ดาวน์โหลดใบอินวอยซ์', 'pieceIdTitle': 'หมายเลข Piece ID', 'warningsTitle': 'คำเตือนจากระบบ', 'createNewShipment': 'สร้างใบนำส่งใหม่', 'backToMain': 'กลับหน้าหลัก', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'loadingData': 'กำลังโหลดข้อมูล...', 'noShipmentData': 'ไม่พบข้อมูลการจัดส่ง กรุณาสร้างใบนำส่งใหม่อีกครั้ง', 'downloadError': 'เกิดข้อผิดพลาดในการเตรียมไฟล์สำหรับดาวน์โหลด', 'downloadDisabled': 'ไฟล์นี้ไม่สามารถดาวน์โหลดได้', 'downloadLabelAndInvoice': 'ดาวน์โหลด Label และ Invoice',
+                    'contactSupport': 'ติดต่อและสอบถาม', 'contactUs': 'ติดต่อเรา', 'legal': 'ข้อมูลทางกฎหมาย', 'termsOfUse': 'ข้อกำหนดการใช้งาน', 'privacyNotice': 'ข้อความแจ้งเตือนความเป็นส่วนตัว', 'fraudAwareness': 'การตระหนักถึงการฉ้อโกง', 'legalNotice': 'ประกาศทางกฎหมาย', 'aboutDhl': 'เกี่ยวกับ DHL', 'press': 'ข่าวสาร', 'dhlExpress': 'DHL Express',
+                    'links': {
+                        'contactUs': 'https://www.dhl.com/th-th/home/customer-service.html', 'termsOfUse': 'https://www.dhl.com/th-th/home/footer/terms-of-use.html', 'privacyNotice': 'https://www.dhl.com/th-th/home/footer/privacy-notice.html', 'fraudAwareness': 'https://www.dhl.com/th-th/home/footer/fraud-awareness.html', 'legalNotice': 'https://www.dhl.com/th-th/home/footer/legal-notice.html', 'dhlExpress': 'https://www.dhl.com/th-th/home/express.html', 'aboutDhl': 'https://www.dhl.com/th-th/home/about-us.html', 'press': 'https://www.dhl.com/th-th/home/press.html'
+                    }
+                },
+                'en': { 
+                    'confirmationTitle': 'Shipment Created Successfully!', 'confirmationSubtitle': 'Your shipment documents are ready to print and download.', 'awbLabel': 'Your AWB Number is:', 'pickupNumberTitle': 'Pickup Confirmation #', 'downloadLabel': 'Download Label', 'downloadReceipt': 'Download Receipt', 'downloadInvoice': 'Download Invoice', 'pieceIdTitle': 'Piece ID Numbers', 'warningsTitle': 'System Warnings', 'createNewShipment': 'Create New Shipment', 'backToMain': 'Back to Main', 'allRightsReserved': 'All rights reserved.', 'loadingData': 'Loading data...', 'noShipmentData': 'Shipment data not found. Please create a new shipment.', 'downloadError': 'Error preparing file for download', 'downloadDisabled': 'This file is not available for download', 'downloadLabelAndInvoice': 'Download Label & Invoice',
+                    'contactSupport': 'CONTACT AND SUPPORT', 'contactUs': 'Contact Us', 'legal': 'LEGAL', 'termsOfUse': 'Terms of Use', 'privacyNotice': 'Privacy Notice', 'fraudAwareness': 'Fraud Awareness', 'legalNotice': 'Legal Notice', 'aboutDhl': 'About DHL', 'press': 'Press', 'dhlExpress': 'DHL Express',
+                    'links': {
+                        'contactUs': 'https://www.dhl.com/th-en/home/customer-service.html', 'termsOfUse': 'https://www.dhl.com/th-en/home/footer/terms-of-use.html', 'privacyNotice': 'https://www.dhl.com/th-en/home/footer/privacy-notice.html', 'fraudAwareness': 'https://www.dhl.com/th-en/home/footer/fraud-awareness.html', 'legalNotice': 'https://www.dhl.com/th-en/home/footer/legal-notice.html', 'dhlExpress': 'https://www.dhl.com/th-en/home/express.html', 'aboutDhl': 'https://www.dhl.com/th-en/home/about-us.html', 'press': 'https://www.dhl.com/th-en/home/press.html'
+                    }
+                }
             };
 
-            // --- Globals & Element Selectors ---
             let currentLanguage = sessionStorage.getItem('shipmentLanguage') || 'th';
             const errorContainer = document.getElementById('error-message-container');
             const confirmationContainer = document.getElementById('confirmation-container');
-            const blobUrls = []; // Store blob URLs for cleanup
-            const { PDFDocument } = PDFLib; // access library
+            const blobUrls = [];
+            const { PDFDocument } = PDFLib;
 
-            // --- Helper Functions ---
             function getTranslatedText(key) { return translations[currentLanguage]?.[key] || key; }
             
             function updateContentLanguage() {
                 document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    el.textContent = getTranslatedText(key);
+                    el.textContent = getTranslatedText(el.getAttribute('data-i18n'));
                 });
+
+                document.querySelectorAll('[data-i18n-link]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-link');
+                    const links = translations[currentLanguage]?.links;
+                    if (links && links[key]) {
+                        el.href = links[key];
+                    }
+                });
+
                 document.title = `DHL Backup Solution - ${getTranslatedText('confirmationTitle')}`;
                 document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase();
             }
@@ -132,9 +178,6 @@
                 errorContainer.classList.remove('hidden');
             }
 
-            /**
-             * Function Merge PDF File (Base64)
-             */
             async function mergePdfs(base64Pdfs) {
                 const mergedPdf = await PDFDocument.create();
                 for (const base64Pdf of base64Pdfs) {
@@ -155,10 +198,8 @@
                 return await mergedPdf.save();
             }
 
-            // --- Main Logic ---
             async function renderConfirmationPage(data) {
                 
-                // check warning '7988'
                 const needsToPrintAll = data.warnings?.some(w => w.startsWith('7988')) ?? false;
 
                 async function createDocumentLinks(documents) {
@@ -166,13 +207,11 @@
                     const awb = data.shipmentTrackingNumber;
                     let linksHtml = '';
 
-                    // Case warning no PLT Service (Merge Label and Invoice)
                     if (needsToPrintAll) {
                         const labelDoc = documents.find(doc => doc.typeCode.toLowerCase() === 'waybilldoc' || doc.typeCode.toLowerCase() === 'label');
                         const invoiceDoc = documents.find(doc => doc.typeCode.toLowerCase() === 'invoice');
                         const receiptDoc = documents.find(doc => doc.typeCode.toLowerCase() === 'shipmentreceipt' || doc.typeCode.toLowerCase() === 'receipt');
 						
-						 // create Label and Invoice button 
                         if (labelDoc && invoiceDoc) {
                             try {
                                 const mergedPdfBytes = await mergePdfs([labelDoc.content, invoiceDoc.content]);
@@ -189,23 +228,19 @@
                                 `;
                             } catch (e) {
                                 console.error("Failed to merge Label and Invoice:", e);
-                                // if merge file fail (Rollback)
                                 linksHtml += createSingleDocumentLink(labelDoc, awb);
                                 linksHtml += createSingleDocumentLink(invoiceDoc, awb);
                             }
                         } else {
-                            // Label or Invoice lost show normal form
                              if(labelDoc) linksHtml += createSingleDocumentLink(labelDoc, awb);
                              if(invoiceDoc) linksHtml += createSingleDocumentLink(invoiceDoc, awb);
                         }
 
-                        // create Receipt button (alway seperate)
                         if (receiptDoc) {
                             linksHtml += createSingleDocumentLink(receiptDoc, awb);
                         }
 
                     } else {
-                        // normal case: create all seperate button
                         documents.forEach(doc => {
                             linksHtml += createSingleDocumentLink(doc, awb);
                         });
@@ -288,7 +323,6 @@
                 
                 function createWarningsSection(warnings) {
                     if (!warnings || warnings.length === 0) return '';
-                    // filter warning 7987 but keep 7988 to show
                     const filteredWarnings = warnings.filter(warn => !warn.includes('7987'));
                     if (filteredWarnings.length === 0) return '';
                     const items = filteredWarnings.map(warn => `<li class="mt-1">${warn}</li>`).join('');
@@ -331,7 +365,6 @@
                 updateContentLanguage();
             }
 
-            // --- Page Initialization ---
             const responseDataString = sessionStorage.getItem('shipmentResponse');
             
             if (responseDataString) {
@@ -349,6 +382,7 @@
             document.getElementById('current-year').textContent = new Date().getFullYear();
             setupTheme();
             setupLanguageSwitch();
+            updateContentLanguage();
 
             window.addEventListener('beforeunload', () => {
                 sessionStorage.removeItem('shipmentResponse');
@@ -358,5 +392,3 @@
     </script>
 </body>
 </html>
-
-

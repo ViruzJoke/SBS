@@ -92,7 +92,42 @@
         </div>
     </div>
 
-    <footer class="bg-gray-800 text-white py-8 mt-8"><div class="text-center text-sm text-gray-400">&copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span></div></footer>
+    <footer>
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center md:text-left">
+                    <h3 class="font-semibold mb-4 uppercase" data-i18n="contactSupport"></h3>
+                    <ul class="space-y-2">
+                        <li><a data-i18n-link="contactUs" target="_blank" class="text-sm" data-i18n="contactUs"></a></li>
+                    </ul>
+                </div>
+
+                <div class="text-center md:text-left">
+                    <h3 class="font-semibold mb-4 uppercase" data-i18n="legal"></h3>
+                    <ul class="space-y-2">
+                        <li><a data-i18n-link="termsOfUse" target="_blank" class="text-sm" data-i18n="termsOfUse"></a></li>
+                        <li><a data-i18n-link="privacyNotice" target="_blank" class="text-sm" data-i18n="privacyNotice"></a></li>
+                        <li><a data-i18n-link="fraudAwareness" target="_blank" class="text-sm" data-i18n="fraudAwareness"></a></li>
+                        <li><a data-i18n-link="legalNotice" target="_blank" class="text-sm" data-i18n="legalNotice"></a></li>
+                    </ul>
+                </div>
+
+                <div class="hidden md:block"></div>
+
+                <div class="col-span-2 md:col-span-1 text-center md:text-left flex flex-col items-center md:items-start">
+                    <img src="DHL_logo_rgb_black.svg" alt="DHL Group Logo" class="h-6 mb-5">
+                    <ul class="space-y-2">
+                        <li><a data-i18n-link="dhlExpress" target="_blank" class="text-sm" data-i18n="dhlExpress"></a></li>
+                        <li><a data-i18n-link="aboutDhl" target="_blank" class="text-sm" data-i18n="aboutDhl"></a></li>
+                        <li><a data-i18n-link="press" target="_blank" class="text-sm" data-i18n="press"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t mt-8 pt-6 text-center text-sm">
+                &copy; <span id="current-year"></span> DHL Express. <span data-i18n="allRightsReserved"></span>
+            </div>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -110,7 +145,27 @@
                     'termsTitle': 'ข้อกำหนดการใช้บริการ',
                     'termsContentP1': 'นี่คือข้อความข้อกำหนดบรรทัดที่ 1',
                     'termsContentP2': 'นี่คือข้อความข้อกำหนดบรรทัดที่ 2',
-                    'termsContentP3': 'นี่คือข้อความข้อกำหนดบรรทัดที่ 3'
+                    'termsContentP3': 'นี่คือข้อความข้อกำหนดบรรทัดที่ 3',
+                    'contactSupport': 'ติดต่อและสอบถาม',
+                    'contactUs': 'ติดต่อเรา',
+                    'legal': 'ข้อมูลทางกฎหมาย',
+                    'termsOfUse': 'ข้อกำหนดการใช้งาน',
+                    'privacyNotice': 'ข้อความแจ้งเตือนความเป็นส่วนตัว',
+                    'fraudAwareness': 'การตระหนักถึงการฉ้อโกง',
+                    'legalNotice': 'ประกาศทางกฎหมาย',
+                    'aboutDhl': 'เกี่ยวกับ DHL',
+                    'press': 'ข่าวสาร',
+                    'dhlExpress': 'DHL Express',
+                    'links': {
+                        'contactUs': 'https://www.dhl.com/th-th/home/customer-service.html',
+                        'termsOfUse': 'https://www.dhl.com/th-th/home/footer/terms-of-use.html',
+                        'privacyNotice': 'https://www.dhl.com/th-th/home/footer/privacy-notice.html',
+                        'fraudAwareness': 'https://www.dhl.com/th-th/home/footer/fraud-awareness.html',
+                        'legalNotice': 'https://www.dhl.com/th-th/home/footer/legal-notice.html',
+                        'dhlExpress': 'https://www.dhl.com/th-th/home/express.html',
+                        'aboutDhl': 'https://www.dhl.com/th-th/home/about-us.html',
+                        'press': 'https://www.dhl.com/th-th/home/press.html'
+                    }
                 }, 
                 'en': { 
                     'homepage': 'Home', 'gettingStartedTitle': 'Get Started', 'createShipment': 'Create Shipment', 
@@ -123,13 +178,49 @@
                     'termsTitle': 'Terms of Use',
                     'termsContentP1': 'This is consent ban tad tee 1',
                     'termsContentP2': 'This is consent ban tad tee 2',
-                    'termsContentP3': 'This is consent ban tad tee 3'
+                    'termsContentP3': 'This is consent ban tad tee 3',
+                    'contactSupport': 'CONTACT AND SUPPORT',
+                    'contactUs': 'Contact Us',
+                    'legal': 'LEGAL',
+                    'termsOfUse': 'Terms of Use',
+                    'privacyNotice': 'Privacy Notice',
+                    'fraudAwareness': 'Fraud Awareness',
+                    'legalNotice': 'Legal Notice',
+                    'aboutDhl': 'About DHL',
+                    'press': 'Press',
+                    'dhlExpress': 'DHL Express',
+                    'links': {
+                        'contactUs': 'https://www.dhl.com/th-en/home/customer-service.html',
+                        'termsOfUse': 'https://www.dhl.com/th-en/home/footer/terms-of-use.html',
+                        'privacyNotice': 'https://www.dhl.com/th-en/home/footer/privacy-notice.html',
+                        'fraudAwareness': 'https://www.dhl.com/th-en/home/footer/fraud-awareness.html',
+                        'legalNotice': 'https://www.dhl.com/th-en/home/footer/legal-notice.html',
+                        'dhlExpress': 'https://www.dhl.com/th-en/home/express.html',
+                        'aboutDhl': 'https://www.dhl.com/th-en/home/about-us.html',
+                        'press': 'https://www.dhl.com/th-en/home/press.html'
+                    }
                 } 
             };
             let currentLanguage = localStorage.getItem('language') || 'th';
             
             function getTranslatedText(key) { return translations[currentLanguage]?.[key] || key; }
-            function updateContentLanguage() { document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = getTranslatedText(el.getAttribute('data-i18n')); }); document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase(); document.title = `Shipment Creation Backup Solution - ${getTranslatedText('homepage')}`; }
+            
+            function updateContentLanguage() { 
+                document.querySelectorAll('[data-i18n]').forEach(el => { 
+                    el.textContent = getTranslatedText(el.getAttribute('data-i18n')); 
+                }); 
+                
+                document.querySelectorAll('[data-i18n-link]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-link');
+                    const links = translations[currentLanguage]?.links;
+                    if (links && links[key]) {
+                        el.href = links[key];
+                    }
+                });
+
+                document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase(); 
+                document.title = `Shipment Creation Backup Solution - ${getTranslatedText('homepage')}`; 
+            }
             
             function setupTheme() { 
                 const themeToggle = document.getElementById('theme-toggle'); 
@@ -148,11 +239,11 @@
                     darkIcon.classList.add('hidden'); 
                 }; 
                 themeToggle.addEventListener('click', () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode()); 
-                if (localStorage.getItem('theme') === 'dark') { 
-                    enableDarkMode(); 
-                } else { 
-                    disableDarkMode(); 
-                } 
+                if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    enableDarkMode();
+                } else {
+                    disableDarkMode();
+                }
             }
 
             function setupLanguageSwitch() { document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden')); document.querySelectorAll('[data-lang]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); currentLanguage = e.target.dataset.lang; localStorage.setItem('language', currentLanguage); updateContentLanguage(); document.getElementById('language-dropdown').classList.add('hidden'); }); }); }
@@ -218,5 +309,3 @@
     </script>
 </body>
 </html>
-
-
