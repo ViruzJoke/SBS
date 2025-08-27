@@ -70,7 +70,7 @@
                 </div>
                 <div class="flex justify-center mt-6 max-w-xs mx-auto">
                     <a href="ship.html" id="create-shipment-btn" class="main-action-button bg-yellow-500 text-black hover:bg-yellow-600 is-disabled">
-                        <svg class="w-14 h-14 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8.25V17.25H19V8.25L12 3L5 8.25Z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 8.25L12 13.5L5 8.25"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 13.5V21"></path></svg>
+                        <img src="Icon/parcel_rgb_black.svg" alt="Parcel Logo" class="h-12 mb-5">
                         <span data-i18n="createShipment"></span>
                     </a>
                 </div>
@@ -205,22 +205,47 @@
             
             function getTranslatedText(key) { return translations[currentLanguage]?.[key] || key; }
             
-            function updateContentLanguage() { 
-                document.querySelectorAll('[data-i18n]').forEach(el => { 
-                    el.textContent = getTranslatedText(el.getAttribute('data-i18n')); 
-                }); 
-                
-                document.querySelectorAll('[data-i18n-link]').forEach(el => {
-                    const key = el.getAttribute('data-i18n-link');
-                    const links = translations[currentLanguage]?.links;
-                    if (links && links[key]) {
-                        el.href = links[key];
+            function updateContentLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (el.placeholder !== undefined && (el.hasAttribute('data-i18n-placeholder') || el.matches('[data-i18n-placeholder]'))) {
+                    el.placeholder = getTranslatedText(key);
+                } else {
+                     if (!el.closest('.line-item-summary')) {
+                        el.textContent = getTranslatedText(key);
                     }
-                });
+                }
+            });
 
-                document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase(); 
-                document.title = `Shipment Creation Backup Solution - ${getTranslatedText('homepage')}`; 
-            }
+            document.querySelectorAll('[data-i18n-link]').forEach(el => {
+                const key = el.getAttribute('data-i18n-link');
+                const links = translations[currentLanguage]?.links;
+                if (links && links[key]) {
+                    el.href = links[key];
+                }
+            });
+
+            document.querySelectorAll('label[data-i18n]').forEach(label => {
+                const key = label.getAttribute('data-i18n');
+                const asterisk = label.querySelector('.text-red-500');
+                if (key !== 'invoiceNumber' && key !== 'summarizeShipment') {
+                   label.innerHTML = getTranslatedText(key) + (asterisk ? ' <span class="text-red-500">*</span>' : '');
+                } else if (key === 'summarizeShipment') {
+                    label.innerHTML = `
+                        <span data-i18n="summarizeShipment">${getTranslatedText('summarizeShipment')}</span>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400" data-i18n="shipmentDescription">${getTranslatedText('shipmentDescription')}</span>
+                    `;
+                }
+                 else {
+                   label.innerHTML = getTranslatedText(key);
+                }
+            });
+            document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase();
+            document.title = `DHL Backup Solution - ${getTranslatedText('createShipment')}`;
+            document.querySelectorAll('.line-item-summary strong[data-i18n]').forEach(el => {
+                 el.textContent = getTranslatedText(el.getAttribute('data-i18n'));
+            });
+        }
             
             function setupTheme() { 
                 const themeToggle = document.getElementById('theme-toggle'); 

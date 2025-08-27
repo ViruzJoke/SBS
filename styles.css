@@ -221,3 +221,19 @@ body.dark-mode footer .border-t {
     border-color: #374151;
 }
 /* --- END: Footer Styles --- */
+
+/* --- START: Footer Balance Override (Desktop) --- */
+/* สำหรับหน้าจอขนาด md (768px) ขึ้นไป */
+@media (min-width: 768px) {
+    /* เลือก grid container ใน footer */
+    footer .container > .grid {
+        /* เปลี่ยน layout ให้เป็น 3 คอลัมน์เท่าๆ กัน */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* ซ่อนคอลัมน์ที่ 3 ซึ่งเป็น div ว่างๆ สำหรับเว้นวรรค */
+    footer .container > .grid > div:nth-child(3) {
+        display: none;
+    }
+}
+/* --- END: Footer Balance Override (Desktop) --- */

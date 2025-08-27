@@ -227,12 +227,12 @@
                     <div class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <button type="button" id="ship-type-document" class="shipment-type-button p-4 rounded-lg flex flex-col items-center justify-center text-center">
-                                <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                <span class="font-semibold" data-i18n="document"></span>
+                                <img src="Icon/document_rgb_black.svg" alt="Parcel Logo" class="h-10 mb-5">
+								<span class="font-semibold" data-i18n="document"></span>
                             </button>
                             <button type="button" id="ship-type-package" class="shipment-type-button p-4 rounded-lg flex flex-col items-center justify-center text-center active">
-                                <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-14L4 7m0 10l8 4m-8-4v-4"></path></svg>
-                                <span class="font-semibold" data-i18n="package"></span>
+                                <img src="Icon/parcel_rgb_black.svg" alt="Parcel Logo" class="h-10 mb-5">
+								<span class="font-semibold" data-i18n="package"></span>
                             </button>
                         </div>
                     </div>
@@ -427,8 +427,8 @@
                             <div id="doc-uploader-container">
                                 <label for="doc-uploader" class="file-drop-zone">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center">
-                                        <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                        <img src="Icon/upload_file_rgb_black.svg" alt="Parcel Logo" class="w-10 h-10 mb-3 text-gray-400">
+										<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
                                             <span class="font-semibold" data-i18n="browseForFile"></span><span data-i18n="orDropHere"></span>
                                         </p>
                                     </div>
@@ -461,12 +461,12 @@
                         <h3 class="text-xl font-semibold" data-i18n="pickupStep"></h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <button type="button" id="pickup-yes-btn" class="shipment-type-button p-4 rounded-lg flex items-center justify-center text-center gap-2 active">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                <span class="font-semibold" data-i18n="pickupYes"></span>
+                                <img src="Icon/truck_road_freight_rgb_black.svg" alt="Parcel Logo" class="h-8 mb-2">
+								<span class="font-semibold" data-i18n="pickupYes"></span>
                             </button>
                             <button type="button" id="pickup-no-btn" class="shipment-type-button p-4 rounded-lg flex items-center justify-center text-center gap-2">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
-                                <span class="font-semibold" data-i18n="pickupNo"></span>
+                                <img src="Icon/cancel_rgb_black.svg" alt="Parcel Logo" class="h-8 mb-2">
+								<span class="font-semibold" data-i18n="pickupNo"></span>
                             </button>
                         </div>
                     </div>
@@ -619,7 +619,7 @@
         </div>
     </footer>
 
-    <script src="create-shipment.js"></script>
+        <script src="create-shipment.js"></script>
     <script>
     let timeSlider = null; 
 
@@ -628,8 +628,9 @@
             window.location.href = 'index.html';
             return;
         }
-            const translations = {
+        const translations = {
             'th': { 
+                'itemHeader': 'รายการ',
                 'leaveSiteTitle': 'ออกจากหน้านี้?', 'leaveSiteBody': 'การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก', 'stayButton': 'อยู่ต่อ', 'leaveButton': 'ออก', 'createShipment':'สร้างใบนำส่ง','addressStep':'ที่อยู่','shipmentDetailsStep':'ชิปเมนต์','packageStep':'แพ็คเกจ','paymentStep':'การชำระเงิน','docsStep':'เอกสาร','pickupStep':'การนัดรับสินค้า','summaryStep':'สรุป','shipperInfo':'ข้อมูลผู้ส่ง','receiverInfo':'ข้อมูลผู้รับ','shipperName':'ชื่อผู้ส่ง','shipperCompany':'บริษัทผู้ส่ง','shipperPhone':'เบอร์โทรผู้ส่ง','shipperAddress1':'ที่อยู่ 1','shipperAddress2':'ที่อยู่ 2','shipperAddress3':'ที่อยู่ 3','shipperCountry':'ประเทศ','shipperPostalCode':'รหัสไปรษณีย์','shipperCity':'เมือง','receiverName':'ชื่อผู้รับ','receiverCompany':'บริษัทผู้รับ','receiverPhone':'เบอร์โทรผู้รับ','receiverAddress1':'ที่อยู่ 1','receiverAddress2':'ที่อยู่ 2','receiverAddress3':'ที่อยู่ 3','receiverCountry':'ประเทศ','receiverPostalCode':'รหัสไปรษณีย์','receiverCity':'เมือง', 'receiverSuburb': 'แขวง/ตำบล', 'document':'เอกสาร','package':'พัสดุ','addLineItem':'เพิ่มรายการสินค้า','shipmentRef':'เลขที่อ้างอิง (optional)','protectShipment':'เพิ่มความคุ้มครองการจัดส่ง (ประกัน)','packageDetails':'รายละเอียดแพ็คเกจ','addPiece':'เพิ่มกล่อง','shipperAccount':'บัญชีผู้ส่ง','billingAccount':'บัญชีสำหรับวางบิล', 'dutiesAccount':'บัญชีผู้ชำระภาษี','incoterm':'Incoterm','shipmentDate':'วันที่ส่ง','docUpload':'อัปโหลดเอกสาร','docUploadDesc':'อัปโหลดเอกสารเพิ่มเติม (ไม่เกิน 5MB)','summary':'สรุปข้อมูล','previous':'ย้อนกลับ','next':'ถัดไป','createShipmentBtn':'สร้างใบนำส่ง','allRightsReserved':'สงวนลิขสิทธิ์.','fillAllFields':'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน','typeOrSelectCountry': 'พิมพ์หรือเลือกประเทศ', 'backToMain': 'กลับหน้าหลัก', 'shipperEmail': 'อีเมลผู้ส่ง', 'receiverEmail': 'อีเมลผู้รับ', 'shipperVat': 'เลขประจำตัวผู้เสียภาษีผู้ส่ง', 'receiverVat': 'เลขประจำตัวผู้เสียภาษีผู้รับ', 'whatIsTheItem': 'สินค้าคืออะไร?', 'commodityCode': 'รหัสพิกัดศุลกากร', 'quantity': 'จำนวน', 'units': 'หน่วย', 'valuePerItem': 'มูลค่า (ต่อชิ้น)', 'weight': 'น้ำหนัก (KG)', 'whereWasItMade': 'ผลิตที่ประเทศ', 'totalUnits': 'จำนวนรวม:', 'totalWeight': 'น้ำหนักรวม:', 'totalValue': 'มูลค่ารวม:', 'insuredValue': 'มูลค่าประกัน', 'describeDocuments': 'ระบุประเภทเอกสารในชิปเมนต์ของคุณ', 'fillAllFieldsInItem': 'กรุณากรอกข้อมูลในรายการก่อนหน้าให้ครบถ้วน', 'customsInvoiceDetails': 'รายละเอียดใบกำกับสินค้า', 'createInvoice': 'สร้าง Invoice', 'useMyOwnInvoice': 'ใช้ Invoice ของฉัน', 'invoiceNumber': 'หมายเลข Invoice', 'itemDescription': 'รายละเอียดสินค้า', 'totalItemValue': 'มูลค่ารวม', 'summarizeShipment': 'สรุปรายการสินค้าในชิปเมนต์', 'shipmentDescription': '(shipment description)', 'totalPackages': 'จำนวนแพ็คเกจรวม:', 'totalWeightKg': 'น้ำหนักรวม:', 'lengthCm': 'ยาว (ซม.)', 'widthCm': 'กว้าง (ซม.)', 'heightCm': 'สูง (ซม.)', 'weightKg': 'น้ำหนัก (Kg)', 'dimensionsCm': 'ขนาด (ซม.)', 'fillAllFieldsInPiece': 'กรุณากรอกข้อมูลในแพ็คเกจก่อนหน้าให้ครบถ้วน', 'receiverWillPay': 'ผู้รับชำระภาษี', 'uploadCustomsDocs': 'อัปโหลดเอกสารศุลกากรของคุณ', 'uploadDocsDesc1': 'คุณสามารถอัปโหลดและส่งใบกำกับสินค้าหรือเอกสารทางศุลกากรอื่นๆ ในรูปแบบไฟล์ภาพและส่งมาให้เราทางอิเล็กทรอนิกส์ได้', 'uploadDocsDesc2': 'หากคุณไม่ได้อัปโหลดรูปภาพเอกสาร โปรดอย่าลืมพิมพ์และจัดเตรียมเอกสารของคุณมาพร้อมกับชิปเมนต์', 'uploadDocsQuestion': 'คุณต้องการอัปโหลดไฟล์ภาพหรือไม่?', 'yes': 'ใช่', 'browseForFile': 'เลือกไฟล์', 'orDropHere': ' หรือลากมาวางที่นี่', 'fileTypesAllowed': 'ประเภทไฟล์ที่อนุญาต: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, หรือ PDF', 'maxFileSize': 'ขนาดไฟล์สูงสุด: 5 MB', 'fileNameEnglishOnly': 'ชื่อไฟล์ต้องเป็นภาษาอังกฤษเท่านั้น', 'pickupYes': 'ใช่ – นัดรับสินค้า', 'pickupNo': 'ไม่ – ไม่ต้องการนัดรับ', 'pickupDropOffLink': 'ฉันสามารถนำส่งพัสดุได้ที่ไหน?', 'pickupSendingOn': 'ฉันจะส่งของในวันที่', 'pickupWindow': 'ช่วงเวลานัดรับ – เวลาที่พนักงานอาจมาถึงและพัสดุพร้อม', 'pickupWindowHint': 'กรุณาเผื่อช่วงเวลาอย่างน้อย 90 นาที', 'pickupLocation': 'พนักงานควรไปรับพัสดุที่ไหน?', 'pickupTotalWeight': 'น้ำหนักรวมของพัสดุ', 'pickupInstructions': 'คำแนะนำสำหรับพนักงาน (ถ้ามี)', 'pickupAddress': 'ที่อยู่สำหรับนัดรับ', 'editAddress': 'แก้ไข', 'saveAddress': 'บันทึก', 'editShipment': 'แก้ไขชิปเมนต์', 'summaryShipper': 'ผู้ส่ง', 'summaryReceiver': 'ผู้รับ', 'summaryShipmentInfo': 'ข้อมูลชิปเมนต์', 'summaryPackageInfo': 'ข้อมูลแพ็คเกจ', 'summaryPaymentInfo': 'ข้อมูลการชำระเงิน', 'summaryDocumentInfo': 'ข้อมูลเอกสาร', 'summaryPickupInfo': 'ข้อมูลการนัดรับสินค้า', 'requestPickup': 'ต้องการนัดรับสินค้า', 'summaryPickupDate': 'วันที่นัดรับ', 'summaryPickupTime': 'เวลานัดรับ', 'phoneMinLength': 'เบอร์โทรศัพท์ต้องมีอย่างน้อย 4 ตัวอักษร', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account Number ต้องมี 9 ตัวอักษร', 'uploadLabelOwnInvoice': 'อัปโหลดรูปภาพใบกำกับสินค้าของคุณ', 'uploadLabelCreateInvoice': "DHL จะสร้างใบกำกับสินค้าอิเล็กทรอนิกส์จากรายละเอียดที่คุณให้ไว้สำหรับชิปเมนต์นี้", 'creatingShipment': 'กำลังสร้างใบนำส่ง...', 'apiErrorTitle': 'เกิดข้อผิดพลาด', 'multipleProblemsFound': 'พบปัญหาหลายรายการ', 'useShipperForBilling': 'ใช้บัญชีนี้สำหรับชำระค่าขนส่ง', 'selectPrintSize': 'กรุณาเลือกขนาดในการปริ้น', 'printA4': 'ขนาด A4', 'printLabel': 'ขนาด Label', 'selectPrintSizeError': 'กรุณาเลือกขนาดในการปริ้นก่อนสร้างใบนำส่ง', 'mexicoTaxIdRequired': 'คุณจะต้องระบุหมายเลขผู้เสียภาษีด้วยหากส่งของไปที่ประเทศปลายทางนี้', 'clearHistory': 'ล้างประวัติ', 'clearHistoryConfirm': 'คุณต้องการล้างข้อมูลที่บันทึกไว้ทั้งหมดหรือไม่?', 'maxLengthError': 'สูงสุด {maxLength} ตัวอักษร',
                 'contactSupport': 'ติดต่อและสอบถาม', 'contactUs': 'ติดต่อเรา', 'legal': 'ข้อมูลทางกฎหมาย', 'termsOfUse': 'ข้อกำหนดการใช้งาน', 'privacyNotice': 'ข้อความแจ้งเตือนความเป็นส่วนตัว', 'fraudAwareness': 'การตระหนักถึงการฉ้อโกง', 'legalNotice': 'ประกาศทางกฎหมาย', 'aboutDhl': 'เกี่ยวกับ DHL', 'press': 'ข่าวสาร', 'dhlExpress': 'DHL Express',
                 'links': {
@@ -637,6 +638,7 @@
                 }
             },
             'en': { 
+                'itemHeader': 'Item',
                 'leaveSiteTitle': 'Leave Site?', 'leaveSiteBody': 'Changes you made may not be saved.', 'stayButton': 'Stay', 'leaveButton': 'Leave', 'createShipment':'Create Shipment','addressStep':'Address','shipmentDetailsStep':'Shipment','packageStep':'Package','paymentStep':'Payment','docsStep':'Documents','pickupStep':'Pickup','summaryStep':'Summary','shipperInfo':'Shipper Information','receiverInfo':'Receiver Information','shipperName':'Name','shipperCompany':'Company','shipperPhone':'Phone','shipperAddress1':'Address Line 1','shipperAddress2':'Address Line 2','shipperAddress3':'Address Line 3','shipperCountry':'Country','shipperPostalCode':'Postal Code','shipperCity':'City','receiverName':'Name','receiverCompany':'Company','receiverPhone':'Phone','receiverAddress1':'Address Line 1','receiverAddress2':'Address Line 2','receiverAddress3':'Address Line 3','receiverCountry':'Country','receiverPostalCode':'Postal Code','receiverCity':'City', 'receiverSuburb': 'Suburb', 'document':'Document','package':'Package','addLineItem':'Add Line Item','shipmentRef':'Shipment Reference (optional)','protectShipment':'Protect Your Shipment (Insurance)','packageDetails':'Package Details','addPiece':'Add Piece','shipperAccount':'Shipper Account','billingAccount':'Billing Account', 'dutiesAccount':'Duties & Taxes Account','incoterm':'Incoterm','shipmentDate':'Shipment Date','docUpload':'Document Upload','docUploadDesc':'Upload additional documents (max 5MB)','pickupBooking':'Pickup Booking','requestPickup':'Request a pickup','pickupCloseTime':'Pickup Close Time','pickupLocation':'Pickup Location (e.g., Reception)','summary':'Summary','previous':'Previous','next':'Next','createShipmentBtn':'Create Shipment','allRightsReserved':'All rights reserved.','fillAllFields':'Please fill in all required fields.','typeOrSelectCountry': 'Type or select a country', 'backToMain': 'Back to Main', 'shipperEmail': 'Email Address', 'receiverEmail': 'Email Address', 'shipperVat': 'VAT / Tax ID', 'receiverVat': 'VAT / Tax ID', 'whatIsTheItem': 'What is the item?', 'commodityCode': 'Commodity Code', 'quantity': 'Quantity', 'units': 'Units', 'valuePerItem': 'Value (Per Item)', 'weight': 'Weight (KG)', 'whereWasItMade': 'Where was the item made?', 'totalUnits': 'Total Units:', 'totalWeight': 'Total Weight:', 'totalValue': 'Total Value:', 'insuredValue': 'Insured Value', 'describeDocuments': 'Describe the documents in your shipment', 'fillAllFieldsInItem': 'Please fill in the previous item completely.', 'customsInvoiceDetails': 'Customs Invoice Details', 'createInvoice': 'Create Invoice', 'useMyOwnInvoice': 'Use My Own Invoice', 'invoiceNumber': 'Invoice Number', 'itemDescription': 'Item Description', 'totalItemValue': 'Total Item Value', 'summarizeShipment': 'Summarize the contents of your shipment', 'shipmentDescription': '(shipment description)', 'totalPackages': 'Total Packages:', 'totalWeightKg': 'Total Weight:', 'lengthCm': 'Length (cm)', 'widthCm': 'Width (cm)', 'heightCm': 'Height (cm)', 'weightKg': 'Weight (Kg)', 'dimensionsCm': 'Dimensions (cm)', 'fillAllFieldsInPiece': 'Please fill in the previous package completely.', 'receiverWillPay': 'Receiver will pay', 'uploadCustomsDocs': 'Upload Your Customs Documents', 'uploadDocsDesc1': 'You can upload and submit your customs invoice or any other customs documents as image files and submit them to us electronically.', 'uploadDocsDesc2': 'If you do not upload document images, remember to print and provide your documents with your shipment.', 'uploadDocsQuestion': 'Would you like to upload image files?', 'yes': 'Yes', 'browseForFile': 'Browse for File', 'orDropHere': ' or Drop Here', 'fileTypesAllowed': 'File Type Allowed: JPG, JPE, JPEG, GIF, PNG, TIFF, TIF, or PDF', 'maxFileSize': 'Maximum file size: 5 MB', 'fileNameEnglishOnly': 'File name must be in English only', 'pickupYes': 'Yes – Schedule Pickup', 'pickupNo': 'No - Don\'t need to Pickup', 'pickupDropOffLink': 'Where can I drop off my shipment?', 'pickupSendingOn': 'I\'m sending my shipment on', 'pickupWindow': 'Pickup Window – When courier may arrive and shipment is ready', 'pickupWindowHint': 'Please allow at least 90 minutes for your Pickup Window', 'pickupLocation': 'Where should the courier pick up the shipment?', 'pickupTotalWeight': 'Total Pickup Weight', 'pickupInstructions': 'Instructions for the courier', 'pickupAddress': 'Pickup Address', 'editAddress': 'Edit', 'saveAddress': 'Save', 'editShipment': 'Edit Shipment', 'summaryShipper': 'Shipper', 'summaryReceiver': 'Receiver', 'summaryShipmentInfo': 'Shipment Information', 'summaryPackageInfo': 'Package Information', 'summaryPaymentInfo': 'Payment Information', 'summaryDocumentInfo': 'Document Information', 'summaryPickupInfo': 'Pickup Information', 'requestPickup': 'Request a pickup', 'summaryPickupDate': 'Pickup Date', 'summaryPickupTime': 'Pickup Time', 'phoneMinLength': 'Phone number must be at least 4 characters long', 'proformaInvoice': 'Proforma Invoice', 'commercialInvoice': 'Commercial Invoice', 'accountNumberInvalid': 'Account number must be 9 characters.', 'uploadLabelOwnInvoice': 'Upload an image of your customs invoice.', 'uploadLabelCreateInvoice': "DHL will create an electronic customs invoice from the details you've provided for this shipment.", 'creatingShipment': 'Creating shipment...', 'apiErrorTitle': 'An Error Occurred', 'multipleProblemsFound': 'Multiple problems found', 'useShipperForBilling': 'Use this account to pay for transportation charges', 'selectPrintSize': 'Please select a print size', 'printA4': 'A4 Size', 'printLabel': 'Label Size', 'selectPrintSizeError': 'Please select a print size before creating the shipment', 'mexicoTaxIdRequired': 'You must provide a Tax ID for shipments to Mexico.', 'clearHistory': 'Clear History', 'clearHistoryConfirm': 'Are you sure you want to clear all saved data?', 'maxLengthError': 'Maximum {maxLength} characters',
                 'contactSupport': 'CONTACT AND SUPPORT', 'contactUs': 'Contact Us', 'legal': 'LEGAL', 'termsOfUse': 'Terms of Use', 'privacyNotice': 'Privacy Notice', 'fraudAwareness': 'Fraud Awareness', 'legalNotice': 'Legal Notice', 'aboutDhl': 'About DHL', 'press': 'Press', 'dhlExpress': 'DHL Express',
                 'links': {
@@ -703,6 +705,15 @@
                     }
                 }
             });
+            
+            document.querySelectorAll('[data-i18n-link]').forEach(el => {
+                const key = el.getAttribute('data-i18n-link');
+                const links = translations[currentLanguage]?.links;
+                if (links && links[key]) {
+                    el.href = links[key];
+                }
+            });
+
             document.querySelectorAll('label[data-i18n]').forEach(label => {
                 const key = label.getAttribute('data-i18n');
                 const asterisk = label.querySelector('.text-red-500');
@@ -723,6 +734,9 @@
             document.querySelectorAll('.line-item-summary strong[data-i18n]').forEach(el => {
                  el.textContent = getTranslatedText(el.getAttribute('data-i18n'));
             });
+
+            renumberLineItemHeaders();
+            renumberPackageHeaders();
         }
 
         function setupTheme() {
@@ -1087,7 +1101,7 @@
             const summarizeIndicator = document.querySelector('#summarize-shipment-container .input-indicator');
             
             headers.forEach((header, index) => {
-                header.textContent = `Item #${index + 1}`;
+                header.textContent = `${getTranslatedText('itemHeader')} #${index + 1}`;
             });
             
             const showSummarize = headers.length > 1;
@@ -1114,7 +1128,7 @@
                 <div class="line-item" id="item-wrapper-${itemId}">
                     <div class="line-item-header flex justify-between items-center p-4">
                         <div>
-                            <h4 class="font-bold text-lg">Item #${itemId}</h4>
+                            <h4 class="font-bold text-lg">${getTranslatedText('itemHeader')} #${itemId}</h4>
                             <div class="line-item-summary text-sm text-gray-500 dark:text-gray-400 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-1 mt-2">
                                 <div class="truncate"><strong data-i18n="itemDescription" class="font-semibold text-current"></strong>: <span class="summary-description">...</span></div>
                                 <div><strong data-i18n="quantity" class="font-semibold text-current"></strong>: <span class="summary-quantity">...</span></div>
@@ -1234,11 +1248,14 @@
         }
 
         document.getElementById('add-line-item-btn').addEventListener('click', () => {
-             const lastItem = lineItemsContainer.querySelector('.line-item:last-child');
-             if (lastItem && !lastItem.classList.contains('is-collapsed')) {
-                 lastItem.classList.add('is-collapsed');
-             }
+            const lastItem = lineItemsContainer.querySelector('.line-item:last-child');
+
             if (validateLastLineItem()) {
+                // ถ้า line item สุดท้ายถูกต้อง ให้ยุบ (collapse) ก่อนที่จะเพิ่มอันใหม่
+                if (lastItem && !lastItem.classList.contains('is-collapsed')) {
+                    lastItem.classList.add('is-collapsed');
+                }
+                
                 formMessage.classList.add('hidden');
                 createLineItem();
                 updateSummary();
@@ -1247,6 +1264,10 @@
                     newItem.classList.remove('is-collapsed');
                 }
             } else {
+                // ถ้า line item สุดท้ายไม่ถูกต้อง ให้เปิดค้างไว้ (expand) เพื่อให้เห็น error
+                if (lastItem) {
+                    lastItem.classList.remove('is-collapsed');
+                }
                 formMessage.textContent = getTranslatedText('fillAllFieldsInItem');
                 formMessage.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
                 formMessage.classList.remove('hidden');
@@ -2466,6 +2487,10 @@
         // --- END: Initial Setup ---
     });
     </script>
+	
+</body>
+</html>
+
 	
 </body>
 </html>
