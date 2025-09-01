@@ -809,11 +809,13 @@
                     if (previousCountry !== newCountry) {
                         const postalInput = document.getElementById(`${prefix}-postalcode`);
                         const cityInput = document.getElementById(`${prefix}-city`);
+						const suburbInput = document.getElementById(`${prefix}-suburb`);
                         if (postalInput) postalInput.value = '';
                         if (cityInput) {
                             cityInput.value = '';
                             updateInputValidationState(cityInput);
                         }
+						if (suburbInput) suburbInput.value = '';
                     }
                     
                     if (prefix === 'receiver') {
@@ -2272,14 +2274,13 @@
             }
 
             const hasPostalCodes = locations.some(loc => loc.postalCode && loc.postalCode.trim() !== '');
-            const hasSuburbs = locations.some(loc => loc.countyName && loc.countyName.trim() !== '');
+            // [แก้ไข] เพิ่มการเช็ค cityDistrict ด้วย
+            const hasSuburbs = locations.some(loc => (loc.countyName && loc.countyName.trim() !== '') || (loc.cityDistrict && loc.cityDistrict.trim() !== ''));
 
             let processedLocations = [];
 
-            if (hasPostalCodes) {
-                processedLocations = locations;
-            } else if (hasSuburbs) {
-                processedLocations = locations;
+            if (hasPostalCodes || hasSuburbs) {
+                 processedLocations = locations;
             }
             else {
                 const uniqueKeys = new Set();
@@ -2295,19 +2296,23 @@
             }
 
             dropdown.innerHTML = processedLocations.map(loc => {
-                const postalCodeDisplay = loc.postalCode || '';
                 const postalCodeData = loc.postalCode || '';
                 const cityData = loc.cityName || loc.city || '';
-                const suburbData = loc.countyName || '';
-                let displayText = '';
+                // [แก้ไข] เพิ่มการตรวจสอบ cityDistrict จาก API response
+                const suburbData = loc.cityDistrict || loc.countyName || '';
                 
-                if (hasPostalCodes) {
-                    displayText = `${postalCodeDisplay} ${cityData}`.trim();
-                } else if (hasSuburbs) {
-                    displayText = `${cityData} - ${suburbData}`;
-                } else {
-                    displayText = cityData;
+                let displayTextParts = [];
+                if (postalCodeData) {
+                    displayTextParts.push(postalCodeData);
                 }
+                if (cityData) {
+                    displayTextParts.push(cityData);
+                }
+                // เพิ่ม Suburb/District ถ้ามีและไม่ซ้ำกับชื่อเมือง
+                if (suburbData && suburbData.toLowerCase() !== cityData.toLowerCase()) {
+                    displayTextParts.push(`- ${suburbData}`);
+                }
+                const displayText = displayTextParts.join(' ');
                 
                 return `<div class="address-dropdown-item" data-postalcode="${postalCodeData}" data-city="${cityData}" data-suburb="${suburbData}">
                             ${displayText}
