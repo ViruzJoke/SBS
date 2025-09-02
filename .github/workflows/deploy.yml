@@ -1,6 +1,6 @@
 # ชื่อของ Workflow
-name: Deploy DBS Project to GitHub Pages (Fixed)
- 
+name: Deploy DBS Project to GitHub Pages (Complete)
+
 on:
   push:
     branches: [ "main" ]
@@ -24,22 +24,24 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      
-      # ---- ส่วนที่แก้ไข ----
+
       - name: Build and Sync files
-        # ใช้ rsync เพื่อ copy ไฟล์ทั้งหมด ยกเว้นตัว _site เองและไฟล์ของ git
         run: |
-          rsync -av --progress --exclude "_site" --exclude ".git*" --exclude ".github" . ./_site
-      # ---- จบส่วนที่แก้ไข ----
+          # สร้างโฟลเดอร์ _site เพื่อให้แน่ใจว่ามีอยู่จริง
+          mkdir -p ./_site
+          # คัดลอกไฟล์ทั้งหมดไปยังโฟลเดอร์ ./_site/
+          rsync -av --progress --exclude ".git*" --exclude ".github" ./ ./_site/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './_site'
-
+          
+      # --- เพิ่มขั้นตอนที่ขาดไปกลับเข้ามา ---
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
