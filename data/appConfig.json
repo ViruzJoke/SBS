@@ -2,6 +2,10 @@
 	"countryConditions": {
 		"MX": "mexicoTaxIdRequired"
 	},
+	"overrideConditions": {
+		"AE": "S",
+		"HK": "CP"
+	},
 	"maxLengths": {
 		"name": 255,
 		"company": 100,
@@ -15,5 +19,4 @@
 		"phone": 70,
 		"vat": 35
 	}
-
 }
