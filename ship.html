@@ -870,7 +870,7 @@
 
             input.setAttribute('data-i18n-placeholder', 'typeOrSelectCountry');
             const renderDropdown = (filter = '') => {
-                // +++ FIX 2 of 2: Use correct property names (countryName, countryCode) +++
+                
                 const filteredList = countryList.filter(c => c.countryName.toLowerCase().includes(filter.toLowerCase()));
                 dropdown.innerHTML = filteredList.map(c => 
                     `<div class="country-dropdown-item" data-code="${c.countryCode}" data-name="${c.countryName}">
@@ -878,8 +878,8 @@
                         <span>${c.countryName}</span>
                     </div>`
                 ).join('');
-                // +++ END FIX 2 of 2 +++
             };
+			
             input.addEventListener('focus', () => { renderDropdown(input.value); dropdown.classList.remove('hidden'); });
             input.addEventListener('input', () => { 
                 renderDropdown(input.value); 
