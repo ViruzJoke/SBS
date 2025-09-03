@@ -3,8 +3,7 @@
 		"MX": "mexicoTaxIdRequired"
 	},
 	"overrideConditions": {
-		"AE": "S",
-		"HK": "CP"
+		"VN": "S"
 	},
 	"maxLengths": {
 		"name": 255,
@@ -20,3 +19,4 @@
 		"vat": 35
 	}
 }
+
