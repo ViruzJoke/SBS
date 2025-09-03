@@ -837,7 +837,7 @@
             const enableDarkMode = () => { document.body.classList.add('dark-mode'); localStorage.setItem('theme', 'dark'); lightIcon.classList.add('hidden'); darkIcon.classList.remove('hidden'); };
             const disableDarkMode = () => { document.body.classList.remove('dark-mode'); localStorage.setItem('theme', 'light'); lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden'); };
             themeToggle.addEventListener('click', () => { document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode(); });
-            if (localStorage.getItem('theme') === 'dark') { enableDarkMode(); } else { disableDarkMode(); }
+            if (localStorage.getItem('theme') === 'light') { disableDarkMode(); } else { enableDarkMode(); }
         }
 
         function setupLanguageSwitch() {
@@ -2605,3 +2605,4 @@
 	
 </body>
 </html>
+
