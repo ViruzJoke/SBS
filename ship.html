@@ -765,7 +765,7 @@
             updateInputValidationState(suburbInput);
         }
 
-        let currentLanguage = localStorage.getItem('language') || 'th';
+        let currentLanguage = localStorage.getItem('language') || 'en';
         let currentStep = 1;
         const totalSteps = 7;
         let hasUnsavedChanges = false;
@@ -913,7 +913,14 @@
                     
                     if (prefix === 'receiver') {
                         checkCountryConditions(newCountry);
-						manageReceiverAddressFields(newCountry);
+                        manageReceiverAddressFields(newCountry);
+                        
+                        const addressContainer = document.getElementById('receiver-address-details-container');
+                        addressContainer.classList.remove('hidden');
+                        addressContainer.querySelectorAll('input[data-was-required]').forEach(input => {
+                            input.required = true;
+                            updateInputValidationState(input);
+                        });
                     }
                 }
             });
@@ -2277,15 +2284,21 @@
         function initializeForm() {
              const shipperCountryInput = document.getElementById('shipper-country-input');
              const shipperCountryValue = document.getElementById('shipper-country-value');
-             const shipperEmailInput = document.getElementById('shipper-email');
-             const thailand = countryList.find(c => c.code === 'TH');
-             
+             const shipperEmailInput = document.getElementById('shipper-email');             
+             const thailand = countryList.find(c => c.countryCode === 'TH');
+			 
              if (thailand) {
-                shipperCountryInput.value = thailand.name;
-                shipperCountryValue.value = thailand.code;
+                shipperCountryInput.value = thailand.countryName;
+                shipperCountryValue.value = thailand.countryCode;
                 updateInputValidationState(shipperCountryInput);
              }
              
+             const addressContainer = document.getElementById('receiver-address-details-container');
+             addressContainer.querySelectorAll('input[required]').forEach(input => {
+                input.required = false;
+                input.setAttribute('data-was-required', 'true'); 
+             });
+
              checkAndSetPickupDate();
              updateInputValidationState(document.getElementById('ship-date'));
              updateInputValidationState(shipperEmailInput);
