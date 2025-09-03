@@ -201,7 +201,7 @@
                     }
                 } 
             };
-            let currentLanguage = localStorage.getItem('language') || 'th';
+            let currentLanguage = localStorage.getItem('language') || 'en';
             
             function getTranslatedText(key) { return translations[currentLanguage]?.[key] || key; }
             
@@ -264,11 +264,11 @@
                     darkIcon.classList.add('hidden'); 
                 }; 
                 themeToggle.addEventListener('click', () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode()); 
-                if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    enableDarkMode();
-                } else {
-                    disableDarkMode();
-                }
+                if (localStorage.getItem('theme') === 'dark') {
+				    enableDarkMode();
+				} else {
+				    disableDarkMode();
+				}
             }
 
             function setupLanguageSwitch() { document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden')); document.querySelectorAll('[data-lang]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); currentLanguage = e.target.dataset.lang; localStorage.setItem('language', currentLanguage); updateContentLanguage(); document.getElementById('language-dropdown').classList.add('hidden'); }); }); }
@@ -334,3 +334,4 @@
     </script>
 </body>
 </html>
+
