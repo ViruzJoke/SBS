@@ -1074,6 +1074,9 @@
             
             document.getElementById('ship-now-page').scrollIntoView({ behavior: 'smooth' });
 
+            if (step === 5) { // เพิ่มเงื่อนไขนี้
+                updateUploadSectionLogic();
+            }
             if (step === 6) {
                 updatePickupStepData();
             }
@@ -1523,28 +1526,37 @@
         const invoiceNumberIndicator = document.getElementById('invoice-number-indicator');
 
         function updateUploadSectionLogic() {
-            const uploadCheckbox = document.getElementById('upload-documents-checkbox');
-            if (!uploadCheckbox.checked) {
-                document.getElementById('file-upload-section').classList.add('hidden');
+            const uploadSection = document.getElementById('file-upload-section');
+            const mainUploadCheckbox = document.getElementById('upload-documents-checkbox');
+
+            if (!mainUploadCheckbox.checked) {
+                uploadSection.classList.add('hidden');
                 document.getElementById('doc-uploader').required = false;
                 return;
-            };
+            }
 
-            document.getElementById('file-upload-section').classList.remove('hidden');
-            const useMyOwn = useMyOwnInvoiceBtn.classList.contains('active');
-            const uploadLabelOwn = document.getElementById('upload-label-own-invoice');
-            const uploadLabelCreate = document.getElementById('upload-label-create-invoice');
-            const docUploaderContainer = document.getElementById('doc-uploader-container');
+            uploadSection.classList.remove('hidden');
+
+            const isCreateInvoice = document.getElementById('create-invoice-btn').classList.contains('active');
+            const createInvoiceInfoSection = document.getElementById('create-invoice-info-section');
+            const uploaderWrapper = document.getElementById('file-uploader-wrapper');
             const docUploader = document.getElementById('doc-uploader');
+            const uploadLabel = document.getElementById('upload-label');
+            const otherDocsCheckbox = document.getElementById('upload-other-docs-checkbox');
 
-            uploadLabelOwn.classList.toggle('hidden', !useMyOwn);
-            uploadLabelCreate.classList.toggle('hidden', useMyOwn);
-            docUploaderContainer.classList.toggle('hidden', !useMyOwn);
-            docUploader.required = useMyOwn;
-            
-            if (!useMyOwn) {
-                docUploader.value = '';
-                docUploader.dispatchEvent(new Event('change'));
+            if (isCreateInvoice) {
+                createInvoiceInfoSection.classList.remove('hidden');
+                uploadLabel.textContent = getTranslatedText('uploadLabelOptionalDocs');
+                
+                const showUploader = otherDocsCheckbox.checked;
+                uploaderWrapper.classList.toggle('hidden', !showUploader);
+                docUploader.required = false; 
+
+            } else {
+                createInvoiceInfoSection.classList.add('hidden');
+                uploaderWrapper.classList.remove('hidden');
+                uploadLabel.textContent = getTranslatedText('uploadLabelOwnInvoice');
+                docUploader.required = true;
             }
         }
 
@@ -1564,6 +1576,7 @@
             useMyOwnInvoiceBtn.classList.remove('active');
             invoiceOptionsContainer.classList.remove('hidden');
             updateInvoiceSection();
+            updateUploadSectionLogic();
         });
 
         useMyOwnInvoiceBtn.addEventListener('click', (e) => {
@@ -1571,6 +1584,7 @@
             createInvoiceBtn.classList.remove('active');
             invoiceOptionsContainer.classList.add('hidden');
             updateInvoiceSection();
+            updateUploadSectionLogic(); // เพิ่มบรรทัดนี้
         });
 
         document.getElementById('invoice-type-proforma').addEventListener('click', (e) => {
@@ -1747,6 +1761,13 @@
         const deleteFileBtn = document.getElementById('delete-file-btn');
 
         uploadDocsCheckbox.addEventListener('change', (e) => {
+            if (!e.target.checked) {
+                document.getElementById('upload-other-docs-checkbox').checked = false;
+            }
+            updateUploadSectionLogic();
+        });
+		
+		document.getElementById('upload-other-docs-checkbox').addEventListener('change', () => {
             updateUploadSectionLogic();
         });
 
@@ -2634,6 +2655,7 @@
 	
 </body>
 </html>
+
 
 
 
