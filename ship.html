@@ -199,12 +199,18 @@
                             <div><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field"></div>
                             <div><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field"></div>
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
-                                <div class="relative"><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                <div id="receiver-postalcode-container">
+                                    <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
+                                </div>
+                                <div>
+                                    <div class="relative"><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                </div>
                             </div>
-                            <div><label for="receiver-suburb" class="block text-sm font-medium mb-1" data-i18n="receiverSuburb">Suburb</label><input type="text" id="receiver-suburb" class="input-field"></div>
-                            <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
-                            <div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div id="receiver-suburb-container">
+                                <label for="receiver-suburb" class="block text-sm font-medium mb-1" data-i18n="receiverSuburb">Suburb</label><input type="text" id="receiver-suburb" class="input-field">
+                            </div>
+							<div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
+							<div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
                         </div>
                     </div>
@@ -632,6 +638,21 @@
 		// --- START: Load Static Data from JSON files ---
         let translations, countryList, currencyList, documentTypes, uomList, incotermList, pickupLocations, countryConditions, maxLengths;
 
+		function transformCountryData(apiResponse) {
+            if (!apiResponse || !apiResponse.referenceData || !apiResponse.referenceData[0] || !apiResponse.referenceData[0].data) {
+                console.error("Invalid country data structure from API");
+                return [];
+            }
+            const countryDataArray = apiResponse.referenceData[0].data;
+            return countryDataArray.map(countryDetails => {
+                const countryObject = {};
+                countryDetails.forEach(attributePair => {
+                    countryObject[attributePair.attribute] = attributePair.value;
+                });
+                return countryObject;
+            }).sort((a, b) => a.countryName.localeCompare(b.countryName)); // เรียงตามชื่อประเทศ
+        }
+
         try {
             const [
                 translationsRes,
@@ -644,7 +665,7 @@
                 appConfigRes
             ] = await Promise.all([
                 fetch('data/translations.json'),
-                fetch('data/countries.json'),
+                fetch('/api/address-reference?datasetName=country'),
                 fetch('data/currencies.json'),
                 fetch('data/documentTypes.json'),
                 fetch('data/uom.json'),
@@ -662,7 +683,12 @@
             }
 
             translations = await translationsRes.json();
-            countryList = await countriesRes.json();
+            
+            // +++ FIX 1 of 2: Correctly transform the country data from the API +++
+            const rawCountryData = await countriesRes.json();
+            countryList = transformCountryData(rawCountryData);
+            // +++ END FIX 1 of 2 +++
+            
             currencyList = await currenciesRes.json();
             documentTypes = await docTypesRes.json();
             uomList = await uomRes.json();
@@ -679,6 +705,58 @@
             return; // Stop execution if data loading fails
         }
 		 // --- END: Load Static Data ---
+		 
+		 function manageReceiverAddressFields(countryCode) {
+            const selectedCountry = countryList.find(c => c.countryCode === countryCode);
+
+            const postalCodeInput = document.getElementById('receiver-postalcode');
+            const suburbInput = document.getElementById('receiver-suburb');
+            
+            // Target containers directly by their new IDs for simplicity
+            const postalCodeContainer = document.getElementById('receiver-postalcode-container');
+            const suburbContainer = document.getElementById('receiver-suburb-container');
+
+            if (!selectedCountry || !postalCodeContainer || !suburbContainer) {
+                postalCodeContainer.classList.remove('hidden');
+                suburbContainer.classList.remove('hidden');
+                postalCodeInput.required = true;
+                suburbInput.required = false; 
+                return;
+            }
+
+            // Reset fields before applying new rules
+            postalCodeContainer.classList.remove('hidden');
+            suburbContainer.classList.remove('hidden');
+            postalCodeInput.value = '';
+            suburbInput.value = '';
+
+            switch (selectedCountry.postalLocationTypeCode) {
+                case 'CP': // City & Postal Code
+                    suburbContainer.classList.add('hidden');
+                    postalCodeInput.required = true;
+                    suburbInput.required = false;
+                    break;
+                case 'C':  // City only
+                    postalCodeContainer.classList.add('hidden');
+                    suburbContainer.classList.add('hidden');
+                    postalCodeInput.required = false;
+                    suburbInput.required = false;
+                    break;
+                case 'S':  // City & Suburb
+                    postalCodeContainer.classList.add('hidden');
+                    postalCodeInput.required = false;
+                    suburbInput.required = true;
+                    break;
+                default:   // Fallback
+                    postalCodeContainer.classList.remove('hidden');
+                    suburbContainer.classList.remove('hidden');
+                    postalCodeInput.required = true;
+                    suburbInput.required = false;
+                    break;
+            }
+            updateInputValidationState(postalCodeInput);
+            updateInputValidationState(suburbInput);
+        }
 
         let currentLanguage = localStorage.getItem('language') || 'th';
         let currentStep = 1;
@@ -785,13 +863,15 @@
 
             input.setAttribute('data-i18n-placeholder', 'typeOrSelectCountry');
             const renderDropdown = (filter = '') => {
-                const filteredList = countryList.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()));
+                // +++ FIX 2 of 2: Use correct property names (countryName, countryCode) +++
+                const filteredList = countryList.filter(c => c.countryName.toLowerCase().includes(filter.toLowerCase()));
                 dropdown.innerHTML = filteredList.map(c => 
-                    `<div class="country-dropdown-item" data-code="${c.code}" data-name="${c.name}">
-                        <img src="https://flagcdn.com/w20/${c.code.toLowerCase()}.png" alt="${c.name} flag">
-                        <span>${c.name}</span>
+                    `<div class="country-dropdown-item" data-code="${c.countryCode}" data-name="${c.countryName}">
+                        <img src="https://flagcdn.com/w20/${c.countryCode.toLowerCase()}.png" alt="${c.countryName} flag">
+                        <span>${c.countryName}</span>
                     </div>`
                 ).join('');
+                // +++ END FIX 2 of 2 +++
             };
             input.addEventListener('focus', () => { renderDropdown(input.value); dropdown.classList.remove('hidden'); });
             input.addEventListener('input', () => { 
@@ -826,6 +906,7 @@
                     
                     if (prefix === 'receiver') {
                         checkCountryConditions(newCountry);
+						manageReceiverAddressFields(newCountry);
                     }
                 }
             });
@@ -834,11 +915,12 @@
         
         function updateInputValidationState(inputElement) {
             if (!inputElement.hasAttribute('required')) return;
-            const wrapper = inputElement.closest('.relative');
+            // This handles cases where the container is a direct parent, like for Suburb
+            const wrapper = inputElement.closest('.relative') || inputElement.parentElement;
             if (!wrapper) return;
             const indicator = wrapper.querySelector('.input-indicator');
-            if (!indicator) return;
-
+            // Allow function to proceed even if there's no indicator (like for Suburb)
+            
             let isValid = true;
             if (inputElement.id.includes('-country-input')) {
                 const valueHolderId = inputElement.id.replace('-input', '-value');
@@ -858,15 +940,17 @@
                 isValid = false;
             }
 
-            if (isValid) {
-                indicator.textContent = '✓';
-                indicator.classList.remove('indicator-required');
-                indicator.classList.add('indicator-valid');
-                inputElement.classList.remove('is-invalid');
-            } else {
-                indicator.textContent = '*';
-                indicator.classList.remove('indicator-valid');
-                indicator.classList.add('indicator-required');
+            if(indicator){
+                if (isValid) {
+                    indicator.textContent = '✓';
+                    indicator.classList.remove('indicator-required');
+                    indicator.classList.add('indicator-valid');
+                    inputElement.classList.remove('is-invalid');
+                } else {
+                    indicator.textContent = '*';
+                    indicator.classList.remove('indicator-valid');
+                    indicator.classList.add('indicator-required');
+                }
             }
         }
         
