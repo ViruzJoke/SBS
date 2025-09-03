@@ -435,37 +435,50 @@
                             <label for="upload-documents-checkbox" class="ml-2" data-i18n="yes">Yes</label>
                         </div>
                         
-                        <div id="file-upload-section" class="hidden mt-4 space-y-2">
-                            <p id="upload-label-own-invoice" class="text-sm font-semibold hidden" data-i18n="uploadLabelOwnInvoice"></p>
-                            <p id="upload-label-create-invoice" class="text-sm font-semibold hidden" data-i18n="uploadLabelCreateInvoice"></p>
-                            
-                            <div id="doc-uploader-container">
-                                <label for="doc-uploader" class="file-drop-zone">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center">
-                                        <img src="Icon/upload_file_rgb_black.svg" alt="Parcel Logo" class="w-10 h-10 mb-3 text-gray-400">
-										<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                            <span class="font-semibold" data-i18n="browseForFile"></span><span data-i18n="orDropHere"></span>
-                                        </p>
-                                    </div>
-                                    <input type="file" id="doc-uploader" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.gif,.tiff,.tif">
-                                </label>
-                            </div>
-                            <div id="uploaded-file-view" class="uploaded-file-view hidden">
-                                <div class="flex items-center gap-3 truncate">
-                                    <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    <div class="truncate">
-                                        <p id="uploaded-file-name" class="text-sm font-medium truncate"></p>
-                                        <p id="uploaded-file-size" class="text-xs text-gray-500 dark:text-gray-400"></p>
-                                    </div>
+                        <div id="file-upload-section" class="hidden mt-4 space-y-4">
+                            <!-- This new section is ONLY for the 'Create Invoice' flow -->
+                            <div id="create-invoice-info-section" class="hidden space-y-4">
+                                <div class="p-4 rounded-md bg-gray-100 dark:bg-gray-800 border dark:border-gray-700">
+                                    <p class="text-sm" data-i18n="dhlWillCreateInvoice"></p>
                                 </div>
-                                <button type="button" id="delete-file-btn" class="delete-file-btn">
-                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                </button>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="upload-other-docs-checkbox" class="form-checkbox h-5 w-5 text-red-600">
+                                    <label for="upload-other-docs-checkbox" class="ml-2" data-i18n="uploadOtherDocs"></label>
+                                </div>
                             </div>
-                             <div class="text-center text-xs text-gray-500 dark:text-gray-400 mt-2 space-y-1">
-                                <p data-i18n="fileTypesAllowed"></p>
-                                <p data-i18n="maxFileSize"></p>
-                                <p data-i18n="fileNameEnglishOnly"></p>
+
+                            <!-- This is the uploader, shown conditionally -->
+                            <div id="file-uploader-wrapper" class="hidden">
+                                <p id="upload-label" class="text-sm font-semibold mb-2"></p>
+                                
+                                <div id="doc-uploader-container">
+                                    <label for="doc-uploader" class="file-drop-zone">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center">
+                                            <img src="Icon/upload_file_rgb_black.svg" alt="Upload Icon" class="w-10 h-10 mb-3 text-gray-400">
+                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                                <span class="font-semibold" data-i18n="browseForFile"></span><span data-i18n="orDropHere"></span>
+                                            </p>
+                                        </div>
+                                        <input type="file" id="doc-uploader" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.gif,.tiff,.tif">
+                                    </label>
+                                </div>
+                                <div id="uploaded-file-view" class="uploaded-file-view hidden">
+                                    <div class="flex items-center gap-3 truncate">
+                                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                        <div class="truncate">
+                                            <p id="uploaded-file-name" class="text-sm font-medium truncate"></p>
+                                            <p id="uploaded-file-size" class="text-xs text-gray-500 dark:text-gray-400"></p>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="delete-file-btn" class="delete-file-btn">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                                    </button>
+                                </div>
+                                <div class="text-center text-xs text-gray-500 dark:text-gray-400 mt-2 space-y-1">
+                                    <p data-i18n="fileTypesAllowed"></p>
+                                    <p data-i18n="maxFileSize"></p>
+                                    <p data-i18n="fileNameEnglishOnly"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2655,6 +2668,7 @@
 	
 </body>
 </html>
+
 
 
 
