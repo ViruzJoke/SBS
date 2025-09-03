@@ -1255,7 +1255,7 @@
             const itemId = lineItemCounter;
             const currencyOptions = currencyList.map(c => `<option value="${c}" ${c === 'THB' ? 'selected' : ''}>${c}</option>`).join('');
             const unitOptions = uomList.map(u => `<option value="${u.unitOfMeasurement}" ${u.unitOfMeasurement === 'PCS' ? 'selected' : ''}>${u.description}</option>`).join('');
-            const countryOptions = countryList.map(c => `<option value="${c.code}" ${c.code === 'TH' ? 'selected' : ''}>${c.name}</option>`).join('');
+            const countryOptions = countryList.map(c => `<option value="${c.countryCode}" ${c.countryCode === 'TH' ? 'selected' : ''}>${c.countryName}</option>`).join('');
 
             const itemHTML = `
                 <div class="line-item" id="item-wrapper-${itemId}">
@@ -2634,6 +2634,7 @@
 	
 </body>
 </html>
+
 
 
 
