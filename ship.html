@@ -630,6 +630,10 @@
     let timeSlider = null; 
 
     document.addEventListener('DOMContentLoaded', async () => {
+		
+		localStorage.setItem('theme', 'light');
+		localStorage.setItem('language', 'en');
+		
 		if (sessionStorage.getItem('termsAccepted') !== 'true') {
             window.location.href = 'index.html';
             return;
@@ -2612,3 +2616,4 @@
 	
 </body>
 </html>
+
