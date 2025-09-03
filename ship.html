@@ -684,11 +684,9 @@
 
             translations = await translationsRes.json();
             
-            // +++ FIX 1 of 2: Correctly transform the country data from the API +++
             const rawCountryData = await countriesRes.json();
             countryList = transformCountryData(rawCountryData);
-            // +++ END FIX 1 of 2 +++
-            
+			
             currencyList = await currenciesRes.json();
             documentTypes = await docTypesRes.json();
             uomList = await uomRes.json();
@@ -698,6 +696,15 @@
             
             countryConditions = appConfig.countryConditions;
             maxLengths = appConfig.maxLengths;
+			
+            const countryOverrides = appConfig.overrideConditions || {}; // Use overrideConditions from the config file
+
+            countryList.forEach(country => {
+                if (countryOverrides[country.countryCode]) {
+                    console.log(`Overriding ${country.countryCode}: From '${country.postalLocationTypeCode}' to '${countryOverrides[country.countryCode]}'`);
+                    country.postalLocationTypeCode = countryOverrides[country.countryCode];
+                }
+            });
 
         } catch (error) {
             console.error("Fatal Error: Could not load initial application data.", error);
@@ -2589,7 +2596,6 @@
 	
 </body>
 </html>
-
 
 
 
