@@ -200,22 +200,27 @@
                             <div id="receiver-address1-wrapper" class="hidden"><label for="receiver-address1" class="block text-sm font-medium mb-1" data-i18n="receiverAddress1">Address Line 1</label><div class="relative"><input type="text" id="receiver-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div id="receiver-address2-wrapper" class="hidden"><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field"></div>
                             <div id="receiver-address3-wrapper" class="hidden"><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field"></div>
-                            <div id="receiver-postal-city-wrapper" class="grid grid-cols-2 gap-4 hidden">
-                                <div id="receiver-postalcode-container">
-                                    <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
-                                </div>
-                                <div>
-                                    <div class="relative"><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            
+                            <div id="receiver-postal-city-wrapper" class="hidden">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div id="receiver-postalcode-container">
+                                        <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
+                                    </div>
+                                    <div id="receiver-city-container">
+                                        <div class="relative"><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="receiver-suburb-container" class="hidden">
+                            
+                            <div id="receiver-suburb-wrapper" class="hidden">
                                 <label for="receiver-suburb" class="block text-sm font-medium mb-1" data-i18n="receiverSuburb">Suburb</label><input type="text" id="receiver-suburb" class="input-field">
                             </div>
-                            <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
                             <!-- End of hidden fields -->
 
+                            <!-- Reordered Fields -->
 							<div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
 							<div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
                         </div>
                     </div>
                     <div id="country-condition-alert" class="hidden p-4 rounded-md bg-yellow-100 border border-yellow-300 text-yellow-800">
@@ -719,49 +724,60 @@
 		 
 		 function manageReceiverAddressFields(countryCode) {
             const selectedCountry = countryList.find(c => c.countryCode === countryCode);
+            
+            // Get all relevant elements
+            const postalCityWrapper = document.getElementById('receiver-postal-city-wrapper');
+            const postalCodeContainer = document.getElementById('receiver-postalcode-container');
+            const cityContainer = document.getElementById('receiver-city-container');
+            const suburbWrapper = document.getElementById('receiver-suburb-wrapper');
 
             const postalCodeInput = document.getElementById('receiver-postalcode');
+            const cityInput = document.getElementById('receiver-city');
             const suburbInput = document.getElementById('receiver-suburb');
             
-            const postalCodeContainer = document.getElementById('receiver-postalcode-container');
-            const suburbContainer = document.getElementById('receiver-suburb-container');
-
-            if (!selectedCountry || !postalCodeContainer || !suburbContainer) {
-                postalCodeContainer.parentElement.classList.remove('hidden'); // Show the grid
-                suburbContainer.classList.remove('hidden');
+            if (!selectedCountry || !postalCityWrapper || !suburbWrapper) {
+                console.error("C/CP/S Logic Error: Missing required elements.");
+                // Fallback to a safe default (e.g., show everything)
+                postalCityWrapper.classList.remove('hidden');
+                postalCodeContainer.classList.remove('hidden');
+                cityContainer.classList.remove('hidden');
+                suburbWrapper.classList.add('hidden');
                 postalCodeInput.required = true;
-                suburbInput.required = false; 
+                suburbInput.required = false;
+                cityInput.required = true;
                 return;
             }
 
-            // Reset fields before applying new rules
-            postalCodeContainer.parentElement.classList.remove('hidden'); // Ensure grid wrapper is visible
-            suburbContainer.classList.remove('hidden'); // Ensure suburb wrapper is visible (will be hidden by logic if needed)
+            // Reset state first
+            postalCityWrapper.classList.add('hidden');
+            postalCodeContainer.classList.remove('hidden'); // Show postal code within the grid by default
+            suburbWrapper.classList.add('hidden');
+            postalCodeInput.required = false;
+            suburbInput.required = false;
+            cityInput.required = true; // City is almost always required
 
             switch (selectedCountry.postalLocationTypeCode) {
-                case 'CP': // City & Postal Code
-                    suburbContainer.classList.add('hidden');
-                    postalCodeInput.required = true;
-                    suburbInput.required = false;
-                    break;
                 case 'C':  // City only
-                    postalCodeContainer.parentElement.classList.add('hidden'); // Hide the whole grid
-                    suburbContainer.classList.add('hidden');
-                    postalCodeInput.required = false;
-                    suburbInput.required = false;
+                    postalCityWrapper.classList.remove('hidden');
+                    postalCodeContainer.classList.add('hidden'); // Hide just the postal code part
                     break;
-                case 'S':  // City & Suburb
-                    postalCodeContainer.parentElement.classList.add('hidden'); // Hide the whole grid
-                    postalCodeInput.required = false;
+                case 'S':  // Suburb & City
+                    postalCityWrapper.classList.remove('hidden');
+                    postalCodeContainer.classList.add('hidden'); // Hide postal code
+                    suburbWrapper.classList.remove('hidden');
                     suburbInput.required = true;
                     break;
-                default:   // Fallback (Show CP)
-                    suburbContainer.classList.add('hidden');
+                case 'CP': // City & Postal Code (and default)
+                default:
+                    postalCityWrapper.classList.remove('hidden');
+                    suburbWrapper.classList.add('hidden');
                     postalCodeInput.required = true;
-                    suburbInput.required = false;
                     break;
             }
+
+            // Update validation states for all affected fields
             updateInputValidationState(postalCodeInput);
+            updateInputValidationState(cityInput);
             updateInputValidationState(suburbInput);
         }
 
@@ -920,6 +936,7 @@
                         document.getElementById('receiver-address3-wrapper').classList.remove('hidden');
                         document.getElementById('receiver-postal-city-wrapper').classList.remove('hidden');
                         document.getElementById('receiver-vat-wrapper').classList.remove('hidden');
+                        document.getElementById('receiver-suburb-wrapper').classList.remove('hidden'); // Show this too initially, manageReceiverAddressFields will hide it if needed
                         
                         const addressContainer = document.getElementById('receiver-address-details-container');
                         addressContainer.querySelectorAll('input[data-was-required="true"]').forEach(field => {
@@ -2617,5 +2634,6 @@
 	
 </body>
 </html>
+
 
 
