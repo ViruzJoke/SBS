@@ -151,6 +151,10 @@
 		"aboutDhl": "เกี่ยวกับ DHL",
 		"press": "ข่าวสาร",
 		"dhlExpress": "DHL Express",
+		"backToNormalTitle":"ขณะนี้ระบบ MyDHL+ กลับมาพร้อมให้บริการแล้ว",
+		"backToNormalBody1":"ระบบกำลังนำท่านกลับสู่หน้าหลักของ MyDHL+ ใน",
+		"backToNormalBody2":"วินาที",
+		"backToNormalBody3":"หากท่านไม่ถูกเปลี่ยนเส้นทางโดยอัตโนมัติ กรุณาคลิกที่นี่ :",		
 		"links": {
 			"contactUs": "https://www.dhl.com/th-th/home/customer-service.html",
 			"termsOfUse": "https://www.dhl.com/th-th/home/footer/terms-of-use.html",
@@ -317,6 +321,10 @@
 		"aboutDhl": "About DHL",
 		"press": "Press",
 		"dhlExpress": "DHL Express",
+		"backToNormalTitle":"MyDHL+ is now back online",
+		"backToNormalBody1":"You are being redirected to the MyDHL+ homepage in",
+		"backToNormalBody2":"Seconds",
+		"backToNormalBody3":"If you are not automatically redirected, please click here:",
 		"links": {
 			"contactUs": "https://www.dhl.com/th-en/home/customer-service.html",
 			"termsOfUse": "https://www.dhl.com/th-en/home/footer/terms-of-use.html",
