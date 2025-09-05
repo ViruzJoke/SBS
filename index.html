@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
+	<script>
+        if (!sessionStorage.getItem('isRefreshed')) {
+            sessionStorage.setItem('isRefreshed', 'true');
+            location.reload(true);
+        }
+    </script>
+    <meta charset="UTF-8">	
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shipment Creation Backup Solution - Back to normal</title>
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
