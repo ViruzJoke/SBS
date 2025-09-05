@@ -1,17 +1,9 @@
 {
-  "headers": [
+  "redirects": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Vercel-Rule-Applied", "value": "true" }
-      ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/closemode.html"
+      "source": "/((?!maintenance.html).*)",
+      "destination": "/closemode.html",
+      "permanent": false
     }
   ]
 }
-
