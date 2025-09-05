@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+	<script>
+    if (!sessionStorage.getItem('isRefreshed')) {
+        sessionStorage.setItem('isRefreshed', 'true');
+        location.reload(true);
+    }
+	</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -10,12 +16,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
 	<link rel="icon" href="DBS_Icon3.jpg" type="image/jpg">
-	<script>
-    if (!sessionStorage.getItem('isRefreshed')) {
-        sessionStorage.setItem('isRefreshed', 'true');
-        location.reload(true);
-    }
-	</script>
     <style>
         .is-disabled {
             opacity: 0.5;
@@ -343,6 +343,7 @@
     </script>
 </body>
 </html>
+
 
 
 
