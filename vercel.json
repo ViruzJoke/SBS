@@ -2,4 +2,3 @@
   "rewrites": [
     { "source": "/:path*", "destination": "/maintenance.html" }
   ]
-}
