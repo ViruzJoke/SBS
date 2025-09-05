@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Shipment Creation Backup Solution - Create Shipment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
@@ -200,27 +203,22 @@
                             <div id="receiver-address1-wrapper" class="hidden"><label for="receiver-address1" class="block text-sm font-medium mb-1" data-i18n="receiverAddress1">Address Line 1</label><div class="relative"><input type="text" id="receiver-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div id="receiver-address2-wrapper" class="hidden"><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field"></div>
                             <div id="receiver-address3-wrapper" class="hidden"><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field"></div>
-                            
-                            <div id="receiver-postal-city-wrapper" class="hidden">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div id="receiver-postalcode-container">
-                                        <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
-                                    </div>
-                                    <div id="receiver-city-container">
-                                        <div class="relative"><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                                    </div>
+                            <div id="receiver-postal-city-wrapper" class="grid grid-cols-2 gap-4 hidden">
+                                <div id="receiver-postalcode-container">
+                                    <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
+                                </div>
+                                <div>
+                                    <div class="relative"><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                                 </div>
                             </div>
-                            
-                            <div id="receiver-suburb-wrapper" class="hidden">
+                            <div id="receiver-suburb-container" class="hidden">
                                 <label for="receiver-suburb" class="block text-sm font-medium mb-1" data-i18n="receiverSuburb">Suburb</label><input type="text" id="receiver-suburb" class="input-field">
                             </div>
+                            <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
                             <!-- End of hidden fields -->
 
-                            <!-- Reordered Fields -->
 							<div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
 							<div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                            <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
                         </div>
                     </div>
                     <div id="country-condition-alert" class="hidden p-4 rounded-md bg-yellow-100 border border-yellow-300 text-yellow-800">
@@ -435,52 +433,37 @@
                             <label for="upload-documents-checkbox" class="ml-2" data-i18n="yes">Yes</label>
                         </div>
                         
-                        <div id="file-upload-section" class="hidden mt-4 space-y-4">
-                            <!-- This is the uploader, shown conditionally -->
-                            <div id="uploader-wrapper">
-                                <!-- This info box is ONLY for the 'Create Invoice' flow -->
-                                <div id="create-invoice-info-section" class="hidden p-4 border rounded-md bg-gray-100 dark:bg-gray-800 dark:border-gray-700 space-y-4 mb-4">
-                                    <p class="text-sm" data-i18n="dhlWillCreateInvoice"></p>
-                                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="upload-other-docs-checkbox" class="form-checkbox h-5 w-5 text-red-600">
-                                            <label for="upload-other-docs-checkbox" class="ml-2" data-i18n="uploadOtherDocs"></label>
-                                        </div>
+                        <div id="file-upload-section" class="hidden mt-4 space-y-2">
+                            <p id="upload-label-own-invoice" class="text-sm font-semibold hidden" data-i18n="uploadLabelOwnInvoice"></p>
+                            <p id="upload-label-create-invoice" class="text-sm font-semibold hidden" data-i18n="uploadLabelCreateInvoice"></p>
+                            
+                            <div id="doc-uploader-container">
+                                <label for="doc-uploader" class="file-drop-zone">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center">
+                                        <img src="Icon/upload_file_rgb_black.svg" alt="Parcel Logo" class="w-10 h-10 mb-3 text-gray-400">
+										<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                            <span class="font-semibold" data-i18n="browseForFile"></span><span data-i18n="orDropHere"></span>
+                                        </p>
+                                    </div>
+                                    <input type="file" id="doc-uploader" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.gif,.tiff,.tif">
+                                </label>
+                            </div>
+                            <div id="uploaded-file-view" class="uploaded-file-view hidden">
+                                <div class="flex items-center gap-3 truncate">
+                                    <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                    <div class="truncate">
+                                        <p id="uploaded-file-name" class="text-sm font-medium truncate"></p>
+                                        <p id="uploaded-file-size" class="text-xs text-gray-500 dark:text-gray-400"></p>
                                     </div>
                                 </div>
-                                
-                                <div id="actual-uploader-container" class="hidden">
-                                    <p id="upload-label" class="text-sm font-semibold mb-2"></p>
-                                    
-                                    <div id="doc-uploader-container">
-                                        <label for="doc-uploader" class="file-drop-zone">
-                                            <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center">
-                                                <img src="Icon/upload_file_rgb_black.svg" alt="Upload Icon" class="w-10 h-10 mb-3 text-gray-400">
-                                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                    <span class="font-semibold" data-i18n="browseForFile"></span><span data-i18n="orDropHere"></span>
-                                                </p>
-                                            </div>
-                                            <input type="file" id="doc-uploader" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.gif,.tiff,.tif">
-                                        </label>
-                                    </div>
-                                    <div id="uploaded-file-view" class="uploaded-file-view hidden">
-                                        <div class="flex items-center gap-3 truncate">
-                                            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <div class="truncate">
-                                                <p id="uploaded-file-name" class="text-sm font-medium truncate"></p>
-                                                <p id="uploaded-file-size" class="text-xs text-gray-500 dark:text-gray-400"></p>
-                                            </div>
-                                        </div>
-                                        <button type="button" id="delete-file-btn" class="delete-file-btn">
-                                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                        </button>
-                                    </div>
-                                    <div class="text-center text-xs text-gray-500 dark:text-gray-400 mt-2 space-y-1">
-                                        <p data-i18n="fileTypesAllowed"></p>
-                                        <p data-i18n="maxFileSize"></p>
-                                        <p data-i18n="fileNameEnglishOnly"></p>
-                                    </div>
-                                </div>
+                                <button type="button" id="delete-file-btn" class="delete-file-btn">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                                </button>
+                            </div>
+                             <div class="text-center text-xs text-gray-500 dark:text-gray-400 mt-2 space-y-1">
+                                <p data-i18n="fileTypesAllowed"></p>
+                                <p data-i18n="maxFileSize"></p>
+                                <p data-i18n="fileNameEnglishOnly"></p>
                             </div>
                         </div>
                     </div>
@@ -739,60 +722,49 @@
 		 
 		 function manageReceiverAddressFields(countryCode) {
             const selectedCountry = countryList.find(c => c.countryCode === countryCode);
-            
-            // Get all relevant elements
-            const postalCityWrapper = document.getElementById('receiver-postal-city-wrapper');
-            const postalCodeContainer = document.getElementById('receiver-postalcode-container');
-            const cityContainer = document.getElementById('receiver-city-container');
-            const suburbWrapper = document.getElementById('receiver-suburb-wrapper');
 
             const postalCodeInput = document.getElementById('receiver-postalcode');
-            const cityInput = document.getElementById('receiver-city');
             const suburbInput = document.getElementById('receiver-suburb');
             
-            if (!selectedCountry || !postalCityWrapper || !suburbWrapper) {
-                console.error("C/CP/S Logic Error: Missing required elements.");
-                // Fallback to a safe default (e.g., show everything)
-                postalCityWrapper.classList.remove('hidden');
-                postalCodeContainer.classList.remove('hidden');
-                cityContainer.classList.remove('hidden');
-                suburbWrapper.classList.add('hidden');
+            const postalCodeContainer = document.getElementById('receiver-postalcode-container');
+            const suburbContainer = document.getElementById('receiver-suburb-container');
+
+            if (!selectedCountry || !postalCodeContainer || !suburbContainer) {
+                postalCodeContainer.parentElement.classList.remove('hidden'); // Show the grid
+                suburbContainer.classList.remove('hidden');
                 postalCodeInput.required = true;
-                suburbInput.required = false;
-                cityInput.required = true;
+                suburbInput.required = false; 
                 return;
             }
 
-            // Reset state first
-            postalCityWrapper.classList.add('hidden');
-            postalCodeContainer.classList.remove('hidden'); // Show postal code within the grid by default
-            suburbWrapper.classList.add('hidden');
-            postalCodeInput.required = false;
-            suburbInput.required = false;
-            cityInput.required = true; // City is almost always required
+            // Reset fields before applying new rules
+            postalCodeContainer.parentElement.classList.remove('hidden'); // Ensure grid wrapper is visible
+            suburbContainer.classList.remove('hidden'); // Ensure suburb wrapper is visible (will be hidden by logic if needed)
 
             switch (selectedCountry.postalLocationTypeCode) {
-                case 'C':  // City only
-                    postalCityWrapper.classList.remove('hidden');
-                    postalCodeContainer.classList.add('hidden'); // Hide just the postal code part
+                case 'CP': // City & Postal Code
+                    suburbContainer.classList.add('hidden');
+                    postalCodeInput.required = true;
+                    suburbInput.required = false;
                     break;
-                case 'S':  // Suburb & City
-                    postalCityWrapper.classList.remove('hidden');
-                    postalCodeContainer.classList.add('hidden'); // Hide postal code
-                    suburbWrapper.classList.remove('hidden');
+                case 'C':  // City only
+                    postalCodeContainer.parentElement.classList.add('hidden'); // Hide the whole grid
+                    suburbContainer.classList.add('hidden');
+                    postalCodeInput.required = false;
+                    suburbInput.required = false;
+                    break;
+                case 'S':  // City & Suburb
+                    postalCodeContainer.parentElement.classList.add('hidden'); // Hide the whole grid
+                    postalCodeInput.required = false;
                     suburbInput.required = true;
                     break;
-                case 'CP': // City & Postal Code (and default)
-                default:
-                    postalCityWrapper.classList.remove('hidden');
-                    suburbWrapper.classList.add('hidden');
+                default:   // Fallback (Show CP)
+                    suburbContainer.classList.add('hidden');
                     postalCodeInput.required = true;
+                    suburbInput.required = false;
                     break;
             }
-
-            // Update validation states for all affected fields
             updateInputValidationState(postalCodeInput);
-            updateInputValidationState(cityInput);
             updateInputValidationState(suburbInput);
         }
 
@@ -951,7 +923,6 @@
                         document.getElementById('receiver-address3-wrapper').classList.remove('hidden');
                         document.getElementById('receiver-postal-city-wrapper').classList.remove('hidden');
                         document.getElementById('receiver-vat-wrapper').classList.remove('hidden');
-                        document.getElementById('receiver-suburb-wrapper').classList.remove('hidden'); // Show this too initially, manageReceiverAddressFields will hide it if needed
                         
                         const addressContainer = document.getElementById('receiver-address-details-container');
                         addressContainer.querySelectorAll('input[data-was-required="true"]').forEach(field => {
@@ -1089,9 +1060,6 @@
             
             document.getElementById('ship-now-page').scrollIntoView({ behavior: 'smooth' });
 
-            if (step === 5) { // เพิ่มเงื่อนไขนี้
-                updateUploadSectionLogic();
-            }
             if (step === 6) {
                 updatePickupStepData();
             }
@@ -1273,7 +1241,7 @@
             const itemId = lineItemCounter;
             const currencyOptions = currencyList.map(c => `<option value="${c}" ${c === 'THB' ? 'selected' : ''}>${c}</option>`).join('');
             const unitOptions = uomList.map(u => `<option value="${u.unitOfMeasurement}" ${u.unitOfMeasurement === 'PCS' ? 'selected' : ''}>${u.description}</option>`).join('');
-            const countryOptions = countryList.map(c => `<option value="${c.countryCode}" ${c.countryCode === 'TH' ? 'selected' : ''}>${c.countryName}</option>`).join('');
+            const countryOptions = countryList.map(c => `<option value="${c.code}" ${c.code === 'TH' ? 'selected' : ''}>${c.name}</option>`).join('');
 
             const itemHTML = `
                 <div class="line-item" id="item-wrapper-${itemId}">
@@ -1541,37 +1509,28 @@
         const invoiceNumberIndicator = document.getElementById('invoice-number-indicator');
 
         function updateUploadSectionLogic() {
-            const uploadSection = document.getElementById('file-upload-section');
-            const mainUploadCheckbox = document.getElementById('upload-documents-checkbox');
-
-            if (!mainUploadCheckbox.checked) {
-                uploadSection.classList.add('hidden');
+            const uploadCheckbox = document.getElementById('upload-documents-checkbox');
+            if (!uploadCheckbox.checked) {
+                document.getElementById('file-upload-section').classList.add('hidden');
                 document.getElementById('doc-uploader').required = false;
                 return;
-            }
+            };
 
-            uploadSection.classList.remove('hidden');
-
-            const isCreateInvoice = document.getElementById('create-invoice-btn').classList.contains('active');
-            const createInvoiceInfoSection = document.getElementById('create-invoice-info-section');
-            const uploaderWrapper = document.getElementById('file-uploader-wrapper');
+            document.getElementById('file-upload-section').classList.remove('hidden');
+            const useMyOwn = useMyOwnInvoiceBtn.classList.contains('active');
+            const uploadLabelOwn = document.getElementById('upload-label-own-invoice');
+            const uploadLabelCreate = document.getElementById('upload-label-create-invoice');
+            const docUploaderContainer = document.getElementById('doc-uploader-container');
             const docUploader = document.getElementById('doc-uploader');
-            const uploadLabel = document.getElementById('upload-label');
-            const otherDocsCheckbox = document.getElementById('upload-other-docs-checkbox');
 
-            if (isCreateInvoice) {
-                createInvoiceInfoSection.classList.remove('hidden');
-                uploadLabel.textContent = getTranslatedText('uploadLabelOptionalDocs');
-                
-                const showUploader = otherDocsCheckbox.checked;
-                uploaderWrapper.classList.toggle('hidden', !showUploader);
-                docUploader.required = false; 
-
-            } else {
-                createInvoiceInfoSection.classList.add('hidden');
-                uploaderWrapper.classList.remove('hidden');
-                uploadLabel.textContent = getTranslatedText('uploadLabelOwnInvoice');
-                docUploader.required = true;
+            uploadLabelOwn.classList.toggle('hidden', !useMyOwn);
+            uploadLabelCreate.classList.toggle('hidden', useMyOwn);
+            docUploaderContainer.classList.toggle('hidden', !useMyOwn);
+            docUploader.required = useMyOwn;
+            
+            if (!useMyOwn) {
+                docUploader.value = '';
+                docUploader.dispatchEvent(new Event('change'));
             }
         }
 
@@ -1591,7 +1550,6 @@
             useMyOwnInvoiceBtn.classList.remove('active');
             invoiceOptionsContainer.classList.remove('hidden');
             updateInvoiceSection();
-            updateUploadSectionLogic();
         });
 
         useMyOwnInvoiceBtn.addEventListener('click', (e) => {
@@ -1599,7 +1557,6 @@
             createInvoiceBtn.classList.remove('active');
             invoiceOptionsContainer.classList.add('hidden');
             updateInvoiceSection();
-            updateUploadSectionLogic(); // เพิ่มบรรทัดนี้
         });
 
         document.getElementById('invoice-type-proforma').addEventListener('click', (e) => {
@@ -1776,13 +1733,6 @@
         const deleteFileBtn = document.getElementById('delete-file-btn');
 
         uploadDocsCheckbox.addEventListener('change', (e) => {
-            if (!e.target.checked) {
-                document.getElementById('upload-other-docs-checkbox').checked = false;
-            }
-            updateUploadSectionLogic();
-        });
-		
-		document.getElementById('upload-other-docs-checkbox').addEventListener('change', () => {
             updateUploadSectionLogic();
         });
 
@@ -2670,10 +2620,5 @@
 	
 </body>
 </html>
-
-
-
-
-
 
 
