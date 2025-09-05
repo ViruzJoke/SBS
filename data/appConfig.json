@@ -1,0 +1,22 @@
+{
+	"countryConditions": {
+		"MX": "mexicoTaxIdRequired"
+	},
+	"overrideConditions": {
+		"VN": "S"
+	},
+	"maxLengths": {
+		"name": 255,
+		"company": 100,
+		"address1": 45,
+		"address2": 45,
+		"address3": 45,
+		"postalcode": 12,
+		"city": 45,
+		"suburb": 45,
+		"email": 70,
+		"phone": 70,
+		"vat": 35
+	}
+}
+
