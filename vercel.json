@@ -10,7 +10,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/offline.html"
+      "destination": "/closemode.html"
     }
   ]
 }
