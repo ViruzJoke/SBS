@@ -1,8 +1,8 @@
 {
   "redirects": [
     {
-      "source": "/((?!closemode.html).*)",
-      "destination": "/closemode.html",
+      "source": "/((?!offline.html).*)",
+      "destination": "/offline.html",
       "permanent": false
     }
   ]
