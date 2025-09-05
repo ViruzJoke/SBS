@@ -1,5 +1,17 @@
 {
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Vercel-Rule-Applied", "value": "true" }
+      ]
+    }
+  ],
   "rewrites": [
-    { "source": "/:path*", "destination": "/maintenance.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/maintenance.html"
+    }
   ]
 }
+
