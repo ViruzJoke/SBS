@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+	<script>
+    if (!sessionStorage.getItem('isRefreshed')) {
+        sessionStorage.setItem('isRefreshed', 'true');
+        location.reload(true);
+    }
+	</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -11,13 +17,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
     <link rel="stylesheet" href="styles.css">
-	<link rel="icon" href="DBS_Icon3.jpg" type="image/jpg">
-	<script>
-    if (!sessionStorage.getItem('isRefreshed')) {
-        sessionStorage.setItem('isRefreshed', 'true');
-        location.reload(true);
-    }
-</script>
+	<link rel="icon" href="DBS_Icon3.jpg" type="image/jpg">	
     <style>
         .country-dropdown, .document-dropdown { position: absolute; z-index: 1000; width: 100%; background-color: white; border: 1px solid #d1d5db; border-radius: 0.375rem; margin-top: 0.25rem; max-height: 15rem; overflow-y: auto; }
         .country-dropdown-item, .document-dropdown-item { padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; }
@@ -220,11 +220,13 @@
                             <div id="receiver-suburb-container" class="hidden">
                                 <label for="receiver-suburb" class="block text-sm font-medium mb-1" data-i18n="receiverSuburb">Suburb</label><input type="text" id="receiver-suburb" class="input-field">
                             </div>
-                            <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
                             <!-- End of hidden fields -->
 
-							<div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
-							<div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <!-- START: Reordered Fields -->
+                            <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
+                            <div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
+                            <!-- END: Reordered Fields -->
                         </div>
                     </div>
                     <div id="country-condition-alert" class="hidden p-4 rounded-md bg-yellow-100 border border-yellow-300 text-yellow-800">
@@ -744,6 +746,7 @@
         }
 		 // --- END: Load Static Data ---
 		 
+		 // START: Logic Fix
 		 function manageReceiverAddressFields(countryCode) {
             const selectedCountry = countryList.find(c => c.countryCode === countryCode);
 
@@ -752,9 +755,12 @@
             
             const postalCodeContainer = document.getElementById('receiver-postalcode-container');
             const suburbContainer = document.getElementById('receiver-suburb-container');
+            const cityContainer = document.querySelector('#receiver-city').closest('.relative').parentElement;
 
-            if (!selectedCountry || !postalCodeContainer || !suburbContainer) {
-                postalCodeContainer.parentElement.classList.remove('hidden'); // Show the grid
+            if (!selectedCountry || !postalCodeContainer || !suburbContainer || !cityContainer) {
+                postalCodeContainer.parentElement.classList.remove('hidden');
+                postalCodeContainer.classList.remove('hidden');
+                cityContainer.classList.remove('hidden');
                 suburbContainer.classList.remove('hidden');
                 postalCodeInput.required = true;
                 suburbInput.required = false; 
@@ -763,7 +769,9 @@
 
             // Reset fields before applying new rules
             postalCodeContainer.parentElement.classList.remove('hidden'); // Ensure grid wrapper is visible
-            suburbContainer.classList.remove('hidden'); // Ensure suburb wrapper is visible (will be hidden by logic if needed)
+            postalCodeContainer.classList.remove('hidden'); // Ensure postal code is visible
+            cityContainer.classList.remove('hidden'); // Ensure city is visible
+            suburbContainer.classList.remove('hidden'); // Ensure suburb wrapper is visible
 
             switch (selectedCountry.postalLocationTypeCode) {
                 case 'CP': // City & Postal Code
@@ -772,13 +780,13 @@
                     suburbInput.required = false;
                     break;
                 case 'C':  // City only
-                    postalCodeContainer.parentElement.classList.add('hidden'); // Hide the whole grid
+                    postalCodeContainer.classList.add('hidden'); // Hide only postal code
                     suburbContainer.classList.add('hidden');
                     postalCodeInput.required = false;
                     suburbInput.required = false;
                     break;
                 case 'S':  // City & Suburb
-                    postalCodeContainer.parentElement.classList.add('hidden'); // Hide the whole grid
+                    postalCodeContainer.classList.add('hidden'); // Hide only postal code
                     postalCodeInput.required = false;
                     suburbInput.required = true;
                     break;
@@ -791,6 +799,7 @@
             updateInputValidationState(postalCodeInput);
             updateInputValidationState(suburbInput);
         }
+        // END: Logic Fix
 
         let currentLanguage = localStorage.getItem('language') || 'en';
         let currentStep = 1;
@@ -2204,7 +2213,7 @@
                         try {
                             changeStep(currentStep + 1);
                         } finally {
-                            document.getElementById('loading-modal').classList.add('hidden');
+                            document.getElementById('loading-modal').add('hidden');
                         }
                     }, 50); 
                 } else if (currentStep < totalSteps) {
@@ -2688,4 +2697,3 @@
 	
 </body>
 </html>
-
