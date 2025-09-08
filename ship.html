@@ -1358,8 +1358,17 @@
             lineItemsContainer.insertAdjacentHTML('beforeend', itemHTML);
             const newItem = document.getElementById(`item-wrapper-${itemId}`);
             
+            // Set default "Made In" country to Thailand
+            const thailand = countryList.find(c => c.countryCode === 'TH');
+            if (thailand) {
+                const madeInInput = newItem.querySelector(`#item-made-in-input-${itemId}`);
+                const madeInValue = newItem.querySelector(`#item-made-in-value-${itemId}`);
+                madeInInput.value = thailand.countryName;
+                madeInValue.value = thailand.countryCode;
+            }
+            
             // Setup the combobox for the new line item, appending dropdown to the item wrapper itself
-            setupCountryComboBox(`item-made-in-input-${itemId}`, `item-made-in-value-${itemId}`, `item-made-in-dropdown-${itemId}`, `#item-wrapper-${itemId}`);
+            setupCountryComboBox(`item-made-in-input-${itemId}`, `item-made-in-value-${itemId}`, `item-made-in-dropdown-${itemId}`);
 
             newItem.querySelectorAll('input[required], select[required]').forEach(updateInputValidationState);
             updateLineItemSummary(newItem);
@@ -2706,5 +2715,6 @@
 	
 </body>
 </html>
+
 
 
