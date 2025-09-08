@@ -163,7 +163,9 @@ async function buildShipmentPayload() {
                         unitOfMeasurement: item.querySelector('.item-units').value,
                     },
                     exportReasonType: "permanent",
-                    manufacturerCountry: item.querySelector('.item-made-in').value,
+                    // START: Fix for Country of Origin
+                    manufacturerCountry: item.querySelector('.item-made-in-value').value,
+                    // END: Fix for Country of Origin
                     weight: {
                         netValue: weight,
                         grossValue: weight,
