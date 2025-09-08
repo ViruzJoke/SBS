@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-	<script>
-    if (!sessionStorage.getItem('isRefreshed')) {
-        sessionStorage.setItem('isRefreshed', 'true');
-        location.reload(true);
-    }
-	</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -17,7 +11,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
     <link rel="stylesheet" href="styles.css">
-	<link rel="icon" href="DBS_Icon3.jpg" type="image/jpg">	
+	<link rel="icon" href="DBS_Icon3.jpg" type="image/jpg">
+	<script>
+    if (!sessionStorage.getItem('isRefreshed')) {
+        sessionStorage.setItem('isRefreshed', 'true');
+        location.reload(true);
+    }
+</script>
     <style>
         .country-dropdown, .document-dropdown { position: absolute; z-index: 1000; width: 100%; background-color: white; border: 1px solid #d1d5db; border-radius: 0.375rem; margin-top: 0.25rem; max-height: 15rem; overflow-y: auto; }
         .country-dropdown-item, .document-dropdown-item { padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; }
@@ -697,7 +697,7 @@
                 pickupLocsRes,
                 appConfigRes
             ] = await Promise.all([
-                fetch('data/translations.json'),
+                fetch('translations.json'),
                 fetch('https://sbs-back.vercel.app/api/address-reference?datasetName=country'),
                 fetch('data/currencies.json'),
                 fetch('data/documentTypes.json'),
@@ -916,10 +916,19 @@
             container.appendChild(dropdown);
 
             const positionDropdown = () => {
-                const rect = input.getBoundingClientRect();
-                dropdown.style.top = `${rect.bottom + window.scrollY}px`;
-                dropdown.style.left = `${rect.left + window.scrollX}px`;
-                dropdown.style.width = `${rect.width}px`;
+                const inputRect = input.getBoundingClientRect();
+                if (container === document.body) {
+                    // For dropdowns positioned relative to the whole page
+                    dropdown.style.top = `${inputRect.bottom + window.scrollY}px`;
+                    dropdown.style.left = `${inputRect.left + window.scrollX}px`;
+                    dropdown.style.width = `${inputRect.width}px`;
+                } else {
+                    // For dropdowns inside a specific container (like a line item)
+                    const containerRect = container.getBoundingClientRect();
+                    dropdown.style.top = `${inputRect.bottom - containerRect.top}px`;
+                    dropdown.style.left = `${inputRect.left - containerRect.left}px`;
+                    dropdown.style.width = `${inputRect.width}px`;
+                }
             };
 
             input.setAttribute('data-i18n-placeholder', 'typeOrSelectCountry');
@@ -2213,7 +2222,7 @@
                         try {
                             changeStep(currentStep + 1);
                         } finally {
-                            document.getElementById('loading-modal').add('hidden');
+                            document.getElementById('loading-modal').classList.add('hidden');
                         }
                     }, 50); 
                 } else if (currentStep < totalSteps) {
@@ -2697,3 +2706,4 @@
 	
 </body>
 </html>
+
