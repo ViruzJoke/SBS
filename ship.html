@@ -697,7 +697,7 @@
                 pickupLocsRes,
                 appConfigRes
             ] = await Promise.all([
-                fetch('translations.json'),
+                fetch('data/translations.json'),
                 fetch('https://sbs-back.vercel.app/api/address-reference?datasetName=country'),
                 fetch('data/currencies.json'),
                 fetch('data/documentTypes.json'),
@@ -2706,4 +2706,5 @@
 	
 </body>
 </html>
+
 
