@@ -189,13 +189,13 @@
                             <div><label for="shipper-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany">Company</label><div class="relative"><input type="text" id="shipper-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-country-input" class="block text-sm font-medium mb-1" data-i18n="shipperCountry">Country</label><div class="relative"><input type="text" id="shipper-country-input" class="input-field pr-8" autocomplete="off" required disabled><input type="hidden" id="shipper-country-value"><div id="shipper-country-dropdown" class="country-dropdown hidden"></div><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1">Address Line 1</label><div class="relative"><input type="text" id="shipper-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                            <div><label for="shipper-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><input type="text" id="shipper-address2" class="input-field" maxlength="45"></div>
-                            <div><label for="shipper-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><input type="text" id="shipper-address3" class="input-field" maxlength="45"></div>
+                            <div><label for="shipper-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><input type="text" id="shipper-address2" class="input-field"></div>
+                            <div><label for="shipper-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><input type="text" id="shipper-address3" class="input-field"></div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="relative"><label for="shipper-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode">Postal Code</label><input type="text" id="shipper-postalcode" class="input-field"></div>
                                 <div class="relative"><label for="shipper-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity">City</label><div class="relative"><input type="text" id="shipper-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             </div>
-                            <div><label for="shipper-email" class="block text-sm font-medium mb-1" data-i18n="shipperEmail">Email Address</label><div class="relative"><input type="email" id="shipper-email" class="input-field pr-8" required maxlength="70"><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="shipper-email" class="block text-sm font-medium mb-1" data-i18n="shipperEmail">Email Address</label><div class="relative"><input type="email" id="shipper-email" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone">Phone</label><div class="relative"><input type="tel" id="shipper-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-vat" class="block text-sm font-medium mb-1" data-i18n="shipperVat">VAT / Tax ID</label><input type="text" id="shipper-vat" class="input-field"></div>
                         </div>
@@ -207,8 +207,8 @@
                             
                             <!-- Fields to be initially hidden -->
                             <div id="receiver-address1-wrapper" class="hidden"><label for="receiver-address1" class="block text-sm font-medium mb-1" data-i18n="receiverAddress1">Address Line 1</label><div class="relative"><input type="text" id="receiver-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                            <div id="receiver-address2-wrapper" class="hidden"><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field" maxlength="45"></div>
-                            <div id="receiver-address3-wrapper" class="hidden"><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field" maxlength="45"></div>
+                            <div id="receiver-address2-wrapper" class="hidden"><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field"></div>
+                            <div id="receiver-address3-wrapper" class="hidden"><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field"></div>
                             <div id="receiver-postal-city-wrapper" class="grid grid-cols-2 gap-4 hidden">
                                 <div id="receiver-postalcode-container">
                                     <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
@@ -223,7 +223,7 @@
                             <!-- End of hidden fields -->
 
                             <!-- START: Reordered Fields -->
-                            <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field" maxlength="70"></div>
+                            <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
                             <div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
                             <!-- END: Reordered Fields -->
@@ -277,7 +277,7 @@
                         </div>
                         <div class="text-left space-y-2">
                             <label for="shipment-reference-doc" class="block text-sm font-medium" data-i18n="shipmentRef"></label>
-                            <input type="text" id="shipment-reference-doc" class="input-field" maxlength="35">
+                            <input type="text" id="shipment-reference-doc" class="input-field">
                         </div>
                     </div>
 
@@ -305,7 +305,7 @@
                             
                             <div class="text-left space-y-2">
                                 <label for="shipment-reference-pkg" class="block text-sm font-medium" data-i18n="shipmentRef"></label>
-                                <input type="text" id="shipment-reference-pkg" class="input-field" maxlength="35">
+                                <input type="text" id="shipment-reference-pkg" class="input-field">
                             </div>
                         </div>
 
@@ -388,7 +388,7 @@
                         <div>
                             <label for="shipper-account" class="block text-sm font-medium mb-1" data-i18n="shipperAccount">Shipper Account</label>
                             <div class="relative">
-                                <input type="text" id="shipper-account" class="input-field pr-8" required maxlength="9" pattern="[0-9]*" inputmode="numeric">
+                                <input type="text" id="shipper-account" class="input-field pr-8" required pattern="[0-9]*" inputmode="numeric">
                                 <span class="input-indicator indicator-required">*</span>
                             </div>
                         </div>
@@ -401,7 +401,7 @@
                         <div id="billing-account-container" class="hidden">
                             <label for="billing-account" class="block text-sm font-medium mb-1" data-i18n="billingAccount">Billing Account</label>
                             <div class="relative">
-                                <input type="text" id="billing-account" class="input-field pr-8" maxlength="9" pattern="[0-9]*" inputmode="numeric">
+                                <input type="text" id="billing-account" class="input-field pr-8" pattern="[0-9]*" inputmode="numeric">
                                 <span class="input-indicator indicator-required hidden">*</span>
                             </div>
                         </div>
@@ -415,7 +415,7 @@
                                     <label for="receiver-pays-checkbox" class="ml-2" data-i18n="receiverWillPay"></label>
                                 </div>
                                 <div class="relative flex-grow">
-                                    <input type="text" id="duties-account" class="input-field pr-8" maxlength="9" pattern="[0-9]*" inputmode="numeric">
+                                    <input type="text" id="duties-account" class="input-field pr-8" pattern="[0-9]*" inputmode="numeric">
                                     <span class="input-indicator indicator-required hidden">*</span>
                                 </div>
                             </div>
@@ -536,7 +536,7 @@
                                 </div>
                                 <div>
                                     <label for="pickup-instructions" class="block text-sm font-medium mb-1" data-i18n="pickupInstructions"></label>
-                                <input type="text" id="pickup-instructions" class="input-field" maxlength="75">
+                                <input type="text" id="pickup-instructions" class="input-field">
                                 </div>
                             </div>
                         </div>
@@ -556,8 +556,8 @@
                                 <div><label for="pickup-name" class="block text-sm font-medium mb-1" data-i18n="shipperName"></label><div class="relative"><input type="text" id="pickup-name" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                                 <div><label for="pickup-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany"></label><div class="relative"><input type="text" id="pickup-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                                 <div><label for="pickup-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1"></label><div class="relative"><input type="text" id="pickup-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                                <div><label for="pickup-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2"></label><input type="text" id="pickup-address2" class="input-field" maxlength="45"></div>
-                                <div><label for="pickup-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3"></label><input type="text" id="pickup-address3" class="input-field" maxlength="45"></div>
+                                <div><label for="pickup-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2"></label><input type="text" id="pickup-address2" class="input-field"></div>
+                                <div><label for="pickup-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3"></label><input type="text" id="pickup-address3" class="input-field"></div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div><label for="pickup-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode"></label><input type="text" id="pickup-postalcode" class="input-field"></div>
                                     <div><label for="pickup-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity"></label><div class="relative"><input type="text" id="pickup-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
@@ -668,7 +668,7 @@
         }
         
 		// --- START: Load Static Data from JSON files ---
-        let translations, countryList, currencyList, documentTypes, uomList, incotermList, pickupLocations, countryConditions, maxLengths;
+        let translations, countryList, currencyList, documentTypes, uomList, incotermList, pickupLocations, countryConditions, validationRules;
 
 		function transformCountryData(apiResponse) {
             if (!apiResponse || !apiResponse.referenceData || !apiResponse.referenceData[0] || !apiResponse.referenceData[0].data) {
@@ -727,7 +727,7 @@
             const appConfig = await appConfigRes.json();
             
             countryConditions = appConfig.countryConditions;
-            maxLengths = appConfig.maxLengths;
+            validationRules = appConfig.validationRules;
 			
             const countryOverrides = appConfig.overrideConditions || {}; // Use overrideConditions from the config file
 
@@ -807,6 +807,47 @@
         let navigationTargetUrl = null;
         let lineItemCounter = 0;
         let packagePieceCounter = 0;
+
+        function applyValidationRulesToElement(element, rules) {
+            if (!element || !rules) return;
+            if (rules.maxLength) element.maxLength = rules.maxLength;
+            if (rules.minLength) element.minLength = rules.minLength;
+            if (rules.min !== undefined) element.min = rules.min;
+            if (rules.max !== undefined) element.max = rules.max;
+            if (rules.length) {
+                element.maxLength = rules.length;
+                element.minLength = rules.length;
+            }
+        }
+
+        function applyAllStaticValidationRules() {
+            if (!validationRules) return;
+
+            const fieldMap = {
+                'shipper-name': validationRules.name, 'shipper-company': validationRules.company,
+                'shipper-address1': validationRules.address1, 'shipper-address2': validationRules.address2, 'shipper-address3': validationRules.address3,
+                'shipper-postalcode': validationRules.postalcode, 'shipper-city': validationRules.city,
+                'shipper-email': validationRules.email, 'shipper-phone': validationRules.phone, 'shipper-vat': validationRules.vat,
+                'receiver-name': validationRules.name, 'receiver-company': validationRules.company,
+                'receiver-address1': validationRules.address1, 'receiver-address2': validationRules.address2, 'receiver-address3': validationRules.address3,
+                'receiver-postalcode': validationRules.postalcode, 'receiver-city': validationRules.city, 'receiver-suburb': validationRules.suburb,
+                'receiver-email': validationRules.email, 'receiver-phone': validationRules.phone, 'receiver-vat': validationRules.vat,
+                'shipment-reference-doc': validationRules.shipmentRef, 'shipment-reference-pkg': validationRules.shipmentRef,
+                'summarize-shipment': validationRules.summarizeShipment, 'invoice-number': validationRules.invoiceNumber,
+                'shipper-account': validationRules.accountNumber, 'billing-account': validationRules.accountNumber, 'duties-account': validationRules.accountNumber,
+                'pickup-name': validationRules.name, 'pickup-company': validationRules.company,
+                'pickup-address1': validationRules.address1, 'pickup-address2': validationRules.address2, 'pickup-address3': validationRules.address3,
+                'pickup-postalcode': validationRules.postalcode, 'pickup-city': validationRules.city,
+                'pickup-phone': validationRules.phone, 'pickup-instructions': validationRules.pickupInstructions,
+            };
+
+            for (const id in fieldMap) {
+                const element = document.getElementById(id);
+                if (element) {
+                    applyValidationRulesToElement(element, fieldMap[id]);
+                }
+            }
+        }
 
         const leaveModal = document.getElementById('leave-confirm-modal');
         const stayButton = document.getElementById('stay-button');
@@ -1013,7 +1054,12 @@
                 const valueHolder = document.getElementById(valueHolderId);
                 isValid = !!valueHolder && !!valueHolder.value;
             } else if (inputElement.id.includes('-account')) {
-                 isValid = inputElement.value.length === 9;
+                const accountRule = validationRules?.accountNumber;
+                if (accountRule && accountRule.length) {
+                    isValid = inputElement.value.length === accountRule.length;
+                } else { // fallback
+                    isValid = inputElement.value.length === 9;
+                }
             } else if (inputElement.type === 'email') {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 isValid = emailRegex.test(inputElement.value);
@@ -1204,9 +1250,17 @@
                 } else if (input.type === 'file') {
                     isInputValid = input.files.length > 0;
                 } else if (input.id.includes('-account')) {
-                    isInputValid = input.value.length === 9;
-                    if (!isInputValid && input.value.length > 0) {
-                        errorMessage = getTranslatedText('accountNumberInvalid');
+                    const accountRule = validationRules.accountNumber;
+                    if (accountRule && accountRule.length) {
+                        isInputValid = input.value.length === accountRule.length;
+                        if (!isInputValid && input.value.length > 0) {
+                            errorMessage = getTranslatedText('accountNumberInvalid');
+                        }
+                    } else { // fallback
+                        isInputValid = input.value.length === 9;
+                        if (!isInputValid && input.value.length > 0) {
+                            errorMessage = getTranslatedText('accountNumberInvalid');
+                        }
                     }
                 } else if (input.type === 'tel') {
                     isInputValid = input.value.trim().length >= 4;
@@ -1245,14 +1299,19 @@
                 else if (id.includes('-email')) key = 'email';
                 else if (id.includes('-phone')) key = 'phone';
                 else if (id.includes('-vat')) key = 'vat';
+                else if (id.includes('shipment-reference')) key = 'shipmentRef';
+                else if (id === 'summarize-shipment') key = 'summarizeShipment';
+                else if (id === 'invoice-number') key = 'invoiceNumber';
+                else if (id === 'pickup-instructions') key = 'pickupInstructions';
 
-                if (key && maxLengths[key] && input.value.length > maxLengths[key]) {
+                if (key && validationRules[key] && validationRules[key].maxLength && input.value.length > validationRules[key].maxLength) {
+                    const maxLength = validationRules[key].maxLength;
                     isValid = false;
                     input.classList.add('is-invalid');
                     if (!firstInvalidElement) {
                         firstInvalidElement = input;
                     }
-                    errorMessage = getTranslatedText('maxLengthError', { maxLength: maxLengths[key] });
+                    errorMessage = getTranslatedText('maxLengthError', { maxLength: maxLength });
                 }
             });
             // --- END: Length validation on step change ---
@@ -1330,15 +1389,15 @@
                         <div><label class="block text-sm font-medium mb-1" data-i18n="whatIsTheItem"></label><div class="relative"><input type="text" class="input-field item-description pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                         <div><label class="block text-sm font-medium mb-1" data-i18n="commodityCode"></label><input type="text" class="input-field commodity-code" placeholder="xxxx.xx.xxxxxx"></div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div><label class="block text-sm font-medium mb-1" data-i18n="quantity"></label><div class="relative"><input type="number" min="1" step="1" value="1" class="input-field item-quantity pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label class="block text-sm font-medium mb-1" data-i18n="quantity"></label><div class="relative"><input type="number" step="1" value="1" class="input-field item-quantity pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label class="block text-sm font-medium mb-1" data-i18n="units"></label><select class="input-field item-units">${unitOptions}</select></div>
-                            <div><label class="block text-sm font-medium mb-1" data-i18n="weight"></label><div class="relative"><input type="number" min="0.001" step="0.001" value="0.5" class="input-field item-weight pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label class="block text-sm font-medium mb-1" data-i18n="weight"></label><div class="relative"><input type="number" step="0.001" value="0.5" class="input-field item-weight pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="valuePerItem"></label>
                                 <div class="flex items-center">
-                                    <div class="relative w-full"><input type="number" min="0" step="0.001" value="1" class="input-field item-value rounded-r-none pr-8" required><span class="input-indicator indicator-required">*</span></div>
+                                    <div class="relative w-full"><input type="number" step="0.001" value="1" class="input-field item-value rounded-r-none pr-8" required><span class="input-indicator indicator-required">*</span></div>
                                     <select class="input-field item-currency rounded-l-none border-l-0 w-24">${currencyOptions}</select>
                                 </div>
                             </div>
@@ -1356,6 +1415,13 @@
                 </div>`;
             lineItemsContainer.insertAdjacentHTML('beforeend', itemHTML);
             const newItem = document.getElementById(`item-wrapper-${itemId}`);
+            
+            const lineItemRules = validationRules.lineItem;
+            if (lineItemRules) {
+                applyValidationRulesToElement(newItem.querySelector('.item-quantity'), lineItemRules.quantity);
+                applyValidationRulesToElement(newItem.querySelector('.item-weight'), lineItemRules.weight);
+                applyValidationRulesToElement(newItem.querySelector('.item-value'), lineItemRules.value);
+            }
             
             // Set default "Made In" country to Thailand
             const thailand = countryList.find(c => c.countryCode === 'TH');
@@ -1707,23 +1773,23 @@
                         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="quantity"></label>
-                                <div class="relative"><input type="number" min="1" max="999" step="1" value="1" class="input-field piece-quantity pr-8" required placeholder="1"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" step="1" value="1" class="input-field piece-quantity pr-8" required placeholder="1"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="weightKg"></label>
-                                <div class="relative"><input type="number" min="0.001" max="999999999999" step="0.001" class="input-field piece-weight pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" step="0.001" class="input-field piece-weight pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="lengthCm"></label>
-                                <div class="relative"><input type="number" min="0.001" max="9999999" step="0.001" class="input-field piece-length pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" step="0.001" class="input-field piece-length pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="widthCm"></label>
-                                <div class="relative"><input type="number" min="0.001" max="9999999" step="0.001" class="input-field piece-width pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" step="0.001" class="input-field piece-width pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="heightCm"></label>
-                                <div class="relative"><input type="number" min="0.001" max="9999999" step="0.001" class="input-field piece-height pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" step="0.001" class="input-field piece-height pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                         </div>
                     </div>
@@ -1731,6 +1797,16 @@
             `;
             packagePiecesContainer.insertAdjacentHTML('beforeend', pieceHTML);
             const newPiece = document.getElementById(`piece-wrapper-${pieceId}`);
+
+            const packageRules = validationRules.package;
+            if (packageRules) {
+                applyValidationRulesToElement(newPiece.querySelector('.piece-quantity'), packageRules.quantity);
+                applyValidationRulesToElement(newPiece.querySelector('.piece-weight'), packageRules.weight);
+                applyValidationRulesToElement(newPiece.querySelector('.piece-length'), packageRules.dimensions);
+                applyValidationRulesToElement(newPiece.querySelector('.piece-width'), packageRules.dimensions);
+                applyValidationRulesToElement(newPiece.querySelector('.piece-height'), packageRules.dimensions);
+            }
+
             newPiece.querySelectorAll('input[required]').forEach(updateInputValidationState);
             updateContentLanguage();
             updatePackageSummary();
@@ -2216,9 +2292,13 @@
             else if (id.includes('-email')) key = 'email';
             else if (id.includes('-phone')) key = 'phone';
             else if (id.includes('-vat')) key = 'vat';
+            else if (id.includes('shipment-reference')) key = 'shipmentRef';
+            else if (id === 'summarize-shipment') key = 'summarizeShipment';
+            else if (id === 'invoice-number') key = 'invoiceNumber';
+            else if (id === 'pickup-instructions') key = 'pickupInstructions';
 
-            if (key && maxLengths[key]) {
-                const maxLength = maxLengths[key];
+            if (key && validationRules[key] && validationRules[key].maxLength) {
+                const maxLength = validationRules[key].maxLength;
                 
                 manageLengthError(target, maxLength);
                 
@@ -2685,6 +2765,7 @@
         setupDocumentCombobox();
         populateStaticDropdowns();
         initializeForm();
+        applyAllStaticValidationRules();
         initializeTimeSlider();
         setupDateSync();
         
