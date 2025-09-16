@@ -795,8 +795,6 @@
                     suburbInput.required = false;
                     break;
             }
-            updateInputValidationState(postalCodeInput);
-            updateInputValidationState(suburbInput);
         }
         // END: Logic Fix
 
@@ -1025,7 +1023,6 @@
                         addressContainer.querySelectorAll('input[data-was-required="true"]').forEach(field => {
                            if (!field.closest('.hidden')) {
                                field.required = true;
-                               updateInputValidationState(field);
                            }
                         });
                         
@@ -1403,7 +1400,6 @@
             if (!showSummarize) {
                 summarizeInput.classList.remove('is-invalid');
             }
-            updateInputValidationState(summarizeInput);
         }
         
         function createLineItem() {
@@ -1647,7 +1643,6 @@
             insuranceValueContainer.classList.add('hidden');
             document.getElementById('insurance-value').required = false;
             docDescInput.required = true;
-            updateInputValidationState(docDescInput);
             
             dutiesAccountContainer.classList.add('hidden');
             incotermContainer.classList.add('hidden');
@@ -1666,7 +1661,6 @@
             }
             docDescInput.required = false;
             docDescInput.classList.remove('is-invalid');
-            updateInputValidationState(docDescInput);
 
             dutiesAccountContainer.classList.remove('hidden');
             incotermContainer.classList.remove('hidden');
@@ -1688,8 +1682,6 @@
                 if (isChecked) {
                     updateSummary();
                     insuranceInput.disabled = true;
-                    insuranceInput.classList.remove('is-invalid');
-                    updateInputValidationState(insuranceInput);
                 } else {
                     insuranceInput.disabled = false;
                     insuranceInput.value = '';
@@ -1752,7 +1744,6 @@
             invoiceNumberContainer.classList.remove('hidden');
             invoiceNumberInput.required = true;
             invoiceNumberIndicator.classList.remove('hidden');
-            updateInputValidationState(invoiceNumberInput);
         }
 
         createInvoiceBtn.addEventListener('click', (e) => {
@@ -1927,7 +1918,6 @@
                 dutiesAccountInput.value = '';
                 dutiesAccountInput.classList.remove('is-invalid');
             }
-            updateInputValidationState(dutiesAccountInput);
         });
 
         const useShipperForBillingCheckbox = document.getElementById('use-shipper-for-billing');
@@ -1944,7 +1934,6 @@
                 billingAccountInput.value = '';
                 billingAccountInput.classList.remove('is-invalid');
             }
-            updateInputValidationState(billingAccountInput);
         });
 
 
@@ -2547,7 +2536,6 @@
              if (thailand) {
                 shipperCountryInput.value = thailand.countryName;
                 shipperCountryValue.value = thailand.countryCode;
-                updateInputValidationState(shipperCountryInput);
              }
              
              const hiddenWrappers = document.querySelectorAll('#receiver-address-details-container .hidden');
@@ -2799,7 +2787,6 @@
                     const element = document.getElementById(key);
                     if (element) {
                         element.value = formData[key];
-                        updateInputValidationState(element);
                     }
                 }
             }
