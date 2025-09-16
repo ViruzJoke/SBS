@@ -1040,52 +1040,64 @@
         }
         
         function updateInputValidationState(inputElement) {
+            // Don't validate disabled or hidden fields
+            if (inputElement.disabled || inputElement.offsetParent === null) {
+                inputElement.classList.remove('is-invalid');
+                return;
+            }
+
             const wrapper = inputElement.closest('.relative') || inputElement.parentElement;
             if (!wrapper) return;
             const indicator = wrapper.querySelector('.input-indicator');
             const isRequired = inputElement.hasAttribute('required');
             
             let isValid = true;
-            if (inputElement.id.includes('-country-input')) {
-                const valueHolderId = inputElement.id.replace('-input', '-value');
-                const valueHolder = document.getElementById(valueHolderId);
-                isValid = !!valueHolder && !!valueHolder.value;
-            } else if (inputElement.id.includes('-account')) {
-                const accountRule = validationRules?.accountNumber;
-                if (accountRule && accountRule.length) {
-                    isValid = inputElement.value.length === accountRule.length;
-                } else { // fallback
-                    isValid = inputElement.value.length === 9;
-                }
-            } else if (inputElement.type === 'email') {
-                if (inputElement.value.trim() === '') {
-                    isValid = !isRequired; // Valid if optional and empty, invalid if required and empty
-                } else {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    isValid = emailRegex.test(inputElement.value);
-                }
+
+            // --- Start of validation logic ---
+            const maxLength = parseInt(inputElement.maxLength, 10);
+            if (maxLength > 0 && inputElement.value.length > maxLength) {
+                isValid = false;
             } else if (inputElement.type === 'number') {
                 isValid = inputElement.checkValidity();
-            }
-            else {
+            } else if (inputElement.id.includes('-country-input')) {
+                const valueHolderId = inputElement.id.replace('-input', '-value');
+                isValid = !!document.getElementById(valueHolderId)?.value;
+            } else if (inputElement.id.includes('-account')) {
+                const accountRule = validationRules?.accountNumber;
+                isValid = !isRequired || (accountRule && inputElement.value.length === accountRule.length);
+            } else if (inputElement.type === 'email') {
+                if (inputElement.value.trim() === '') {
+                    isValid = !isRequired;
+                } else {
+                    isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputElement.value);
+                }
+            } else {
                 isValid = !isRequired || inputElement.value.trim() !== '';
             }
 
-            if (inputElement.type === 'tel' && inputElement.value.trim().length > 0 && inputElement.value.trim().length < 4) {
+            if (isValid && inputElement.type === 'tel' && inputElement.value.trim().length > 0 && inputElement.value.trim().length < 4) {
                 isValid = false;
             }
+            // --- End of validation logic ---
 
-            if(indicator){
-                if (isValid) {
+            // --- Start of UI update logic ---
+            if (maxLength > 0) {
+                manageLengthError(inputElement, maxLength);
+            }
+
+            if (isValid) {
+                inputElement.classList.remove('is-invalid');
+                if (indicator) {
                     indicator.textContent = isRequired ? '✓' : '';
                     indicator.classList.remove('indicator-required');
                     if (isRequired) indicator.classList.add('indicator-valid');
-                    inputElement.classList.remove('is-invalid');
-                } else {
+                }
+            } else {
+                inputElement.classList.add('is-invalid');
+                if (indicator) {
                     indicator.textContent = isRequired ? '*' : '!';
                     indicator.classList.remove('indicator-valid');
                     indicator.classList.add('indicator-required');
-                    inputElement.classList.add('is-invalid');
                 }
             }
         }
@@ -1095,7 +1107,6 @@
             const dropdown = document.getElementById('document-description-dropdown');
 
             input.value = "Documents - general business";
-            updateInputValidationState(input);
 
             const renderDropdown = (filter = '') => {
                 const filteredList = documentTypes.filter(d => d.toLowerCase().includes(filter.toLowerCase()));
@@ -1110,7 +1121,6 @@
             input.addEventListener('input', () => {
                 renderDropdown(input.value);
                 dropdown.classList.remove('hidden');
-                updateInputValidationState(input);
             });
 
             dropdown.addEventListener('click', (e) => {
@@ -1118,7 +1128,6 @@
                 if (item) {
                     input.value = item.dataset.value;
                     dropdown.classList.add('hidden');
-                    updateInputValidationState(input);
                 }
             });
 
@@ -1226,85 +1235,37 @@
             let firstInvalidElement = null;
             let errorMessage = getTranslatedText('fillAllFields');
             const stepDiv = document.getElementById(`ship-now-step-${currentStep}`);
-            stepDiv.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
 
-            let requiredInputs;
-            
+            // Determine which inputs to validate for the current step
+            let inputsToValidate;
             if (currentStep === 2) {
                 const isDocument = document.getElementById('ship-type-document').classList.contains('active');
                 if (isDocument) {
-                    requiredInputs = stepDiv.querySelectorAll('#document-details-container input[required], #ship-date');
+                    inputsToValidate = Array.from(stepDiv.querySelectorAll('#document-details-container input[required], #ship-date'));
                 } else {
-                    requiredInputs = stepDiv.querySelectorAll('#package-details-container input[required], #package-details-container select[required], #ship-date');
+                    inputsToValidate = Array.from(stepDiv.querySelectorAll('#package-details-container input[required], #package-details-container select[required], #ship-date'));
                 }
-            } else if (currentStep === 4) {
-                 requiredInputs = stepDiv.querySelectorAll('input[required]:not(:disabled)');
-            } else if (currentStep === 5) {
-                requiredInputs = stepDiv.querySelectorAll('input[required]:not(:disabled)');
-            }
-            else {
-                requiredInputs = stepDiv.querySelectorAll('input[required]:not(:disabled), select[required]:not(:disabled)');
+            } else {
+                inputsToValidate = Array.from(stepDiv.querySelectorAll('input[required]:not(:disabled), select[required]:not(:disabled)'));
             }
 
-            requiredInputs.forEach(input => {
-                let isInputValid = true;
-                if (input.type === 'number') {
-                    isInputValid = input.checkValidity();
-                } else if (input.id.includes('-country-input')) {
-                    const valueHolderId = input.id.replace('-input', '-value');
-                    isInputValid = !!document.getElementById(valueHolderId).value;
-                } else if (input.type === 'file') {
-                    isInputValid = input.files.length > 0;
-                } else if (input.id.includes('-account')) {
-                    const accountRule = validationRules.accountNumber;
-                    if (accountRule && accountRule.length) {
-                        isInputValid = input.value.length === accountRule.length;
-                        if (!isInputValid && input.value.length > 0) {
-                            errorMessage = getTranslatedText('accountNumberInvalid');
-                        }
-                    } else { // fallback
-                        isInputValid = input.value.length === 9;
-                        if (!isInputValid && input.value.length > 0) {
-                            errorMessage = getTranslatedText('accountNumberInvalid');
-                        }
-                    }
-                } else if (input.type === 'tel') {
-                    isInputValid = input.value.trim().length >= 4;
-                     if (!isInputValid && input.value.trim().length > 0) {
-                        errorMessage = getTranslatedText('phoneMinLength');
-                    }
-                } else if (input.type === 'email') {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    isInputValid = emailRegex.test(input.value);
-                    if (!isInputValid) {
-                        errorMessage = getTranslatedText('emailInvalid');
-                    }
-                }
-                else {
-                    isInputValid = input.value.trim() !== '';
-                }
-
-                if (!isInputValid) {
-                    isValid = false;
-                    input.classList.add('is-invalid');
-                    if (!firstInvalidElement) {
-                        firstInvalidElement = input;
-                    }
+            // Also check optional emails and fields with maxlength if they have content
+            stepDiv.querySelectorAll('input[type="email"]:not([required]), input[maxlength]:not([required])').forEach(input => {
+                if (input.value.trim() !== '') {
+                    inputsToValidate.push(input);
                 }
             });
 
-            // --- START: Validate optional email fields ---
-            stepDiv.querySelectorAll('input[type="email"]:not([required])').forEach(input => {
-                if (input.value.trim() !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
-                    isValid = false;
-                    input.classList.add('is-invalid');
-                    if (!firstInvalidElement) {
-                        firstInvalidElement = input;
+            // Validate all collected fields
+            inputsToValidate.forEach(input => {
+                updateInputValidationState(input);
+                if (isValid) {
+                    if (input.classList.contains('is-invalid')) {
+                        isValid = false;
+                        if (!firstInvalidElement) firstInvalidElement = input;
                     }
-                    errorMessage = getTranslatedText('emailInvalid');
                 }
             });
-            // --- END: Validate optional email fields ---
 
             // --- START: Custom validation for specific steps ---
             if (currentStep === 3) {
@@ -1331,44 +1292,10 @@
             }
             // --- END: Custom validation for specific steps ---
 
-            // --- START: Length validation on step change ---
-            stepDiv.querySelectorAll('input').forEach(input => {
-                const id = input.id;
-                let key = null;
-                if (id.includes('-name')) key = 'name';
-                else if (id.includes('-company')) key = 'company';
-                else if (id.includes('-address1')) key = 'address1';
-                else if (id.includes('-address2')) key = 'address2';
-                else if (id.includes('-address3')) key = 'address3';
-                else if (id.includes('-postalcode')) key = 'postalcode';
-                else if (id.includes('-city')) key = 'city';
-                else if (id.includes('-suburb')) key = 'suburb';
-                else if (id.includes('-email')) key = 'email';
-                else if (id.includes('-phone')) key = 'phone';
-                else if (id.includes('-vat')) key = 'vat';
-                else if (input.classList.contains('item-description')) key = 'itemDescription';
-                else if (id.includes('shipment-reference')) key = 'shipmentRef';
-                else if (id === 'summarize-shipment') key = 'summarizeShipment';
-                else if (id === 'invoice-number') key = 'invoiceNumber';
-                else if (id === 'pickup-instructions') key = 'pickupInstructions';
-
-                if (key && validationRules[key] && validationRules[key].maxLength && input.value.length > validationRules[key].maxLength) {
-                    const maxLength = validationRules[key].maxLength;
-                    isValid = false;
-                    input.classList.add('is-invalid');
-                    if (!firstInvalidElement) {
-                        firstInvalidElement = input;
-                    }
-                    errorMessage = getTranslatedText('maxLengthError', { maxLength: maxLength });
-                }
-            });
-            // --- END: Length validation on step change ---
-
             formMessage.classList.toggle('hidden', isValid);
             if (!isValid) {
                 formMessage.textContent = errorMessage;
                 formMessage.className = 'p-4 rounded-md text-center bg-red-100 text-red-700 break-words';
-                // Scroll to the top of the form to show the error message.
                 document.getElementById('ship-now-page').scrollIntoView({ behavior: 'smooth' });
             }
             return isValid;
@@ -1396,9 +1323,6 @@
 
             if (summarizeIndicator) {
                 summarizeIndicator.classList.toggle('hidden', !showSummarize);
-            }
-            if (!showSummarize) {
-                summarizeInput.classList.remove('is-invalid');
             }
         }
         
@@ -1494,11 +1418,9 @@
             let isLastItemValid = true;
             const requiredInputs = lastItem.querySelectorAll('input[required], select[required]');
             requiredInputs.forEach(input => {
-                if (!input.value.trim()) {
+                updateInputValidationState(input);
+                if(input.classList.contains('is-invalid')) {
                     isLastItemValid = false;
-                    input.classList.add('is-invalid');
-                } else {
-                    input.classList.remove('is-invalid');
                 }
             });
             return isLastItemValid;
@@ -1660,7 +1582,6 @@
                 document.getElementById('insurance-value').required = true;
             }
             docDescInput.required = false;
-            docDescInput.classList.remove('is-invalid');
 
             dutiesAccountContainer.classList.remove('hidden');
             incotermContainer.classList.remove('hidden');
@@ -1859,11 +1780,9 @@
             let isLastPieceValid = true;
             const requiredInputs = lastPiece.querySelectorAll('input[required]');
             requiredInputs.forEach(input => {
-                if (!input.value.trim()) {
+                updateInputValidationState(input);
+                if (input.classList.contains('is-invalid')) {
                     isLastPieceValid = false;
-                    input.classList.add('is-invalid');
-                } else {
-                    input.classList.remove('is-invalid');
                 }
             });
             return isLastPieceValid;
@@ -1997,7 +1916,6 @@
             pickupYesContainer.classList.remove('hidden');
             pickupNoContainer.classList.add('hidden');
             pickupWeightInput.required = true;
-            // updateInputValidationState(pickupWeightInput); // No longer needed as it's disabled
         });
 
         pickupNoBtn.addEventListener('click', () => {
@@ -2005,9 +1923,6 @@
             pickupYesBtn.classList.remove('active');
             pickupNoContainer.classList.remove('hidden');
             pickupYesContainer.classList.add('hidden');
-            // pickupWeightInput.required = false; // No longer needed
-            // pickupWeightInput.classList.remove('is-invalid'); // No longer needed
-            // updateInputValidationState(pickupWeightInput); // No longer needed
         });
 
         editPickupAddressBtn.addEventListener('click', () => {
@@ -2020,9 +1935,8 @@
             const fieldsToValidate = pickupAddressEditContainer.querySelectorAll('input[required]');
             fieldsToValidate.forEach(input => {
                 updateInputValidationState(input);
-                if (input.classList.contains('is-invalid') || (input.required && !input.value.trim())) {
+                if (input.classList.contains('is-invalid')) {
                     isPickupAddressValid = false;
-                    input.classList.add('is-invalid');
                 }
             });
 
@@ -2263,18 +2177,20 @@
                     wrapper.insertAdjacentElement('afterend', errorElement);
                 }
                 errorElement.textContent = getTranslatedText('maxLengthError', { maxLength: maxLength });
-                inputElement.classList.add('is-invalid');
             } else {
                 if (errorElement) {
                     errorElement.remove();
                 }
-                const isRequiredAndEmpty = inputElement.required && inputElement.value.trim() === '';
-                if (!isRequiredAndEmpty) {
-                    inputElement.classList.remove('is-invalid');
-                }
             }
         }
         // --- END: New function to manage length error messages ---
+
+        document.getElementById('ship-now-form').addEventListener('blur', (e) => {
+            const target = e.target;
+            if (target.matches('input:not([type="hidden"]), select')) {
+                updateInputValidationState(target);
+            }
+        }, true);
 
         document.getElementById('ship-now-form').addEventListener('input', (e) => {
             hasUnsavedChanges = true;
@@ -2285,7 +2201,6 @@
                 let value = target.value;
                 value = value.replace(/[^0-9]/g, '');
                 target.value = value;
-                updateInputValidationState(target);
             } else {
                 const asciiOnlyRegex = /[^\u0000-\u007F]/g;
                 const phoneRegex = /[^\d+-]/g;
@@ -2349,7 +2264,7 @@
             // --- END: Updated real-time length validation and truncation ---
 
             // Only re-validate on input if the field is already marked as invalid
-            if (target.classList.contains('is-invalid') && target.matches('input[required], select[required], input[type="email"]')) {
+            if (target.classList.contains('is-invalid')) {
                 updateInputValidationState(target);
             }
         });
@@ -2699,17 +2614,9 @@
                     const cityInput = document.getElementById(`${prefix}-city`);
                     const suburbInput = document.getElementById(`${prefix}-suburb`);
 
-                    if (postalCodeInput) {
-                        postalCodeInput.value = postalCode;
-                        updateInputValidationState(postalCodeInput);
-                    }
-                    if (cityInput) {
-                        cityInput.value = city;
-                        updateInputValidationState(cityInput);
-                    }
-                    if (suburbInput) {
-                        suburbInput.value = suburb;
-                    }
+                    if (postalCodeInput) postalCodeInput.value = postalCode;
+                    if (cityInput) cityInput.value = city;
+                    if (suburbInput) suburbInput.value = suburb;
                     
                     hideAddressDropdown();
                 });
