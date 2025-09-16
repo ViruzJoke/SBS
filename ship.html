@@ -1107,6 +1107,7 @@
             const dropdown = document.getElementById('document-description-dropdown');
 
             input.value = "Documents - general business";
+            updateInputValidationState(input);
 
             const renderDropdown = (filter = '') => {
                 const filteredList = documentTypes.filter(d => d.toLowerCase().includes(filter.toLowerCase()));
@@ -2165,6 +2166,10 @@
 
         // --- START: New function to manage length error messages ---
         function manageLengthError(inputElement, maxLength) {
+            if (inputElement.id.includes('-account')) {
+                return;
+            }
+
             const wrapper = inputElement.closest('.relative');
             if (!wrapper) return;
 
@@ -2451,6 +2456,7 @@
              if (thailand) {
                 shipperCountryInput.value = thailand.countryName;
                 shipperCountryValue.value = thailand.countryCode;
+                updateInputValidationState(shipperCountryInput);
              }
              
              const hiddenWrappers = document.querySelectorAll('#receiver-address-details-container .hidden');
@@ -2462,6 +2468,8 @@
              });
 
              checkAndSetPickupDate();
+             updateInputValidationState(document.getElementById('ship-date'));
+             updateInputValidationState(document.getElementById('pickup-date'));
 
              const receiverPaysCheckbox = document.getElementById('receiver-pays-checkbox');
              if (receiverPaysCheckbox) {
