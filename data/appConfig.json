@@ -21,6 +21,7 @@
         "phone": { "maxLength": 70 },
         "vat": { "maxLength": 35 },
         "shipmentRef": { "maxLength": 35 },
+        "itemDescription": { "maxLength": 200 },
         "summarizeShipment": { "maxLength": 70, "minLength": 1 },
         "invoiceNumber": { "maxLength": 35, "minLength": 1 },
         "pickupInstructions": { "maxLength": 75 },

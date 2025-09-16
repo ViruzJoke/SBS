@@ -189,15 +189,15 @@
                             <div><label for="shipper-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany">Company</label><div class="relative"><input type="text" id="shipper-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-country-input" class="block text-sm font-medium mb-1" data-i18n="shipperCountry">Country</label><div class="relative"><input type="text" id="shipper-country-input" class="input-field pr-8" autocomplete="off" required disabled><input type="hidden" id="shipper-country-value"><div id="shipper-country-dropdown" class="country-dropdown hidden"></div><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1">Address Line 1</label><div class="relative"><input type="text" id="shipper-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                            <div><label for="shipper-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><input type="text" id="shipper-address2" class="input-field"></div>
-                            <div><label for="shipper-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><input type="text" id="shipper-address3" class="input-field"></div>
+                            <div><label for="shipper-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><div class="relative"><input type="text" id="shipper-address2" class="input-field"></div></div>
+                            <div><label for="shipper-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><div class="relative"><input type="text" id="shipper-address3" class="input-field"></div></div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="relative"><label for="shipper-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode">Postal Code</label><input type="text" id="shipper-postalcode" class="input-field"></div>
                                 <div class="relative"><label for="shipper-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity">City</label><div class="relative"><input type="text" id="shipper-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             </div>
                             <div><label for="shipper-email" class="block text-sm font-medium mb-1" data-i18n="shipperEmail">Email Address</label><div class="relative"><input type="email" id="shipper-email" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone">Phone</label><div class="relative"><input type="tel" id="shipper-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                            <div><label for="shipper-vat" class="block text-sm font-medium mb-1" data-i18n="shipperVat">VAT / Tax ID</label><input type="text" id="shipper-vat" class="input-field"></div>
+                            <div><label for="shipper-vat" class="block text-sm font-medium mb-1" data-i18n="shipperVat">VAT / Tax ID</label><div class="relative"><input type="text" id="shipper-vat" class="input-field"></div></div>
                         </div>
                         <div id="receiver-address-details-container" class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
                             <h3 class="text-xl font-semibold" data-i18n="receiverInfo"></h3>
@@ -207,8 +207,8 @@
                             
                             <!-- Fields to be initially hidden -->
                             <div id="receiver-address1-wrapper" class="hidden"><label for="receiver-address1" class="block text-sm font-medium mb-1" data-i18n="receiverAddress1">Address Line 1</label><div class="relative"><input type="text" id="receiver-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                            <div id="receiver-address2-wrapper" class="hidden"><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field"></div>
-                            <div id="receiver-address3-wrapper" class="hidden"><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field"></div>
+                            <div id="receiver-address2-wrapper" class="hidden"><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><div class="relative"><input type="text" id="receiver-address2" class="input-field"></div></div>
+                            <div id="receiver-address3-wrapper" class="hidden"><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><div class="relative"><input type="text" id="receiver-address3" class="input-field"></div></div>
                             <div id="receiver-postal-city-wrapper" class="grid grid-cols-2 gap-4 hidden">
                                 <div id="receiver-postalcode-container">
                                     <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
@@ -223,9 +223,9 @@
                             <!-- End of hidden fields -->
 
                             <!-- START: Reordered Fields -->
-                            <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
+                            <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><div class="relative"><input type="email" id="receiver-email" class="input-field pr-8"><span class="input-indicator"></span></div></div>
                             <div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                            <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
+                            <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><div class="relative"><input type="text" id="receiver-vat" class="input-field"></div></div>
                             <!-- END: Reordered Fields -->
                         </div>
                     </div>
@@ -277,7 +277,7 @@
                         </div>
                         <div class="text-left space-y-2">
                             <label for="shipment-reference-doc" class="block text-sm font-medium" data-i18n="shipmentRef"></label>
-                            <input type="text" id="shipment-reference-doc" class="input-field">
+                            <div class="relative"><input type="text" id="shipment-reference-doc" class="input-field"></div>
                         </div>
                     </div>
 
@@ -305,7 +305,7 @@
                             
                             <div class="text-left space-y-2">
                                 <label for="shipment-reference-pkg" class="block text-sm font-medium" data-i18n="shipmentRef"></label>
-                                <input type="text" id="shipment-reference-pkg" class="input-field">
+                                <div class="relative"><input type="text" id="shipment-reference-pkg" class="input-field"></div>
                             </div>
                         </div>
 
@@ -536,7 +536,7 @@
                                 </div>
                                 <div>
                                     <label for="pickup-instructions" class="block text-sm font-medium mb-1" data-i18n="pickupInstructions"></label>
-                                <input type="text" id="pickup-instructions" class="input-field">
+                                <div class="relative"><input type="text" id="pickup-instructions" class="input-field"></div>
                                 </div>
                             </div>
                         </div>
@@ -556,8 +556,8 @@
                                 <div><label for="pickup-name" class="block text-sm font-medium mb-1" data-i18n="shipperName"></label><div class="relative"><input type="text" id="pickup-name" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                                 <div><label for="pickup-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany"></label><div class="relative"><input type="text" id="pickup-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                                 <div><label for="pickup-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1"></label><div class="relative"><input type="text" id="pickup-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                                <div><label for="pickup-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2"></label><input type="text" id="pickup-address2" class="input-field"></div>
-                                <div><label for="pickup-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3"></label><input type="text" id="pickup-address3" class="input-field"></div>
+                                <div><label for="pickup-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><div class="relative"><input type="text" id="pickup-address2" class="input-field"></div></div>
+                                <div><label for="pickup-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><div class="relative"><input type="text" id="pickup-address3" class="input-field"></div></div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div><label for="pickup-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode"></label><input type="text" id="pickup-postalcode" class="input-field"></div>
                                     <div><label for="pickup-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity"></label><div class="relative"><input type="text" id="pickup-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
@@ -1043,10 +1043,10 @@
         }
         
         function updateInputValidationState(inputElement) {
-            if (!inputElement.hasAttribute('required')) return;
             const wrapper = inputElement.closest('.relative') || inputElement.parentElement;
             if (!wrapper) return;
             const indicator = wrapper.querySelector('.input-indicator');
+            const isRequired = inputElement.hasAttribute('required');
             
             let isValid = true;
             if (inputElement.id.includes('-country-input')) {
@@ -1061,11 +1061,17 @@
                     isValid = inputElement.value.length === 9;
                 }
             } else if (inputElement.type === 'email') {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                isValid = emailRegex.test(inputElement.value);
+                if (inputElement.value.trim() === '') {
+                    isValid = !isRequired; // Valid if optional and empty, invalid if required and empty
+                } else {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    isValid = emailRegex.test(inputElement.value);
+                }
+            } else if (inputElement.type === 'number') {
+                isValid = inputElement.checkValidity();
             }
             else {
-                isValid = inputElement.value.trim() !== '';
+                isValid = !isRequired || inputElement.value.trim() !== '';
             }
 
             if (inputElement.type === 'tel' && inputElement.value.trim().length > 0 && inputElement.value.trim().length < 4) {
@@ -1074,14 +1080,15 @@
 
             if(indicator){
                 if (isValid) {
-                    indicator.textContent = '✓';
+                    indicator.textContent = isRequired ? '✓' : '';
                     indicator.classList.remove('indicator-required');
-                    indicator.classList.add('indicator-valid');
+                    if (isRequired) indicator.classList.add('indicator-valid');
                     inputElement.classList.remove('is-invalid');
                 } else {
-                    indicator.textContent = '*';
+                    indicator.textContent = isRequired ? '*' : '!';
                     indicator.classList.remove('indicator-valid');
                     indicator.classList.add('indicator-required');
+                    inputElement.classList.add('is-invalid');
                 }
             }
         }
@@ -1244,7 +1251,9 @@
 
             requiredInputs.forEach(input => {
                 let isInputValid = true;
-                if (input.id.includes('-country-input')) {
+                if (input.type === 'number') {
+                    isInputValid = input.checkValidity();
+                } else if (input.id.includes('-country-input')) {
                     const valueHolderId = input.id.replace('-input', '-value');
                     isInputValid = !!document.getElementById(valueHolderId).value;
                 } else if (input.type === 'file') {
@@ -1270,6 +1279,9 @@
                 } else if (input.type === 'email') {
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     isInputValid = emailRegex.test(input.value);
+                    if (!isInputValid) {
+                        errorMessage = getTranslatedText('emailInvalid');
+                    }
                 }
                 else {
                     isInputValid = input.value.trim() !== '';
@@ -1283,6 +1295,19 @@
                     }
                 }
             });
+
+            // --- START: Validate optional email fields ---
+            stepDiv.querySelectorAll('input[type="email"]:not([required])').forEach(input => {
+                if (input.value.trim() !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                    if (!firstInvalidElement) {
+                        firstInvalidElement = input;
+                    }
+                    errorMessage = getTranslatedText('emailInvalid');
+                }
+            });
+            // --- END: Validate optional email fields ---
 
             // --- START: Length validation on step change ---
             stepDiv.querySelectorAll('input').forEach(input => {
@@ -1299,6 +1324,7 @@
                 else if (id.includes('-email')) key = 'email';
                 else if (id.includes('-phone')) key = 'phone';
                 else if (id.includes('-vat')) key = 'vat';
+                else if (target.classList.contains('item-description')) key = 'itemDescription';
                 else if (id.includes('shipment-reference')) key = 'shipmentRef';
                 else if (id === 'summarize-shipment') key = 'summarizeShipment';
                 else if (id === 'invoice-number') key = 'invoiceNumber';
@@ -1421,6 +1447,9 @@
                 applyValidationRulesToElement(newItem.querySelector('.item-quantity'), lineItemRules.quantity);
                 applyValidationRulesToElement(newItem.querySelector('.item-weight'), lineItemRules.weight);
                 applyValidationRulesToElement(newItem.querySelector('.item-value'), lineItemRules.value);
+            }
+            if (validationRules.itemDescription) {
+                applyValidationRulesToElement(newItem.querySelector('.item-description'), validationRules.itemDescription);
             }
             
             // Set default "Made In" country to Thailand
@@ -2003,12 +2032,12 @@
             const postal = document.getElementById('pickup-postalcode').value;
             
             const addressHTML = `
-                <p><strong>${name}</strong>, ${company}</p>
-                <p>${address1}</p>
-                ${address2 ? `<p>${address2}</p>` : ''}
-                ${address3 ? `<p>${address3}</p>` : ''}
-                <p>${city}, ${postal}</p>
-                <p>Tel: ${phone}</p>
+                <p class="break-words"><strong>${name}</strong>, ${company}</p>
+                <p class="break-words">${address1}</p>
+                ${address2 ? `<p class="break-words">${address2}</p>` : ''}
+                ${address3 ? `<p class="break-words">${address3}</p>` : ''}
+                <p class="break-words">${city}, ${postal}</p>
+                <p class="break-words">Tel: ${phone}</p>
             `;
             document.getElementById('pickup-address-display').innerHTML = addressHTML;
         });
@@ -2087,12 +2116,12 @@
             document.getElementById('pickup-phone').value = shipperPhone;
             
             const addressHTML = `
-                <p><strong>${shipperName || ''}</strong>, ${shipperCompany}</p>
-                <p>${shipperAddress1}</p>
-                ${shipperAddress2 ? `<p>${shipperAddress2}</p>` : ''}
-                ${shipperAddress3 ? `<p>${shipperAddress3}</p>` : ''}
-                <p>${shipperCity}, ${shipperPostal}</p>
-                <p>Tel: ${shipperPhone}</p>
+                <p class="break-words"><strong>${shipperName || ''}</strong>, ${shipperCompany}</p>
+                <p class="break-words">${shipperAddress1}</p>
+                ${shipperAddress2 ? `<p class="break-words">${shipperAddress2}</p>` : ''}
+                ${shipperAddress3 ? `<p class="break-words">${shipperAddress3}</p>` : ''}
+                <p class="break-words">${shipperCity}, ${shipperPostal}</p>
+                <p class="break-words">Tel: ${shipperPhone}</p>
             `;
             document.getElementById('pickup-address-display').innerHTML = addressHTML;
         }
@@ -2292,6 +2321,7 @@
             else if (id.includes('-email')) key = 'email';
             else if (id.includes('-phone')) key = 'phone';
             else if (id.includes('-vat')) key = 'vat';
+            else if (target.classList.contains('item-description')) key = 'itemDescription';
             else if (id.includes('shipment-reference')) key = 'shipmentRef';
             else if (id === 'summarize-shipment') key = 'summarizeShipment';
             else if (id === 'invoice-number') key = 'invoiceNumber';
@@ -2308,7 +2338,7 @@
             }
             // --- END: Updated real-time length validation and truncation ---
 
-            if (target.matches('input[required], select[required]')) {
+            if (target.matches('input[required], select[required], input[type="email"]')) {
                  updateInputValidationState(target);
             }
         });
