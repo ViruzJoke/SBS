@@ -189,13 +189,13 @@
                             <div><label for="shipper-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany">Company</label><div class="relative"><input type="text" id="shipper-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-country-input" class="block text-sm font-medium mb-1" data-i18n="shipperCountry">Country</label><div class="relative"><input type="text" id="shipper-country-input" class="input-field pr-8" autocomplete="off" required disabled><input type="hidden" id="shipper-country-value"><div id="shipper-country-dropdown" class="country-dropdown hidden"></div><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1">Address Line 1</label><div class="relative"><input type="text" id="shipper-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                            <div><label for="shipper-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><input type="text" id="shipper-address2" class="input-field"></div>
-                            <div><label for="shipper-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><input type="text" id="shipper-address3" class="input-field"></div>
+                            <div><label for="shipper-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><input type="text" id="shipper-address2" class="input-field" maxlength="45"></div>
+                            <div><label for="shipper-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><input type="text" id="shipper-address3" class="input-field" maxlength="45"></div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="relative"><label for="shipper-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode">Postal Code</label><input type="text" id="shipper-postalcode" class="input-field"></div>
                                 <div class="relative"><label for="shipper-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity">City</label><div class="relative"><input type="text" id="shipper-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             </div>
-                            <div><label for="shipper-email" class="block text-sm font-medium mb-1" data-i18n="shipperEmail">Email Address</label><div class="relative"><input type="email" id="shipper-email" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="shipper-email" class="block text-sm font-medium mb-1" data-i18n="shipperEmail">Email Address</label><div class="relative"><input type="email" id="shipper-email" class="input-field pr-8" required maxlength="70"><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone">Phone</label><div class="relative"><input type="tel" id="shipper-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-vat" class="block text-sm font-medium mb-1" data-i18n="shipperVat">VAT / Tax ID</label><input type="text" id="shipper-vat" class="input-field"></div>
                         </div>
@@ -207,8 +207,8 @@
                             
                             <!-- Fields to be initially hidden -->
                             <div id="receiver-address1-wrapper" class="hidden"><label for="receiver-address1" class="block text-sm font-medium mb-1" data-i18n="receiverAddress1">Address Line 1</label><div class="relative"><input type="text" id="receiver-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
-                            <div id="receiver-address2-wrapper" class="hidden"><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field"></div>
-                            <div id="receiver-address3-wrapper" class="hidden"><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field"></div>
+                            <div id="receiver-address2-wrapper" class="hidden"><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><input type="text" id="receiver-address2" class="input-field" maxlength="45"></div>
+                            <div id="receiver-address3-wrapper" class="hidden"><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><input type="text" id="receiver-address3" class="input-field" maxlength="45"></div>
                             <div id="receiver-postal-city-wrapper" class="grid grid-cols-2 gap-4 hidden">
                                 <div id="receiver-postalcode-container">
                                     <div class="relative"><label for="receiver-postalcode" class="block text-sm font-medium mb-1" data-i18n="receiverPostalCode">Postal Code</label><input type="text" id="receiver-postalcode" class="input-field"></div>
@@ -223,7 +223,7 @@
                             <!-- End of hidden fields -->
 
                             <!-- START: Reordered Fields -->
-                            <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field"></div>
+                            <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><input type="email" id="receiver-email" class="input-field" maxlength="70"></div>
                             <div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><input type="text" id="receiver-vat" class="input-field"></div>
                             <!-- END: Reordered Fields -->
@@ -277,7 +277,7 @@
                         </div>
                         <div class="text-left space-y-2">
                             <label for="shipment-reference-doc" class="block text-sm font-medium" data-i18n="shipmentRef"></label>
-                            <input type="text" id="shipment-reference-doc" class="input-field">
+                            <input type="text" id="shipment-reference-doc" class="input-field" maxlength="35">
                         </div>
                     </div>
 
@@ -305,7 +305,7 @@
                             
                             <div class="text-left space-y-2">
                                 <label for="shipment-reference-pkg" class="block text-sm font-medium" data-i18n="shipmentRef"></label>
-                                <input type="text" id="shipment-reference-pkg" class="input-field">
+                                <input type="text" id="shipment-reference-pkg" class="input-field" maxlength="35">
                             </div>
                         </div>
 
@@ -531,13 +531,12 @@
                                 <div>
                                     <label for="pickup-weight" class="block text-sm font-medium mb-1" data-i18n="pickupTotalWeight"></label>
                                     <div class="relative">
-                                        <input type="text" id="pickup-weight" class="input-field pr-8">
-                                        <span class="input-indicator indicator-required hidden">*</span>
+                                    <input type="text" id="pickup-weight" class="input-field" disabled>
                                     </div>
                                 </div>
                                 <div>
                                     <label for="pickup-instructions" class="block text-sm font-medium mb-1" data-i18n="pickupInstructions"></label>
-                                    <input type="text" id="pickup-instructions" class="input-field">
+                                <input type="text" id="pickup-instructions" class="input-field" maxlength="75">
                                 </div>
                             </div>
                         </div>
@@ -554,16 +553,16 @@
                                      <h4 class="text-lg font-semibold" data-i18n="pickupAddress"></h4>
                                      <button type="button" id="save-pickup-address-btn" class="text-sm font-semibold text-red-600 hover:text-red-800 dark:text-amber-400 dark:hover:text-amber-300" data-i18n="saveAddress">Save</button>
                                 </div>
-                                <div><label for="pickup-name" class="block text-sm font-medium mb-1" data-i18n="shipperName"></label><input type="text" id="pickup-name" class="input-field"></div>
-                                <div><label for="pickup-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany"></label><input type="text" id="pickup-company" class="input-field"></div>
-                                <div><label for="pickup-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1"></label><input type="text" id="pickup-address1" class="input-field"></div>
-                                <div><label for="pickup-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2"></label><input type="text" id="pickup-address2" class="input-field"></div>
-                                <div><label for="pickup-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3"></label><input type="text" id="pickup-address3" class="input-field"></div>
+                                <div><label for="pickup-name" class="block text-sm font-medium mb-1" data-i18n="shipperName"></label><div class="relative"><input type="text" id="pickup-name" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                <div><label for="pickup-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany"></label><div class="relative"><input type="text" id="pickup-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                <div><label for="pickup-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1"></label><div class="relative"><input type="text" id="pickup-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                <div><label for="pickup-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2"></label><input type="text" id="pickup-address2" class="input-field" maxlength="45"></div>
+                                <div><label for="pickup-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3"></label><input type="text" id="pickup-address3" class="input-field" maxlength="45"></div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div><label for="pickup-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode"></label><input type="text" id="pickup-postalcode" class="input-field"></div>
-                                    <div><label for="pickup-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity"></label><input type="text" id="pickup-city" class="input-field"></div>
+                                    <div><label for="pickup-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity"></label><div class="relative"><input type="text" id="pickup-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                                 </div>
-                                <div><label for="pickup-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone"></label><input type="tel" id="pickup-phone" class="input-field"></div>
+                                <div><label for="pickup-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone"></label><div class="relative"><input type="tel" id="pickup-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             </div>
                         </div>
                     </div>
@@ -1680,6 +1679,10 @@
             if (pickupWeightInput) {
                 pickupWeightInput.value = totalWeightKgString;
             }
+
+            const addPieceBtn = document.getElementById('add-piece-button');
+            const pieceItems = document.querySelectorAll('#package-pieces-container .package-piece-item');
+            addPieceBtn.disabled = pieceItems.length >= 999;
         }
 
         function renumberPackageHeaders() {
@@ -1704,23 +1707,23 @@
                         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="quantity"></label>
-                                <div class="relative"><input type="number" min="1" step="1" value="1" class="input-field piece-quantity pr-8" required placeholder="1"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" min="1" max="999" step="1" value="1" class="input-field piece-quantity pr-8" required placeholder="1"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="weightKg"></label>
-                                <div class="relative"><input type="number" min="0.001" step="0.001" class="input-field piece-weight pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" min="0.001" max="999999999999" step="0.001" class="input-field piece-weight pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="lengthCm"></label>
-                                <div class="relative"><input type="number" min="1" step="0.001" class="input-field piece-length pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" min="0.001" max="9999999" step="0.001" class="input-field piece-length pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="widthCm"></label>
-                                <div class="relative"><input type="number" min="1" step="0.001" class="input-field piece-width pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" min="0.001" max="9999999" step="0.001" class="input-field piece-width pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1" data-i18n="heightCm"></label>
-                                <div class="relative"><input type="number" min="1" step="0.001" class="input-field piece-height pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
+                                <div class="relative"><input type="number" min="0.001" max="9999999" step="0.001" class="input-field piece-height pr-8" required placeholder="0.000"><span class="input-indicator indicator-required">*</span></div>
                             </div>
                         </div>
                     </div>
@@ -1879,7 +1882,7 @@
             pickupYesContainer.classList.remove('hidden');
             pickupNoContainer.classList.add('hidden');
             pickupWeightInput.required = true;
-            updateInputValidationState(pickupWeightInput);
+            // updateInputValidationState(pickupWeightInput); // No longer needed as it's disabled
         });
 
         pickupNoBtn.addEventListener('click', () => {
@@ -1887,9 +1890,9 @@
             pickupYesBtn.classList.remove('active');
             pickupNoContainer.classList.remove('hidden');
             pickupYesContainer.classList.add('hidden');
-            pickupWeightInput.required = false;
-            pickupWeightInput.classList.remove('is-invalid');
-            updateInputValidationState(pickupWeightInput);
+            // pickupWeightInput.required = false; // No longer needed
+            // pickupWeightInput.classList.remove('is-invalid'); // No longer needed
+            // updateInputValidationState(pickupWeightInput); // No longer needed
         });
 
         editPickupAddressBtn.addEventListener('click', () => {
@@ -1898,6 +1901,20 @@
         });
 
         savePickupAddressBtn.addEventListener('click', () => {
+            let isPickupAddressValid = true;
+            const fieldsToValidate = pickupAddressEditContainer.querySelectorAll('input[required]');
+            fieldsToValidate.forEach(input => {
+                updateInputValidationState(input);
+                if (input.classList.contains('is-invalid') || (input.required && !input.value.trim())) {
+                    isPickupAddressValid = false;
+                    input.classList.add('is-invalid');
+                }
+            });
+
+            if (!isPickupAddressValid) {
+                return;
+            }
+
             pickupAddressDisplayContainer.classList.remove('hidden');
             pickupAddressEditContainer.classList.add('hidden');
             const name = document.getElementById('pickup-name').value;
@@ -2015,7 +2032,7 @@
                 lineItemsHTML += `
                     <div class="border-t pt-2 mt-2">
                         <p class="font-semibold">Item #${index + 1}</p>
-                        <p>${item.querySelector('.item-description').value} - Qty: ${item.querySelector('.item-quantity').value}, Weight: ${item.querySelector('.item-weight').value} KG, Value: ${item.querySelector('.item-value').value} ${item.querySelector('.item-currency').value}</p>
+                        <p class="break-words">${item.querySelector('.item-description').value} - Qty: ${item.querySelector('.item-quantity').value}, Weight: ${item.querySelector('.item-weight').value} KG, Value: ${item.querySelector('.item-value').value} ${item.querySelector('.item-currency').value}</p>
                     </div>
                 `;
             });
@@ -2032,56 +2049,56 @@
                     <div class="p-4 border rounded-lg">
                         <h4 class="text-lg font-bold mb-2" data-i18n="summaryShipper"></h4>
                         <div class="space-y-1">
-                            <p><strong>${getVal('shipper-name')}</strong>, ${getVal('shipper-company')}</p>
-                            <p>${shipperAddress}</p>
-                            <p>${getVal('shipper-city')}, ${getVal('shipper-postalcode')}, ${getVal('shipper-country-input')}</p>
-                            <p><strong>Tel:</strong> ${getVal('shipper-phone')}</p>
+                            <p class="break-words"><strong>${getVal('shipper-name')}</strong>, ${getVal('shipper-company')}</p>
+                            <p class="break-words">${shipperAddress}</p>
+                            <p class="break-words">${getVal('shipper-city')}, ${getVal('shipper-postalcode')}, ${getVal('shipper-country-input')}</p>
+                            <p class="break-words"><strong>Tel:</strong> ${getVal('shipper-phone')}</p>
                         </div>
                     </div>
                     <div class="p-4 border rounded-lg">
                         <h4 class="text-lg font-bold mb-2" data-i18n="summaryReceiver"></h4>
                         <div class="space-y-1">
-                            <p><strong>${getVal('receiver-name')}</strong>, ${getVal('receiver-company')}</p>
-                            <p>${receiverAddress}</p>
-                            <p>${getVal('receiver-city')}, ${getVal('receiver-postalcode')}, ${getVal('receiver-country-input')}</p>
-                            <p><strong>Tel:</strong> ${getVal('receiver-phone')}</p>
+                            <p class="break-words"><strong>${getVal('receiver-name')}</strong>, ${getVal('receiver-company')}</p>
+                            <p class="break-words">${receiverAddress}</p>
+                            <p class="break-words">${getVal('receiver-city')}, ${getVal('receiver-postalcode')}, ${getVal('receiver-country-input')}</p>
+                            <p class="break-words"><strong>Tel:</strong> ${getVal('receiver-phone')}</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="p-4 border rounded-lg">
                     <h4 class="text-lg font-bold mb-2" data-i18n="summaryShipmentInfo"></h4>
-                    <p><strong>${getTranslatedText('shipmentDate')}:</strong> ${getVal('ship-date')}</p>
-                    <p><strong>Type:</strong> ${isDocument ? getTranslatedText('document') : getTranslatedText('package')}</p>
-                    <p><strong>Reference:</strong> ${shipmentReferenceValue || 'N/A'}</p>
-                    ${isDocument ? `<p><strong>Description:</strong> ${getVal('document-description-input')}</p>` : ''}
+                    <p class="break-words"><strong>${getTranslatedText('shipmentDate')}:</strong> ${getVal('ship-date')}</p>
+                    <p class="break-words"><strong>Type:</strong> ${isDocument ? getTranslatedText('document') : getTranslatedText('package')}</p>
+                    <p class="break-words"><strong>Reference:</strong> ${shipmentReferenceValue || 'N/A'}</p>
+                    ${isDocument ? `<p class="break-words"><strong>Description:</strong> ${getVal('document-description-input')}</p>` : ''}
                     ${!isDocument ? `
-                        <p><strong>Insurance:</strong> ${getChecked('protect-shipment') ? getVal('insurance-value') + ' ' + document.getElementById('insurance-currency').textContent : 'No'}</p>
-                        <div class="mt-2">${lineItemsHTML}</div>
+                        <p class="break-words"><strong>Insurance:</strong> ${getChecked('protect-shipment') ? getVal('insurance-value') + ' ' + document.getElementById('insurance-currency').textContent : 'No'}</p>
+                        <div class="mt-2 break-words">${lineItemsHTML}</div>
                     ` : ''}
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                      <div class="p-4 border rounded-lg">
                         <h4 class="text-lg font-bold mb-2" data-i18n="summaryPackageInfo"></h4>
-                        <p><strong>${getTranslatedText('totalPackages')}:</strong> ${document.getElementById('summary-total-packages').textContent}</p>
-                        <p><strong>${getTranslatedText('totalWeightKg')}:</strong> ${document.getElementById('summary-total-weight-kg').textContent}</p>
+                        <p class="break-words"><strong>${getTranslatedText('totalPackages')}:</strong> ${document.getElementById('summary-total-packages').textContent}</p>
+                        <p class="break-words"><strong>${getTranslatedText('totalWeightKg')}:</strong> ${document.getElementById('summary-total-weight-kg').textContent}</p>
                     </div>
                     <div class="p-4 border rounded-lg">
                         <h4 class="text-lg font-bold mb-2" data-i18n="summaryPaymentInfo"></h4>
-                        <p><strong>${getTranslatedText('shipperAccount')}:</strong> ${getVal('shipper-account')}</p>
-                        <p><strong>${getTranslatedText('billingAccount')}:</strong> ${getChecked('use-shipper-for-billing') ? getVal('shipper-account') : (getVal('billing-account') || 'N/A')}</p>
-                        <p><strong>${getTranslatedText('dutiesAccount')}:</strong> ${getChecked('receiver-pays-checkbox') ? getTranslatedText('receiverWillPay') : getVal('duties-account')}</p>
-                        ${!isDocument ? `<p><strong>${getTranslatedText('incoterm')}:</strong> ${getVal('incoterm')}</p>` : ''}
+                        <p class="break-words"><strong>${getTranslatedText('shipperAccount')}:</strong> ${getVal('shipper-account')}</p>
+                        <p class="break-words"><strong>${getTranslatedText('billingAccount')}:</strong> ${getChecked('use-shipper-for-billing') ? getVal('shipper-account') : (getVal('billing-account') || 'N/A')}</p>
+                        ${!isDocument ? `<p class="break-words"><strong>${getTranslatedText('dutiesAccount')}:</strong> ${getChecked('receiver-pays-checkbox') ? getTranslatedText('receiverWillPay') : (getVal('duties-account') || 'N/A')}</p>` : ''}
+                        ${!isDocument ? `<p class="break-words"><strong>${getTranslatedText('incoterm')}:</strong> ${getVal('incoterm')}</p>` : ''}
                     </div>
                 </div>
 
                 ${document.getElementById('pickup-yes-btn').classList.contains('active') ? `
                 <div class="p-4 border rounded-lg">
                     <h4 class="text-lg font-bold mb-2" data-i18n="summaryPickupInfo"></h4>
-                    <p><strong>${getTranslatedText('requestPickup')}:</strong> ${getTranslatedText('yes')}</p>
-                    <p><strong>${getTranslatedText('summaryPickupDate')}:</strong> ${new Date(getVal('pickup-date')+'T00:00:00').toLocaleDateString(currentLanguage === 'th' ? 'th-TH' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                    <p><strong>${getTranslatedText('summaryPickupTime')}:</strong> ${timeSlider ? timeSlider.get().map(minutesToTime).join(' - ') : 'N/A'}</p>
+                    <p class="break-words"><strong>${getTranslatedText('requestPickup')}:</strong> ${getTranslatedText('yes')}</p>
+                    <p class="break-words"><strong>${getTranslatedText('summaryPickupDate')}:</strong> ${new Date(getVal('pickup-date')+'T00:00:00').toLocaleDateString(currentLanguage === 'th' ? 'th-TH' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <p class="break-words"><strong>${getTranslatedText('summaryPickupTime')}:</strong> ${timeSlider ? timeSlider.get().map(minutesToTime).join(' - ') : 'N/A'}</p>
                 </div>` : ''}
             `;
 
@@ -2715,6 +2732,3 @@
 	
 </body>
 </html>
-
-
-
