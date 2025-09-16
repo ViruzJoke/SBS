@@ -1404,6 +1404,11 @@
             // Setup the combobox for the new line item, appending dropdown to the item wrapper itself
             setupCountryComboBox(`item-made-in-input-${itemId}`, `item-made-in-value-${itemId}`, `item-made-in-dropdown-${itemId}`);
 
+            // Validate all inputs within the new item to show correct indicators for default values
+            newItem.querySelectorAll('input, select').forEach(input => {
+                updateInputValidationState(input);
+            });
+
             updateLineItemSummary(newItem);
             newItem.classList.add('is-collapsed');
             updateContentLanguage();
@@ -1767,6 +1772,11 @@
                 applyValidationRulesToElement(newPiece.querySelector('.piece-height'), packageRules.dimensions);
             }
 
+            // Validate all inputs within the new piece to show correct indicators for default values
+            newPiece.querySelectorAll('input').forEach(input => {
+                updateInputValidationState(input);
+            });
+
             updateContentLanguage();
             updatePackageSummary();
         }
@@ -1925,6 +1935,9 @@
         editPickupAddressBtn.addEventListener('click', () => {
             pickupAddressDisplayContainer.classList.add('hidden');
             pickupAddressEditContainer.classList.remove('hidden');
+            pickupAddressEditContainer.querySelectorAll('input').forEach(input => {
+                updateInputValidationState(input);
+            });
         });
 
         savePickupAddressBtn.addEventListener('click', () => {
