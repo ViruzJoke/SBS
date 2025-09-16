@@ -274,7 +274,6 @@
                         <div class="relative">
                             <input type="date" id="ship-date" class="input-field pr-8" required>
                             <span class="input-indicator indicator-required">*</span>
-                            <span class="input-indicator"></span>
                         </div>
                     </div>
                     
@@ -285,7 +284,6 @@
                                 <input type="text" id="document-description-input" class="input-field pr-8" autocomplete="off" required>
                                 <div id="document-description-dropdown" class="document-dropdown hidden"></div>
                                 <span class="input-indicator indicator-required">*</span>
-                                <span class="input-indicator"></span>
                             </div>
                         </div>
                         <div class="text-left space-y-2">
@@ -1054,7 +1052,7 @@
         
         function updateInputValidationState(inputElement) {
             // Don't validate hidden fields
-            if (inputElement.offsetParent === null && inputElement.type !== 'hidden') { return; }
+            if (inputElement.offsetParent === null && inputElement.type !== 'hidden' && inputElement.type !== 'date') { return; }
             const wrapper = inputElement.closest('.relative') || inputElement.parentElement;
             if (!wrapper) return;
             const indicator = wrapper.querySelector('.input-indicator');
@@ -2711,7 +2709,7 @@
                     const element = document.getElementById(key);
                     if (element) {
                         element.value = formData[key];
-                        updateInputValidationState(element);
+                        if (element.offsetParent !== null) updateInputValidationState(element);
                     }
                 }
             }
