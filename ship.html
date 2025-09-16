@@ -189,14 +189,19 @@
                             <div><label for="shipper-company" class="block text-sm font-medium mb-1" data-i18n="shipperCompany">Company</label><div class="relative"><input type="text" id="shipper-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-country-input" class="block text-sm font-medium mb-1" data-i18n="shipperCountry">Country</label><div class="relative"><input type="text" id="shipper-country-input" class="input-field pr-8" autocomplete="off" required disabled><input type="hidden" id="shipper-country-value"><div id="shipper-country-dropdown" class="country-dropdown hidden"></div><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1">Address Line 1</label><div class="relative"><input type="text" id="shipper-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="shipper-country-input" class="block text-sm font-medium mb-1" data-i18n="shipperCountry">Country</label><div class="relative"><input type="text" id="shipper-country-input" class="input-field pr-8" autocomplete="off" required disabled><input type="hidden" id="shipper-country-value"><div id="shipper-country-dropdown" class="country-dropdown hidden"></div><span class="input-indicator"></span></div></div>
+                            <div><label for="shipper-address1" class="block text-sm font-medium mb-1" data-i18n="shipperAddress1">Address Line 1</label><div class="relative"><input type="text" id="shipper-address1" class="input-field pr-8" required><span class="input-indicator"></span></div></div>
                             <div><label for="shipper-address2" class="block text-sm font-medium mb-1" data-i18n="shipperAddress2">Address Line 2</label><div class="relative"><input type="text" id="shipper-address2" class="input-field"></div></div>
                             <div><label for="shipper-address3" class="block text-sm font-medium mb-1" data-i18n="shipperAddress3">Address Line 3</label><div class="relative"><input type="text" id="shipper-address3" class="input-field"></div></div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="relative"><label for="shipper-postalcode" class="block text-sm font-medium mb-1" data-i18n="shipperPostalCode">Postal Code</label><input type="text" id="shipper-postalcode" class="input-field"></div>
                                 <div class="relative"><label for="shipper-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity">City</label><div class="relative"><input type="text" id="shipper-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                <div class="relative"><label for="shipper-city" class="block text-sm font-medium mb-1" data-i18n="shipperCity">City</label><div class="relative"><input type="text" id="shipper-city" class="input-field pr-8" required><span class="input-indicator"></span></div></div>
                             </div>
                             <div><label for="shipper-email" class="block text-sm font-medium mb-1" data-i18n="shipperEmail">Email Address</label><div class="relative"><input type="email" id="shipper-email" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="shipper-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone">Phone</label><div class="relative"><input type="tel" id="shipper-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="shipper-email" class="block text-sm font-medium mb-1" data-i18n="shipperEmail">Email Address</label><div class="relative"><input type="email" id="shipper-email" class="input-field pr-8" required><span class="input-indicator"></span></div></div>
+                            <div><label for="shipper-phone" class="block text-sm font-medium mb-1" data-i18n="shipperPhone">Phone</label><div class="relative"><input type="tel" id="shipper-phone" class="input-field pr-8" required><span class="input-indicator"></span></div></div>
                             <div><label for="shipper-vat" class="block text-sm font-medium mb-1" data-i18n="shipperVat">VAT / Tax ID</label><div class="relative"><input type="text" id="shipper-vat" class="input-field"></div></div>
                         </div>
                         <div id="receiver-address-details-container" class="p-4 border rounded-lg bg-yellow-50 dark:border-gray-700 space-y-4">
@@ -204,9 +209,13 @@
                             <div><label for="receiver-name" class="block text-sm font-medium mb-1" data-i18n="receiverName">Name</label><div class="relative"><input type="text" id="receiver-name" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="receiver-company" class="block text-sm font-medium mb-1" data-i18n="receiverCompany">Company</label><div class="relative"><input type="text" id="receiver-company" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
                             <div><label for="receiver-country-input" class="block text-sm font-medium mb-1" data-i18n="receiverCountry">Country</label><div class="relative"><input type="text" id="receiver-country-input" class="input-field pr-8" autocomplete="off" required data-i18n-placeholder="typeOrSelectCountry"><input type="hidden" id="receiver-country-value"><div id="receiver-country-dropdown" class="country-dropdown hidden"></div><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="receiver-name" class="block text-sm font-medium mb-1" data-i18n="receiverName">Name</label><div class="relative"><input type="text" id="receiver-name" class="input-field pr-8" required><span class="input-indicator"></span></div></div>
+                            <div><label for="receiver-company" class="block text-sm font-medium mb-1" data-i18n="receiverCompany">Company</label><div class="relative"><input type="text" id="receiver-company" class="input-field pr-8" required><span class="input-indicator"></span></div></div>
+                            <div><label for="receiver-country-input" class="block text-sm font-medium mb-1" data-i18n="receiverCountry">Country</label><div class="relative"><input type="text" id="receiver-country-input" class="input-field pr-8" autocomplete="off" required data-i18n-placeholder="typeOrSelectCountry"><input type="hidden" id="receiver-country-value"><div id="receiver-country-dropdown" class="country-dropdown hidden"></div><span class="input-indicator"></span></div></div>
                             
                             <!-- Fields to be initially hidden -->
                             <div id="receiver-address1-wrapper" class="hidden"><label for="receiver-address1" class="block text-sm font-medium mb-1" data-i18n="receiverAddress1">Address Line 1</label><div class="relative"><input type="text" id="receiver-address1" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div id="receiver-address1-wrapper" class="hidden"><label for="receiver-address1" class="block text-sm font-medium mb-1" data-i18n="receiverAddress1">Address Line 1</label><div class="relative"><input type="text" id="receiver-address1" class="input-field pr-8" required><span class="input-indicator"></span></div></div>
                             <div id="receiver-address2-wrapper" class="hidden"><label for="receiver-address2" class="block text-sm font-medium mb-1" data-i18n="receiverAddress2">Address Line 2</label><div class="relative"><input type="text" id="receiver-address2" class="input-field"></div></div>
                             <div id="receiver-address3-wrapper" class="hidden"><label for="receiver-address3" class="block text-sm font-medium mb-1" data-i18n="receiverAddress3">Address Line 3</label><div class="relative"><input type="text" id="receiver-address3" class="input-field"></div></div>
                             <div id="receiver-postal-city-wrapper" class="grid grid-cols-2 gap-4 hidden">
@@ -215,6 +224,7 @@
                                 </div>
                                 <div>
                                     <div class="relative"><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                                    <div class="relative"><label for="receiver-city" class="block text-sm font-medium mb-1" data-i18n="receiverCity">City</label><div class="relative"><input type="text" id="receiver-city" class="input-field pr-8" required><span class="input-indicator"></span></div></div>
                                 </div>
                             </div>
                             <div id="receiver-suburb-container" class="hidden">
@@ -225,6 +235,7 @@
                             <!-- START: Reordered Fields -->
                             <div><label for="receiver-email" class="block text-sm font-medium mb-1" data-i18n="receiverEmail">Email Address</label><div class="relative"><input type="email" id="receiver-email" class="input-field pr-8"><span class="input-indicator"></span></div></div>
                             <div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator indicator-required">*</span></div></div>
+                            <div><label for="receiver-phone" class="block text-sm font-medium mb-1" data-i18n="receiverPhone">Phone</label><div class="relative"><input type="tel" id="receiver-phone" class="input-field pr-8" required><span class="input-indicator"></span></div></div>
                             <div id="receiver-vat-wrapper" class="hidden"><label for="receiver-vat" class="block text-sm font-medium mb-1" data-i18n="receiverVat">VAT / Tax ID</label><div class="relative"><input type="text" id="receiver-vat" class="input-field"></div></div>
                             <!-- END: Reordered Fields -->
                         </div>
@@ -263,6 +274,7 @@
                         <div class="relative">
                             <input type="date" id="ship-date" class="input-field pr-8" required>
                             <span class="input-indicator indicator-required">*</span>
+                            <span class="input-indicator"></span>
                         </div>
                     </div>
                     
@@ -273,6 +285,7 @@
                                 <input type="text" id="document-description-input" class="input-field pr-8" autocomplete="off" required>
                                 <div id="document-description-dropdown" class="document-dropdown hidden"></div>
                                 <span class="input-indicator indicator-required">*</span>
+                                <span class="input-indicator"></span>
                             </div>
                         </div>
                         <div class="text-left space-y-2">
@@ -1040,12 +1053,8 @@
         }
         
         function updateInputValidationState(inputElement) {
-            // Don't validate disabled or hidden fields
-            if (inputElement.disabled || inputElement.offsetParent === null) {
-                inputElement.classList.remove('is-invalid');
-                return;
-            }
-
+            // Don't validate hidden fields
+            if (inputElement.offsetParent === null && inputElement.type !== 'hidden') { return; }
             const wrapper = inputElement.closest('.relative') || inputElement.parentElement;
             if (!wrapper) return;
             const indicator = wrapper.querySelector('.input-indicator');
@@ -2622,9 +2631,9 @@
                     const cityInput = document.getElementById(`${prefix}-city`);
                     const suburbInput = document.getElementById(`${prefix}-suburb`);
 
-                    if (postalCodeInput) postalCodeInput.value = postalCode;
-                    if (cityInput) cityInput.value = city;
-                    if (suburbInput) suburbInput.value = suburb;
+                    if (postalCodeInput) { postalCodeInput.value = postalCode; updateInputValidationState(postalCodeInput); }
+                    if (cityInput) { cityInput.value = city; updateInputValidationState(cityInput); }
+                    if (suburbInput) { suburbInput.value = suburb; updateInputValidationState(suburbInput); }
                     
                     hideAddressDropdown();
                 });
@@ -2702,6 +2711,7 @@
                     const element = document.getElementById(key);
                     if (element) {
                         element.value = formData[key];
+                        updateInputValidationState(element);
                     }
                 }
             }
