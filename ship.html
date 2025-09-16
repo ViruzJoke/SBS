@@ -1404,15 +1404,16 @@
             // Setup the combobox for the new line item, appending dropdown to the item wrapper itself
             setupCountryComboBox(`item-made-in-input-${itemId}`, `item-made-in-value-${itemId}`, `item-made-in-dropdown-${itemId}`);
 
-            // Validate all inputs within the new item to show correct indicators for default values
-            newItem.querySelectorAll('input, select').forEach(input => {
-                updateInputValidationState(input);
-            });
-
             updateLineItemSummary(newItem);
             newItem.classList.add('is-collapsed');
             updateContentLanguage();
             renumberLineItemHeaders();
+
+            // Validate all inputs within the new item to show correct indicators for default values.
+            // This is done *after* updateContentLanguage to ensure all elements are correctly rendered before validation.
+            newItem.querySelectorAll('input, select').forEach(input => {
+                updateInputValidationState(input);
+            });
         }
         function validateLastLineItem() {
             const lastItem = lineItemsContainer.querySelector('.line-item:last-child');
