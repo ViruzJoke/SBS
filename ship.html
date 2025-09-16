@@ -1309,6 +1309,31 @@
             });
             // --- END: Validate optional email fields ---
 
+            // --- START: Custom validation for specific steps ---
+            if (currentStep === 3) {
+                let totalPackages = 0;
+                stepDiv.querySelectorAll('.piece-quantity').forEach(input => {
+                    totalPackages += parseInt(input.value, 10) || 0;
+                });
+                if (totalPackages > 99) {
+                    isValid = false;
+                    errorMessage = getTranslatedText('totalPackagesMaxError', { max: 99 });
+                    stepDiv.querySelectorAll('.piece-quantity').forEach(input => {
+                        input.classList.add('is-invalid');
+                        if (!firstInvalidElement) firstInvalidElement = input;
+                    });
+                }
+            }
+            if (currentStep === 6) {
+                const pickupEditContainer = document.getElementById('pickup-address-edit-container');
+                if (pickupEditContainer && !pickupEditContainer.classList.contains('hidden')) {
+                    isValid = false;
+                    errorMessage = getTranslatedText('savePickupAddressError');
+                    if (!firstInvalidElement) firstInvalidElement = document.getElementById('save-pickup-address-btn');
+                }
+            }
+            // --- END: Custom validation for specific steps ---
+
             // --- START: Length validation on step change ---
             stepDiv.querySelectorAll('input').forEach(input => {
                 const id = input.id;

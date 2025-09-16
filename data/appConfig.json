@@ -34,7 +34,7 @@
         "lineItem": {
             "quantity": { "min": 1 },
             "weight": { "min": 0.001 },
-            "value": { "min": 0 }
+            "value": { "min": 0.001 }
         }
     }
 }
