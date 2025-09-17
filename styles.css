@@ -83,7 +83,7 @@ main { flex-grow: 1; padding: 1rem; }
 .utility-button:hover { background-color: #d1d5db; }
 
 /* --- Components --- */
-.hidden-page, .hidden, .ship-now-step.hidden { display: none !important; }
+.hidden-page, .hidden, .ship-now-step.hidden { display: none; }
 header, footer { width: 100%; z-index: 10; }
 .card {
     background-color: #ffffff;
