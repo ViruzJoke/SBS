@@ -1189,10 +1189,13 @@
                 const firstItem = document.querySelector('#line-items-container .line-item:first-child');
                 if (firstItem && firstItem.classList.contains('is-collapsed')) {
                     firstItem.classList.remove('is-collapsed');
-                    // Re-validate the contents of the newly expanded item
-                    firstItem.querySelectorAll('input, select').forEach(input => {
-                        updateInputValidationState(input, true);
-                    });
+                    // Defer validation to allow the browser to render the newly visible elements.
+                    // This prevents a race condition where validation runs before the element is painted.
+                    setTimeout(() => {
+                        firstItem.querySelectorAll('input, select').forEach(input => {
+                            updateInputValidationState(input, true);
+                        });
+                    }, 0);
                 }
             }
             if (step === 5) {
