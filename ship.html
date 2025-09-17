@@ -1039,7 +1039,7 @@
             });
         }
         
-        function updateInputValidationState(inputElement) {
+        function updateInputValidationState(inputElement, isInitialCheck = false) {
             // Don't validate hidden fields
             if (inputElement.offsetParent === null && inputElement.type !== 'hidden' && inputElement.type !== 'date') { return; }
             const wrapper = inputElement.closest('.relative') || inputElement.parentElement;
@@ -1089,7 +1089,13 @@
                     if (isRequired) indicator.classList.add('indicator-valid');
                 }
             } else {
-                inputElement.classList.add('is-invalid');
+                // If it's an initial check and the field is just empty (but required), don't show the red border.
+                if (isInitialCheck && inputElement.value.trim() === '' && isRequired) {
+                    inputElement.classList.remove('is-invalid');
+                } else {
+                    inputElement.classList.add('is-invalid');
+                }
+                
                 if (indicator) {
                     indicator.textContent = isRequired ? '*' : '!';
                     indicator.classList.remove('indicator-valid');
@@ -1179,7 +1185,7 @@
             // Re-validate all inputs in the current step to show correct indicators for default values.
             // This is crucial for fields that have default values but are on initially hidden steps.
             stepContainer.querySelectorAll('input, select').forEach(input => {
-                updateInputValidationState(input);
+                updateInputValidationState(input, true); // Pass true for initial check
             });
 
             if (step === 5) {
@@ -1418,7 +1424,7 @@
             // Validate all inputs within the new item to show correct indicators for default values.
             // This is done *after* updateContentLanguage to ensure all elements are correctly rendered before validation.
             newItem.querySelectorAll('input, select').forEach(input => {
-                updateInputValidationState(input);
+                updateInputValidationState(input, true); // Pass true for initial check
             });
 
             newItem.classList.add('is-collapsed');
@@ -1786,7 +1792,7 @@
 
             // Validate all inputs within the new piece to show correct indicators for default values
             newPiece.querySelectorAll('input').forEach(input => {
-                updateInputValidationState(input);
+                updateInputValidationState(input, true); // Pass true for initial check
             });
         }
 
