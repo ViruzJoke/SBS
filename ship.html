@@ -270,7 +270,7 @@
                         <div>
                             <label for="document-description-input" class="block text-sm font-medium mb-1" data-i18n="describeDocuments"></label>
                             <div class="relative">
-                                <input type="text" id="document-description-input" class="input-field pr-8" autocomplete="off" required>
+                                <input type="text" id="document-description-input" class="input-field pr-8" autocomplete="off" required value="Documents - general business">
                                 <div id="document-description-dropdown" class="document-dropdown hidden"></div>
                                 <span class="input-indicator indicator-required">*</span>
                             </div>
@@ -1108,9 +1108,6 @@
             const input = document.getElementById('document-description-input');
             const dropdown = document.getElementById('document-description-dropdown');
 
-            input.value = "Documents - general business";
-            updateInputValidationState(input);
-
             const renderDropdown = (filter = '') => {
                 const filteredList = documentTypes.filter(d => d.toLowerCase().includes(filter.toLowerCase()));
                 dropdown.innerHTML = filteredList.map(d => `<div class="document-dropdown-item" data-value="${d}">${d}</div>`).join('');
@@ -1422,10 +1419,11 @@
             renumberLineItemHeaders();
 
             // Validate all inputs within the new item to show correct indicators for default values.
-            // This is done *after* updateContentLanguage to ensure all elements are correctly rendered before validation.
-            newItem.querySelectorAll('input, select').forEach(input => {
-                updateInputValidationState(input, true); // Pass true for initial check
-            });
+            // Explicitly validate fields that have default values.
+            updateInputValidationState(newItem.querySelector('.item-quantity'), true);
+            updateInputValidationState(newItem.querySelector('.item-weight'), true);
+            updateInputValidationState(newItem.querySelector('.item-value'), true);
+            updateInputValidationState(newItem.querySelector('.item-made-in-input'), true);
 
             newItem.classList.add('is-collapsed');
         }
@@ -1587,6 +1585,7 @@
             incotermContainer.classList.add('hidden');
             incotermSelect.required = false;
             updateStepIndicator();
+            updateInputValidationState(docDescInput, true);
         });
 
         document.getElementById('ship-type-package').addEventListener('click', (e) => {
