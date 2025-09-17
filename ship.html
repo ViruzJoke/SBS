@@ -1405,7 +1405,6 @@
             setupCountryComboBox(`item-made-in-input-${itemId}`, `item-made-in-value-${itemId}`, `item-made-in-dropdown-${itemId}`);
 
             updateLineItemSummary(newItem);
-            newItem.classList.add('is-collapsed');
             updateContentLanguage();
             renumberLineItemHeaders();
 
@@ -1414,6 +1413,8 @@
             newItem.querySelectorAll('input, select').forEach(input => {
                 updateInputValidationState(input);
             });
+
+            newItem.classList.add('is-collapsed');
         }
         function validateLastLineItem() {
             const lastItem = lineItemsContainer.querySelector('.line-item:last-child');
@@ -1773,13 +1774,13 @@
                 applyValidationRulesToElement(newPiece.querySelector('.piece-height'), packageRules.dimensions);
             }
 
+            updateContentLanguage();
+            updatePackageSummary();
+
             // Validate all inputs within the new piece to show correct indicators for default values
             newPiece.querySelectorAll('input').forEach(input => {
                 updateInputValidationState(input);
             });
-
-            updateContentLanguage();
-            updatePackageSummary();
         }
 
         function validateLastPackagePiece() {
