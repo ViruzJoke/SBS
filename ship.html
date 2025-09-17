@@ -1168,12 +1168,19 @@
         
         function changeStep(step) {
             document.querySelectorAll('.ship-now-step').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`ship-now-step-${step}`).classList.remove('hidden');
+            const stepContainer = document.getElementById(`ship-now-step-${step}`);
+            stepContainer.classList.remove('hidden');
             currentStep = step;
             updateStepIndicator();
             updateNavButtons();
             
             document.getElementById('ship-now-page').scrollIntoView({ behavior: 'smooth' });
+
+            // Re-validate all inputs in the current step to show correct indicators for default values.
+            // This is crucial for fields that have default values but are on initially hidden steps.
+            stepContainer.querySelectorAll('input, select').forEach(input => {
+                updateInputValidationState(input);
+            });
 
             if (step === 5) {
                  updateDocsStepUI();
