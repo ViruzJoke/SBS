@@ -3,10 +3,7 @@
 		"MX": "mexicoTaxIdRequired"
 	},
 	"overrideConditions": {
-        "VN": "S",
-        "HK": "C",
-        "MO": "C",
-        "IE": "C"
+        "VN": "S"
     },
     "validationRules": {
         "name": { "maxLength": 255 },
@@ -28,8 +25,8 @@
         "accountNumber": { "length": 9 },
         "package": {
             "quantity": { "min": 1, "max": 99 },
-            "dimensions": { "min": 0.001, "max": 999 },
-            "weight": { "min": 0.001, "max": 999 }
+            "dimensions": { "min": 0.01, "max": 999 },
+            "weight": { "min": 0.01, "max": 999 }
         },
         "lineItem": {
             "quantity": { "min": 1 },
@@ -38,3 +35,4 @@
         }
     }
 }
+
