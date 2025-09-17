@@ -47,7 +47,7 @@
         <a href="index.html" class="flex items-center"><span class="text-4xl font-bold text-red-600">Shipment Creation</span><span class="ml-2 text-xl font-semibold text-gray-800 sm:block">Backup Solution</span></a>
         
         <!-- Desktop Nav -->
-        <nav class="hidden md:flex items-center space-x-2 sm:space-x-4">
+        <nav class="hidden sm:flex items-center space-x-2 sm:space-x-4">
             <div class="relative">
                 <button id="language-toggle-button" class="utility-button px-4 py-2 flex items-center gap-2"><span id="current-language-display"></span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                 <div id="language-dropdown" class="language-dropdown absolute right-0 mt-2 w-28 bg-white rounded-md shadow-lg hidden z-20">
@@ -61,7 +61,7 @@
         </nav>
 
         <!-- Mobile Nav Button -->
-        <div class="md:hidden">
+        <div class="sm:hidden">
             <button id="mobile-menu-button" class="utility-button p-2">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
@@ -88,7 +88,8 @@
                     </div>
                 </div>
                 <button id="mobile-theme-toggle" class="w-full utility-button px-4 py-2 flex items-center justify-center gap-2">
-                    <span data-i18n="toggleTheme"></span>
+                    <svg id="mobile-theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="mobile-theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                 </button>
             </nav>
         </div>
@@ -302,18 +303,25 @@
             function setupTheme() { 
                 const themeToggles = [document.getElementById('theme-toggle'), document.getElementById('mobile-theme-toggle')];
                 const lightIcon = document.getElementById('theme-icon-light'); 
-                const darkIcon = document.getElementById('theme-icon-dark'); 
+                const darkIcon = document.getElementById('theme-icon-dark');
+                const mobileLightIcon = document.getElementById('mobile-theme-icon-light');
+                const mobileDarkIcon = document.getElementById('mobile-theme-icon-dark');
+
                 const enableDarkMode = () => { 
                     document.body.classList.add('dark-mode'); 
                     localStorage.setItem('theme', 'dark'); 
-                    lightIcon.classList.add('hidden'); 
-                    darkIcon.classList.remove('hidden'); 
+                    if (lightIcon) lightIcon.classList.add('hidden'); 
+                    if (darkIcon) darkIcon.classList.remove('hidden'); 
+                    if (mobileLightIcon) mobileLightIcon.classList.add('hidden');
+                    if (mobileDarkIcon) mobileDarkIcon.classList.remove('hidden');
                 }; 
                 const disableDarkMode = () => { 
                     document.body.classList.remove('dark-mode'); 
                     localStorage.setItem('theme', 'light'); 
-                    lightIcon.classList.remove('hidden'); 
-                    darkIcon.classList.add('hidden'); 
+                    if (lightIcon) lightIcon.classList.remove('hidden'); 
+                    if (darkIcon) darkIcon.classList.add('hidden'); 
+                    if (mobileLightIcon) mobileLightIcon.classList.remove('hidden');
+                    if (mobileDarkIcon) mobileDarkIcon.classList.add('hidden');
                 }; 
                 const toggle = () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode();
                 themeToggles.forEach(btn => btn && btn.addEventListener('click', toggle));
