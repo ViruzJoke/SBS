@@ -1,6 +1,8 @@
 {
 	"th": {
 		"itemHeader": "รายการ",
+		"menu": "เมนู",
+		"toggleTheme": "เปลี่ยนธีม",
 		"leaveSiteTitle": "ออกจากหน้านี้?",
 		"leaveSiteBody": "การเปลี่ยนแปลงที่คุณทำอาจไม่ถูกบันทึก",
 		"stayButton": "อยู่ต่อ",
@@ -172,6 +174,8 @@
 	},
 	"en": {
 		"itemHeader": "Item",
+		"menu": "Menu",
+		"toggleTheme": "Toggle Theme",
 		"leaveSiteTitle": "Leave Site?",
 		"leaveSiteBody": "Changes you made may not be saved.",
 		"stayButton": "Stay",
