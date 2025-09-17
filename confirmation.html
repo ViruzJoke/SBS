@@ -40,8 +40,10 @@
 </head>
 <body class="with-faded-bg">
     <header class="bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center relative z-10 rounded-b-xl">
-        <a href="index.html" class="flex items-center"><span class="text-4xl font-bold text-red-600">Shipment Creation</span><span class="ml-2 text-xl font-semibold text-gray-800  sm:block">Backup Solution</span></a>
-        <nav class="flex items-center space-x-2 sm:space-x-4">
+        <a href="index.html" class="flex items-center"><span class="text-4xl font-bold text-red-600">Shipment Creation</span><span class="ml-2 text-xl font-semibold text-gray-800 sm:block">Backup Solution</span></a>
+        
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center space-x-2 sm:space-x-4">
             <div class="relative">
                 <button id="language-toggle-button" class="utility-button px-4 py-2 flex items-center gap-2"><span id="current-language-display"></span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                 <div id="language-dropdown" class="language-dropdown absolute right-0 mt-2 w-28 bg-white rounded-md shadow-lg hidden z-20">
@@ -53,7 +55,40 @@
                 <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
             </button>
         </nav>
+
+        <!-- Mobile Nav Button -->
+        <div class="md:hidden">
+            <button id="mobile-menu-button" class="utility-button p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
     </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-40">
+        <div class="fixed inset-0 bg-black bg-opacity-50" aria-hidden="true"></div>
+        <div id="mobile-menu-content" class="fixed top-0 right-0 w-64 h-full bg-yellow-50 dark:bg-gray-800 shadow-lg p-6 z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-bold" data-i18n="menu"></h2>
+                <button id="mobile-menu-close-button" class="text-gray-500 hover:text-gray-800 dark:hover:text-white text-3xl">&times;</button>
+            </div>
+            <nav class="flex flex-col space-y-4">
+                <div class="relative">
+                    <button id="mobile-language-toggle-button" class="w-full utility-button px-4 py-2 flex items-center justify-between gap-2">
+                        <span id="mobile-current-language-display"></span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="mobile-language-dropdown" class="language-dropdown absolute right-0 mt-2 w-full bg-white rounded-md shadow-lg hidden z-20">
+                        <a href="#" class="block px-4 py-2" data-lang="th">ภาษาไทย</a>
+                        <a href="#" class="block px-4 py-2" data-lang="en">English</a>
+                    </div>
+                </div>
+                <button id="mobile-theme-toggle" class="w-full utility-button px-4 py-2 flex items-center justify-center gap-2">
+                    <span data-i18n="toggleTheme"></span>
+                </button>
+            </nav>
+        </div>
+    </div>
 
     <main class="container py-8">
         <div id="confirmation-container" class="confirmation-card">
@@ -110,14 +145,14 @@
             const translations = {
                 'th': { 
                     'confirmationTitle': 'สร้างใบนำส่งสำเร็จ!', 'confirmationSubtitle': 'ข้อมูลใบนำส่งสินค้าของคุณพร้อมสำหรับพิมพ์และดาวน์โหลด', 'awbLabel': 'หมายเลข AWB ของคุณคือ:', 'pickupNumberTitle': 'หมายเลขยืนยันการนัดรับสินค้า', 'downloadLabel': 'ดาวน์โหลดใบนำส่ง', 'downloadReceipt': 'ดาวน์โหลดใบสรุปการจัดส่ง', 'downloadInvoice': 'ดาวน์โหลดใบอินวอยซ์', 'pieceIdTitle': 'หมายเลข Piece ID', 'warningsTitle': 'คำเตือนจากระบบ', 'createNewShipment': 'สร้างใบนำส่งใหม่', 'backToMain': 'กลับหน้าหลัก', 'allRightsReserved': 'สงวนลิขสิทธิ์.', 'loadingData': 'กำลังโหลดข้อมูล...', 'noShipmentData': 'ไม่พบข้อมูลการจัดส่ง กรุณาสร้างใบนำส่งใหม่อีกครั้ง', 'downloadError': 'เกิดข้อผิดพลาดในการเตรียมไฟล์สำหรับดาวน์โหลด', 'downloadDisabled': 'ไฟล์นี้ไม่สามารถดาวน์โหลดได้', 'downloadLabelAndInvoice': 'ดาวน์โหลด Label และ Invoice',
-                    'contactSupport': 'ติดต่อและสอบถาม', 'contactUs': 'ติดต่อเรา', 'legal': 'ข้อมูลทางกฎหมาย', 'termsOfUse': 'ข้อกำหนดการใช้งาน', 'privacyNotice': 'ข้อความแจ้งเตือนความเป็นส่วนตัว', 'fraudAwareness': 'การตระหนักถึงการฉ้อโกง', 'legalNotice': 'ประกาศทางกฎหมาย', 'aboutDhl': 'เกี่ยวกับ DHL', 'press': 'ข่าวสาร', 'dhlExpress': 'DHL Express',
+                    'menu': 'เมนู', 'toggleTheme': 'เปลี่ยนธีม', 'contactSupport': 'ติดต่อและสอบถาม', 'contactUs': 'ติดต่อเรา', 'legal': 'ข้อมูลทางกฎหมาย', 'termsOfUse': 'ข้อกำหนดการใช้งาน', 'privacyNotice': 'ข้อความแจ้งเตือนความเป็นส่วนตัว', 'fraudAwareness': 'การตระหนักถึงการฉ้อโกง', 'legalNotice': 'ประกาศทางกฎหมาย', 'aboutDhl': 'เกี่ยวกับ DHL', 'press': 'ข่าวสาร', 'dhlExpress': 'DHL Express',
                     'links': {
                         'contactUs': 'https://www.dhl.com/th-th/home/customer-service.html', 'termsOfUse': 'https://www.dhl.com/th-th/home/footer/terms-of-use.html', 'privacyNotice': 'https://www.dhl.com/th-th/home/footer/privacy-notice.html', 'fraudAwareness': 'https://www.dhl.com/th-th/home/footer/fraud-awareness.html', 'legalNotice': 'https://www.dhl.com/th-th/home/footer/legal-notice.html', 'dhlExpress': 'https://www.dhl.com/th-th/home/express.html', 'aboutDhl': 'https://www.dhl.com/th-th/home/about-us.html', 'press': 'https://www.dhl.com/th-th/home/press.html'
                     }
                 },
                 'en': { 
                     'confirmationTitle': 'Shipment Created Successfully!', 'confirmationSubtitle': 'Your shipment documents are ready to print and download.', 'awbLabel': 'Your AWB Number is:', 'pickupNumberTitle': 'Pickup Confirmation #', 'downloadLabel': 'Download Label', 'downloadReceipt': 'Download Receipt', 'downloadInvoice': 'Download Invoice', 'pieceIdTitle': 'Piece ID Numbers', 'warningsTitle': 'System Warnings', 'createNewShipment': 'Create New Shipment', 'backToMain': 'Back to Main', 'allRightsReserved': 'All rights reserved.', 'loadingData': 'Loading data...', 'noShipmentData': 'Shipment data not found. Please create a new shipment.', 'downloadError': 'Error preparing file for download', 'downloadDisabled': 'This file is not available for download', 'downloadLabelAndInvoice': 'Download Label & Invoice',
-                    'contactSupport': 'CONTACT AND SUPPORT', 'contactUs': 'Contact Us', 'legal': 'LEGAL', 'termsOfUse': 'Terms of Use', 'privacyNotice': 'Privacy Notice', 'fraudAwareness': 'Fraud Awareness', 'legalNotice': 'Legal Notice', 'aboutDhl': 'About DHL', 'press': 'Press', 'dhlExpress': 'DHL Express',
+                    'menu': 'Menu', 'toggleTheme': 'Toggle Theme', 'contactSupport': 'CONTACT AND SUPPORT', 'contactUs': 'Contact Us', 'legal': 'LEGAL', 'termsOfUse': 'Terms of Use', 'privacyNotice': 'Privacy Notice', 'fraudAwareness': 'Fraud Awareness', 'legalNotice': 'Legal Notice', 'aboutDhl': 'About DHL', 'press': 'Press', 'dhlExpress': 'DHL Express',
                     'links': {
                         'contactUs': 'https://www.dhl.com/th-en/home/customer-service.html', 'termsOfUse': 'https://www.dhl.com/th-en/home/footer/terms-of-use.html', 'privacyNotice': 'https://www.dhl.com/th-en/home/footer/privacy-notice.html', 'fraudAwareness': 'https://www.dhl.com/th-en/home/footer/fraud-awareness.html', 'legalNotice': 'https://www.dhl.com/th-en/home/footer/legal-notice.html', 'dhlExpress': 'https://www.dhl.com/th-en/home/express.html', 'aboutDhl': 'https://www.dhl.com/th-en/home/about-us.html', 'press': 'https://www.dhl.com/th-en/home/press.html'
                     }
@@ -146,16 +181,22 @@
                 });
 
                 document.title = `DHL Backup Solution - ${getTranslatedText('confirmationTitle')}`;
-                document.getElementById('current-language-display').textContent = currentLanguage.toUpperCase();
+                const langDisplay = document.getElementById('current-language-display');
+                const mobileLangDisplay = document.getElementById('mobile-current-language-display');
+                if(langDisplay) langDisplay.textContent = currentLanguage.toUpperCase();
+                if(mobileLangDisplay) mobileLangDisplay.textContent = currentLanguage.toUpperCase();
             }
 
             function setupTheme() { 
-                const themeToggle = document.getElementById('theme-toggle'); 
+                const themeToggles = [document.getElementById('theme-toggle'), document.getElementById('mobile-theme-toggle')];
                 const lightIcon = document.getElementById('theme-icon-light'); 
                 const darkIcon = document.getElementById('theme-icon-dark'); 
-                const enableDarkMode = () => { document.body.classList.add('dark-mode'); localStorage.setItem('theme', 'dark'); lightIcon.classList.add('hidden'); darkIcon.classList.remove('hidden'); }; 
-                const disableDarkMode = () => { document.body.classList.remove('dark-mode'); localStorage.setItem('theme', 'light'); lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden'); }; 
-                themeToggle.addEventListener('click', () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode()); 
+                const toggle = () => document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode();
+                const enableDarkMode = () => { document.body.classList.add('dark-mode'); localStorage.setItem('theme', 'dark'); if(lightIcon) lightIcon.classList.add('hidden'); if(darkIcon) darkIcon.classList.remove('hidden'); }; 
+                const disableDarkMode = () => { document.body.classList.remove('dark-mode'); localStorage.setItem('theme', 'light'); if(lightIcon) lightIcon.classList.remove('hidden'); if(darkIcon) darkIcon.classList.add('hidden'); }; 
+                
+                themeToggles.forEach(btn => btn && btn.addEventListener('click', toggle));
+
                 if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                     enableDarkMode();
                 } else {
@@ -164,16 +205,40 @@
             }
 
             function setupLanguageSwitch() { 
-                document.getElementById('language-toggle-button').addEventListener('click', () => document.getElementById('language-dropdown').classList.toggle('hidden')); 
+                const desktopBtn = document.getElementById('language-toggle-button');
+                const mobileBtn = document.getElementById('mobile-language-toggle-button');
+                const desktopDropdown = document.getElementById('language-dropdown');
+                const mobileDropdown = document.getElementById('mobile-language-dropdown');
+
+                if(desktopBtn) desktopBtn.addEventListener('click', () => desktopDropdown.classList.toggle('hidden')); 
+                if(mobileBtn) mobileBtn.addEventListener('click', () => mobileDropdown.classList.toggle('hidden')); 
+
                 document.querySelectorAll('[data-lang]').forEach(link => { 
                     link.addEventListener('click', (e) => { 
                         e.preventDefault(); 
                         currentLanguage = e.target.dataset.lang; 
                         localStorage.setItem('language', currentLanguage); 
                         updateContentLanguage(); 
-                        document.getElementById('language-dropdown').classList.add('hidden'); 
+                        if(desktopDropdown) desktopDropdown.classList.add('hidden'); 
+                        if(mobileDropdown) mobileDropdown.classList.add('hidden'); 
                     }); 
                 }); 
+            }
+
+            function setupMobileMenu() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuContent = document.getElementById('mobile-menu-content');
+                const openBtn = document.getElementById('mobile-menu-button');
+                const closeBtn = document.getElementById('mobile-menu-close-button');
+
+                if (!mobileMenu || !openBtn || !closeBtn || !mobileMenuContent) return;
+
+                const openMenu = () => { mobileMenu.classList.remove('hidden'); setTimeout(() => { mobileMenuContent.classList.remove('translate-x-full'); }, 10); };
+                const closeMenu = () => { mobileMenuContent.classList.add('translate-x-full'); setTimeout(() => { mobileMenu.classList.add('hidden'); }, 300); };
+
+                openBtn.addEventListener('click', openMenu);
+                closeBtn.addEventListener('click', closeMenu);
+                mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) closeMenu(); });
             }
 
             function showError(messageKey) {
@@ -385,6 +450,7 @@
             document.getElementById('current-year').textContent = new Date().getFullYear();
             setupTheme();
             setupLanguageSwitch();
+            setupMobileMenu();
             updateContentLanguage();
 
             window.addEventListener('beforeunload', () => {
