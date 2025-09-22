@@ -1244,6 +1244,8 @@
         const nextButton = document.getElementById('ship-now-next-step');
         
         function changeStep(step) {
+            document.getElementById('form-message').classList.add('hidden');
+            document.getElementById('form-message').textContent = '';
             document.querySelectorAll('.ship-now-step').forEach(el => el.classList.add('hidden'));
             const stepContainer = document.getElementById(`ship-now-step-${step}`);
             stepContainer.classList.remove('hidden');
