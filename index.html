@@ -126,7 +126,7 @@
     <div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-yellow-50 rounded-lg shadow-xl w-full max-w-4xl flex flex-col">
             <div class="flex justify-between items-center p-4 border-b border-yellow-200 flex-shrink-0">
-                <h2 class="text-2xl font-bold text-gray-800" data-i18n="termsTitle"></h2>
+                
                 <button id="close-terms-btn" class="text-gray-500 hover:text-gray-800">&times;</button>
             </div>
             <div id="terms-modal-content" class="p-6 overflow-y-auto">
@@ -407,33 +407,16 @@
                         const modalContent = document.getElementById('terms-modal-content');
                         modalContent.innerHTML = html;
 
-                        // Now, find the elements inside the loaded content and attach events
-                        const langEnBtn = modalContent.querySelector('#lang-en');
-                        const langThBtn = modalContent.querySelector('#lang-th');
                         const contentEn = modalContent.querySelector('#content-en');
                         const contentTh = modalContent.querySelector('#content-th');
-                        const closeButton = modalContent.querySelector('#close-button');
 
-                        function setLanguage(lang) {
-                            if (lang === 'th') {
-                                contentEn.classList.add('hidden');
-                                contentTh.classList.remove('hidden');
-                                langEnBtn.classList.remove('active');
-                                langThBtn.classList.add('active');
-                            } else {
-                                contentTh.classList.add('hidden');
-                                contentEn.classList.remove('hidden');
-                                langThBtn.classList.remove('active');
-                                langEnBtn.classList.add('active');
-                            }
-                            localStorage.setItem('terms_language', lang);
+                        if (currentLanguage === 'th') {
+                            contentEn.classList.add('hidden');
+                            contentTh.classList.remove('hidden');
+                        } else {
+                            contentTh.classList.add('hidden');
+                            contentEn.classList.remove('hidden');
                         }
-
-                        langEnBtn.addEventListener('click', () => setLanguage('en'));
-                        langThBtn.addEventListener('click', () => setLanguage('th'));
-
-                        const savedLang = localStorage.getItem('terms_language') || 'en';
-                        setLanguage(savedLang);
 
                         termsModal.classList.remove('hidden');
                     })
