@@ -418,6 +418,18 @@
                             contentEn.classList.remove('hidden');
                         }
 
+                        modalContent.addEventListener('click', (e) => {
+                            if (e.target.id === 'accept-terms-btn-en' || e.target.id === 'accept-terms-btn-th') {
+                                const consentCheckbox = document.getElementById('consent-checkbox');
+                                consentCheckbox.checked = true;
+                                
+                                const changeEvent = new Event('change');
+                                consentCheckbox.dispatchEvent(changeEvent);
+
+                                termsModal.classList.add('hidden');
+                            }
+                        });
+
                         termsModal.classList.remove('hidden');
                     })
                     .catch(error => console.error('Error fetching terms:', error));
