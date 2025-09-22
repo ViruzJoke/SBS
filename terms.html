@@ -14,7 +14,7 @@
         }
     </style>
 </head>
-<body class="with-faded-bg p-8">
+<body>
     <div class="container mx-auto bg-white p-8 rounded-lg shadow-lg">
         <div class="flex justify-end mb-4 border-b pb-4">
             <button id="lang-en" class="lang-button active px-4 py-2 rounded-l-md border">English</button>
@@ -80,44 +80,8 @@
         </div>
 
         <div class="mt-8 text-center">
-            <button id="close-button" onclick="window.close()" class="main-action-button bg-yellow-500 text-black hover:bg-yellow-600">Close Window</button>
+            <button id="close-button" class="main-action-button bg-yellow-500 text-black hover:bg-yellow-600">Close Window</button>
         </div>
     </div>
-
-    <script>
-        const langEnBtn = document.getElementById('lang-en');
-        const langThBtn = document.getElementById('lang-th');
-        const contentEn = document.getElementById('content-en');
-        const contentTh = document.getElementById('content-th');
-        const closeButton = document.getElementById('close-button');
-
-        function setLanguage(lang) {
-            if (lang === 'th') {
-                contentEn.classList.add('hidden');
-                contentTh.classList.remove('hidden');
-                langEnBtn.classList.remove('active');
-                langThBtn.classList.add('active');
-                document.documentElement.lang = 'th';
-                document.title = 'ข้อกำหนดการใช้บริการ';
-                closeButton.textContent = 'ปิดหน้าต่าง';
-            } else {
-                contentTh.classList.add('hidden');
-                contentEn.classList.remove('hidden');
-                langThBtn.classList.remove('active');
-                langEnBtn.classList.add('active');
-                document.documentElement.lang = 'en';
-                document.title = 'Terms of Use';
-                closeButton.textContent = 'Close Window';
-            }
-            localStorage.setItem('terms_language', lang);
-        }
-
-        langEnBtn.addEventListener('click', () => setLanguage('en'));
-        langThBtn.addEventListener('click', () => setLanguage('th'));
-
-        // Set initial language based on localStorage or default to English
-        const savedLang = localStorage.getItem('terms_language') || 'en';
-        setLanguage(savedLang);
-    </script>
 </body>
 </html>

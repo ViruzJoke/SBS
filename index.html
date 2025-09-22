@@ -108,7 +108,7 @@
                         <input type="checkbox" id="consent-checkbox" class="h-5 w-5 rounded text-red-600 focus:ring-red-500 border-gray-300 flex-shrink-0 mt-0.5">
                         <label for="consent-checkbox" class="text-sm text-gray-800 text-left">
                             <span data-i18n="consentTextPart1"></span>
-                            <a href="terms.html" target="_blank" class="text-red-600 underline font-semibold hover:opacity-80" data-i18n="consentLinkText"></a>
+                            <button type="button" id="open-terms-btn" class="text-red-600 underline font-semibold hover:opacity-80" data-i18n="consentLinkText"></button>
                             <span data-i18n="consentTextPart2"></span>
                         </label>
                     </div>
@@ -123,7 +123,17 @@
         </section>
     </main>
     
-    
+    <div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-yellow-50 rounded-lg shadow-xl w-full max-w-4xl flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-yellow-200 flex-shrink-0">
+                <h2 class="text-2xl font-bold text-gray-800" data-i18n="termsTitle"></h2>
+                <button id="close-terms-btn" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div id="terms-modal-content" class="p-6 overflow-y-auto">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="container mx-auto px-6 py-12">
@@ -176,9 +186,6 @@
                     'consentLinkText': 'ข้อกำหนดการใช้บริการออนไลน์ของ DHL Express',
                     'consentTextPart2': ' และยอมรับเนื้อหาดังกล่าวแล้ว',
                     'termsTitle': 'ข้อกำหนดการใช้บริการ',
-                    'termsContentP1': 'นี่คือข้อความข้อกำหนดบรรทัดที่ 1',
-                    'termsContentP2': 'นี่คือข้อความข้อกำหนดบรรท-ัดที่ 2',
-                    'termsContentP3': 'นี่คือข้อความข้อกำหนดบรรทัดที่ 3',
                     'menu': 'เมนู',
                     'toggleTheme': 'เปลี่ยนธีม',
                     'contactSupport': 'ติดต่อและสอบถาม',
@@ -211,9 +218,6 @@
                     'consentLinkText': 'DHL Express Online Services Terms of Use',
                     'consentTextPart2': ' and accept the content thereof.',
                     'termsTitle': 'Terms of Use',
-                    'termsContentP1': 'This is consent ban tad tee 1',
-                    'termsContentP2': 'This is consent ban tad tee 2',
-                    'termsContentP3': 'This is consent ban tad tee 3',
                     'menu': 'Menu',
                     'toggleTheme': 'Toggle Theme',
                     'contactSupport': 'CONTACT AND SUPPORT',
@@ -243,50 +247,50 @@
             function getTranslatedText(key) { return translations[currentLanguage]?.[key] || key; }
             
             function updateContentLanguage() {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (el.placeholder !== undefined && (el.hasAttribute('data-i18n-placeholder') || el.matches('[data-i18n-placeholder]'))) {
-                    el.placeholder = getTranslatedText(key);
-                } else {
-                     if (!el.closest('.line-item-summary')) {
-                        el.textContent = getTranslatedText(key);
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (el.placeholder !== undefined && (el.hasAttribute('data-i18n-placeholder') || el.matches('[data-i18n-placeholder]'))) {
+                        el.placeholder = getTranslatedText(key);
+                    } else {
+                        if (!el.closest('.line-item-summary')) {
+                            el.textContent = getTranslatedText(key);
+                        }
                     }
-                }
-            });
+                });
 
-            document.querySelectorAll('[data-i18n-link]').forEach(el => {
-                const key = el.getAttribute('data-i18n-link');
-                const links = translations[currentLanguage]?.links;
-                if (links && links[key]) {
-                    el.href = links[key];
-                }
-            });
+                document.querySelectorAll('[data-i18n-link]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-link');
+                    const links = translations[currentLanguage]?.links;
+                    if (links && links[key]) {
+                        el.href = links[key];
+                    }
+                });
 
-            document.querySelectorAll('label[data-i18n]').forEach(label => {
-                const key = label.getAttribute('data-i18n');
-                const asterisk = label.querySelector('.text-red-500');
-                if (key !== 'invoiceNumber' && key !== 'summarizeShipment') {
-                   label.innerHTML = getTranslatedText(key) + (asterisk ? ' <span class="text-red-500">*</span>' : '');
-                } else if (key === 'summarizeShipment') {
-                    label.innerHTML = `
-                        <span data-i18n="summarizeShipment">${getTranslatedText('summarizeShipment')}</span>
-                        <span class="block text-xs text-gray-500 dark:text-gray-400" data-i18n="shipmentDescription">${getTranslatedText('shipmentDescription')}</span>
-                    `;
-                }
-                 else {
-                   label.innerHTML = getTranslatedText(key);
-                }
-            });
-            const langDisplay = document.getElementById('current-language-display');
-            const mobileLangDisplay = document.getElementById('mobile-current-language-display');
-            if(langDisplay) langDisplay.textContent = currentLanguage.toUpperCase();
-            if(mobileLangDisplay) mobileLangDisplay.textContent = currentLanguage.toUpperCase();
+                document.querySelectorAll('label[data-i18n]').forEach(label => {
+                    const key = label.getAttribute('data-i18n');
+                    const asterisk = label.querySelector('.text-red-500');
+                    if (key !== 'invoiceNumber' && key !== 'summarizeShipment') {
+                    label.innerHTML = getTranslatedText(key) + (asterisk ? ' <span class="text-red-500">*</span>' : '');
+                    } else if (key === 'summarizeShipment') {
+                        label.innerHTML = `
+                            <span data-i18n="summarizeShipment">${getTranslatedText('summarizeShipment')}</span>
+                            <span class="block text-xs text-gray-500 dark:text-gray-400" data-i18n="shipmentDescription">${getTranslatedText('shipmentDescription')}</span>
+                        `;
+                    }
+                    else {
+                    label.innerHTML = getTranslatedText(key);
+                    }
+                });
+                const langDisplay = document.getElementById('current-language-display');
+                const mobileLangDisplay = document.getElementById('mobile-current-language-display');
+                if(langDisplay) langDisplay.textContent = currentLanguage.toUpperCase();
+                if(mobileLangDisplay) mobileLangDisplay.textContent = currentLanguage.toUpperCase();
 
-            document.title = `DHL Backup Solution - ${getTranslatedText('createShipment')}`;
-            document.querySelectorAll('.line-item-summary strong[data-i18n]').forEach(el => {
-                 el.textContent = getTranslatedText(el.getAttribute('data-i18n'));
-            });
-        }
+                document.title = `DHL Backup Solution - ${getTranslatedText('createShipment')}`;
+                document.querySelectorAll('.line-item-summary strong[data-i18n]').forEach(el => {
+                    el.textContent = getTranslatedText(el.getAttribute('data-i18n'));
+                });
+            }
             
             function setupTheme() { 
                 const themeToggles = [document.getElementById('theme-toggle'), document.getElementById('mobile-theme-toggle')];
@@ -360,7 +364,9 @@
             
             const consentCheckbox = document.getElementById('consent-checkbox');
             const createShipmentBtn = document.getElementById('create-shipment-btn');
-            
+            const termsModal = document.getElementById('terms-modal');
+            const openTermsBtn = document.getElementById('open-terms-btn');
+            const closeTermsBtn = document.getElementById('close-terms-btn');
 
             function toggleCreateButton(isEnabled) {
                 if (isEnabled) {
@@ -394,7 +400,55 @@
                 }
             });
 
+            openTermsBtn.addEventListener('click', () => {
+                fetch('terms.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        const modalContent = document.getElementById('terms-modal-content');
+                        modalContent.innerHTML = html;
+
+                        // Now, find the elements inside the loaded content and attach events
+                        const langEnBtn = modalContent.querySelector('#lang-en');
+                        const langThBtn = modalContent.querySelector('#lang-th');
+                        const contentEn = modalContent.querySelector('#content-en');
+                        const contentTh = modalContent.querySelector('#content-th');
+                        const closeButton = modalContent.querySelector('#close-button');
+
+                        function setLanguage(lang) {
+                            if (lang === 'th') {
+                                contentEn.classList.add('hidden');
+                                contentTh.classList.remove('hidden');
+                                langEnBtn.classList.remove('active');
+                                langThBtn.classList.add('active');
+                            } else {
+                                contentTh.classList.add('hidden');
+                                contentEn.classList.remove('hidden');
+                                langThBtn.classList.remove('active');
+                                langEnBtn.classList.add('active');
+                            }
+                            localStorage.setItem('terms_language', lang);
+                        }
+
+                        langEnBtn.addEventListener('click', () => setLanguage('en'));
+                        langThBtn.addEventListener('click', () => setLanguage('th'));
+
+                        const savedLang = localStorage.getItem('terms_language') || 'en';
+                        setLanguage(savedLang);
+
+                        termsModal.classList.remove('hidden');
+                    })
+                    .catch(error => console.error('Error fetching terms:', error));
+            });
+
+            closeTermsBtn.addEventListener('click', () => {
+                termsModal.classList.add('hidden');
+            });
             
+            termsModal.addEventListener('click', (event) => {
+                if (event.target === termsModal) {
+                    termsModal.classList.add('hidden');
+                }
+            });
 
             document.getElementById('current-year').textContent = new Date().getFullYear();
             setupTheme();
