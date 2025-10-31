@@ -141,8 +141,8 @@
 		"printLabel": "ขนาด Label",
 		"selectPrintSizeError": "กรุณาเลือกขนาดในการปริ้นก่อนสร้างใบนำส่ง",
 		"mexicoTaxIdRequired": "คุณจะต้องระบุหมายเลขผู้เสียภาษีด้วยหากส่งของไปที่ประเทศปลายทางนี้",
-		"clearHistory": "ล้างประวัติ",
-		"clearHistoryConfirm": "คุณต้องการล้างข้อมูลที่บันทึกไว้ทั้งหมดหรือไม่?",
+		"clearHistory": "ลบข้อมูลผู้ส่ง",
+		"clearHistoryConfirm": "คุณต้องการลบข้อมูลของผู้ส่งที่บันทึกไว้หรือไม่?",
 		"maxLengthError": "สูงสุด {maxLength} ตัวอักษร",
 		"totalPackagesMaxError": "จำนวนแพ็คเกจรวมต้องไม่เกิน {max}",
 		"savePickupAddressError": "กรุณากด \"บันทึก\" ที่อยู่สำหรับนัดรับสินค้าก่อนไปหน้าถัดไป",
@@ -317,8 +317,8 @@
 		"printLabel": "Label Size",
 		"selectPrintSizeError": "Please select a print size before creating the shipment",
 		"mexicoTaxIdRequired": "You must provide a Tax ID for shipments to Mexico.",
-		"clearHistory": "Clear History",
-		"clearHistoryConfirm": "Are you sure you want to clear all saved data?",
+		"clearHistory": "Clear Shipper Detail",
+		"clearHistoryConfirm": "Are you sure you want to clear Shipper Detail?",
 		"maxLengthError": "Maximum {maxLength} characters",
 		"totalPackagesMaxError": "Total packages must not exceed {max}",
 		"savePickupAddressError": "Please \"Save\" the pickup address before proceeding",
@@ -349,3 +349,4 @@
 		}
 	}
 }
+
