@@ -1,0 +1,69 @@
+Changelog: DHL Express Rebranding
+Date: 2025-12-17
+Project: Shipment Creation Backup Solution
+
+Log Update: Logo Change
+Replaced the generic black SVG logo with the official DHL_Logo.png for better brand representation.
+
+Detailed Updates:
+
+1. Asset Replacement
+- Old: DHL_logo_rgb_black.svg
+- New: DHL_Logo.png
+- Files Updated: index.html, ship.html, quote.html, confirmation.html
+
+Theme Refinement (DHL.com Style)
+Updated the application theme to closely mirror the official dhl.com website structure.
+
+Key Changes:
+
+1. Header & Navigation Refinement
+- Yellow Header: Changed the header background to full-width DHL Yellow (#FFCC00).
+- Updated Active State: Light Gray Background (#e5e7eb) with Black Text (#000000).
+- Updated Dark Mode Active State: Dark Gray Background (#374151) with White Text (#ffffff).
+- Confirmed Pickup Buttons ("Yes"/"No") match this style and use Black icons.
+- Confirmed Print Size Buttons ("A4"/"Label") also match this style (Shared CSS Class).
+- Layout: Removed rounded corners from the bottom of the header for a cleaner, full-width look.
+- Navigation: Updated utility buttons (Language/Theme toggle) to be transparent with semi-transparent hover states, improving visibility on the yellow background.
+
+2. Footer Update
+- Dark Footer: Changed the footer background to Dark Grey (#333333) to match the official corporate footer style.
+
+3. Core Branding (Completed Previously)
+- Visual Identity: Full transition to DHL official colors (Red/Yellow).
+- Logo: Integration of the DHL logo across all pages.
+- Components: Standardized buttons, progress bars, and form inputs.
+
+Verified Files:
+- index.html
+- ship.html
+- quote.html
+- confirmation.html
+- styles.css
+
+Log Update: UI Modernization (Red Icons & Button Text)
+Date: 2025-12-17
+
+1. Asset Update
+- Created `DHL_logo_rgb_red.svg` (Red version of main DHL logo).
+- Replaced all `_rgb_black.svg` icon references with `_rgb_red.svg` across all pages.
+- Switched Pickup Yes/No icons to Red versions `_rgb_red.svg`.
+
+Log Update: Create Shipment Button Style
+Date: 2025-12-17
+- Updated "Create Shipment" button on `index.html` to have White Background, Black Text, and Black Border.
+- Kept Icon as Red (`parcel_rgb_red.svg`).
+- Refinement: Removed Black Border, updated to use Shadow effect (via default class) for cleaner look.
+
+2. Button Style Enforcement
+- Enforced Red Text (#D40511) on all Yellow Background buttons (Standard and Active States).
+- Enforced White Text on Red Background buttons.
+- Updated `styles.css` and `ship.html` specific overrides to ensure consistency in Light and Dark modes.
+
+Verified Files:
+- index.html
+- ship.html
+- confirmation.html
+- quote.html
+- styles.css
+
